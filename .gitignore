@@ -1,0 +1,15 @@
+.tooling/
+.synapse/
+.video-work/
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+
+# Local records from before the pinned-contract comparison.
+integration-first-live.json
+integration-guided-live.json
+synapse-build-attempt.log
+integration-scripted-results.json

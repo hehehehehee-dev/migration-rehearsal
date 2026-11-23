@@ -1,0 +1,1073 @@
+{
+  "total": 26,
+  "matched": 26,
+  "source_unchanged": true,
+  "misses": [],
+  "results": [
+    {
+      "id": "round_cents",
+      "split": "dev",
+      "expected": {
+        "verdict": "passed",
+        "issues": []
+      },
+      "matched": true,
+      "report": {
+        "verdict": "passed",
+        "plan_sha256": "f3b8a97ca34cea5ace5bc400b13656c83694616e7ba494de33501c15975a7582",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": true
+        },
+        "issues": {}
+      },
+      "milliseconds": 51.61
+    },
+    {
+      "id": "arithmetic",
+      "split": "dev",
+      "expected": {
+        "verdict": "passed",
+        "issues": []
+      },
+      "matched": true,
+      "report": {
+        "verdict": "passed",
+        "plan_sha256": "cb405ca182060d96d213667c0f6a556448c5664b1255490b79f6eb48a9d08280",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": true
+        },
+        "issues": {}
+      },
+      "milliseconds": 50.33
+    },
+    {
+      "id": "two_pass",
+      "split": "dev",
+      "expected": {
+        "verdict": "passed",
+        "issues": []
+      },
+      "matched": true,
+      "report": {
+        "verdict": "passed",
+        "plan_sha256": "f01b9798e9b7e9f25b56f649537a7a7990bbf38dba0fe5d4dee3ac06ee42e778",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": true
+        },
+        "issues": {}
+      },
+      "milliseconds": 49.91
+    },
+    {
+      "id": "repaired_backfill",
+      "split": "dev",
+      "expected": {
+        "verdict": "passed",
+        "issues": []
+      },
+      "matched": true,
+      "report": {
+        "verdict": "passed",
+        "plan_sha256": "18d6a9f2aaf9e5894f99ce83ad6950bc3e305a9ad5b2a39f53ba0302ce712115",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": true
+        },
+        "issues": {}
+      },
+      "milliseconds": 51.68
+    },
+    {
+      "id": "whole_dollars",
+      "split": "dev",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "price_cents_mismatch"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "a28e5cf4e18a763adc1f27625e559b8c9cf5661b3ea1b29f81a3fbd835b3854f",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": false
+        },
+        "issues": {
+          "price_cents_mismatch": {
+            "count": 3503,
+            "examples": [
+              {
+                "track_id": 1,
+                "expected_cents": 99,
+                "actual_cents": 0
+              },
+              {
+                "track_id": 2,
+                "expected_cents": 99,
+                "actual_cents": 0
+              },
+              {
+                "track_id": 3,
+                "expected_cents": 99,
+                "actual_cents": 0
+              },
+              {
+                "track_id": 4,
+                "expected_cents": 99,
+                "actual_cents": 0
+              },
+              {
+                "track_id": 5,
+                "expected_cents": 99,
+                "actual_cents": 0
+              }
+            ]
+          }
+        }
+      },
+      "milliseconds": 49.12
+    },
+    {
+      "id": "no_schema_change",
+      "split": "dev",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "target_column_missing"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "8fc43e6226c0a8f8601b9e5ce8532ff9771fe9f6517f88d0014541524bdd883b",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true
+        },
+        "issues": {
+          "target_column_missing": {
+            "count": 1,
+            "examples": []
+          }
+        }
+      },
+      "milliseconds": 44.44
+    },
+    {
+      "id": "partial_backfill",
+      "split": "dev",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "price_cents_mismatch"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "0e11c079d852637b8f5a9ac2abfab05a3535abb9cc6c6740b14201c1d4f76b60",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": false
+        },
+        "issues": {
+          "price_cents_mismatch": {
+            "count": 3403,
+            "examples": [
+              {
+                "track_id": 101,
+                "expected_cents": 99,
+                "actual_cents": null
+              },
+              {
+                "track_id": 102,
+                "expected_cents": 99,
+                "actual_cents": null
+              },
+              {
+                "track_id": 103,
+                "expected_cents": 99,
+                "actual_cents": null
+              },
+              {
+                "track_id": 104,
+                "expected_cents": 99,
+                "actual_cents": null
+              },
+              {
+                "track_id": 105,
+                "expected_cents": 99,
+                "actual_cents": null
+              }
+            ]
+          }
+        }
+      },
+      "milliseconds": 48.28
+    },
+    {
+      "id": "missing_column",
+      "split": "dev",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "execution_error"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "b7dfddc17033182e849cf4009f0b36b18f573896323c135bce67a4c6cc640512",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "failed",
+        "checks": {},
+        "issues": {
+          "execution_error": {
+            "count": 1,
+            "examples": [
+              {
+                "detail": "no such column: UnitPriceCents"
+              }
+            ]
+          }
+        }
+      },
+      "milliseconds": 24.22
+    },
+    {
+      "id": "touch_original",
+      "split": "dev",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "protected_records_changed",
+          "application_query_changed"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "fa89d807dddf37530f838422b70d304835894cb033a77b72e372291e7f054bb3",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": false,
+          "application_queries": false,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": true
+        },
+        "issues": {
+          "protected_records_changed": {
+            "count": 1,
+            "examples": [
+              "Track"
+            ]
+          },
+          "application_query_changed": {
+            "count": 1,
+            "examples": []
+          }
+        }
+      },
+      "milliseconds": 50.17
+    },
+    {
+      "id": "leave_nulls",
+      "split": "dev",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "price_cents_mismatch"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "dca554ce01833ead49c0c7caa044944c53a6af668bd971776fa0681b8b958d36",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": false
+        },
+        "issues": {
+          "price_cents_mismatch": {
+            "count": 3503,
+            "examples": [
+              {
+                "track_id": 1,
+                "expected_cents": 99,
+                "actual_cents": null
+              },
+              {
+                "track_id": 2,
+                "expected_cents": 99,
+                "actual_cents": null
+              },
+              {
+                "track_id": 3,
+                "expected_cents": 99,
+                "actual_cents": null
+              },
+              {
+                "track_id": 4,
+                "expected_cents": 99,
+                "actual_cents": null
+              },
+              {
+                "track_id": 5,
+                "expected_cents": 99,
+                "actual_cents": null
+              }
+            ]
+          }
+        }
+      },
+      "milliseconds": 48.73
+    },
+    {
+      "id": "broken_reference",
+      "split": "dev",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "foreign_key_violation",
+          "protected_records_changed",
+          "application_query_changed"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "3472c8e545bcb9476ca3b38ef6f66a410419fb8c2fc4e4e418194f0995421682",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": false,
+          "track_count": 3503,
+          "protected_records": false,
+          "application_queries": false,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": true
+        },
+        "issues": {
+          "foreign_key_violation": {
+            "count": 1,
+            "examples": [
+              [
+                "Track",
+                1,
+                "Album",
+                2
+              ]
+            ]
+          },
+          "protected_records_changed": {
+            "count": 1,
+            "examples": [
+              "Track"
+            ]
+          },
+          "application_query_changed": {
+            "count": 1,
+            "examples": []
+          }
+        }
+      },
+      "milliseconds": 50.44
+    },
+    {
+      "id": "extra_contract_override",
+      "split": "dev",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "invalid_plan"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "61a47266cd2715844dfa8b95474dda4b5d8d1aee0973569b4520733a5107580a",
+        "fixture_sha256": null,
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "not_run",
+        "checks": {},
+        "issues": {
+          "invalid_plan": {
+            "count": 1,
+            "examples": []
+          }
+        }
+      },
+      "milliseconds": 1.7
+    },
+    {
+      "id": "parity_split",
+      "split": "holdout",
+      "expected": {
+        "verdict": "passed",
+        "issues": []
+      },
+      "matched": true,
+      "report": {
+        "verdict": "passed",
+        "plan_sha256": "23004e3f7f688bde12d92d33d0967cdf46df15cb36e494a35a0e46ac2cfff41c",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": true
+        },
+        "issues": {}
+      },
+      "milliseconds": 50.83
+    },
+    {
+      "id": "idempotent_backfill",
+      "split": "holdout",
+      "expected": {
+        "verdict": "passed",
+        "issues": []
+      },
+      "matched": true,
+      "report": {
+        "verdict": "passed",
+        "plan_sha256": "00cf2a007c7f4c8090cc76079d1b38ec1106bf77653d36cd6e27ceda6e02aac1",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": true
+        },
+        "issues": {}
+      },
+      "milliseconds": 52.64
+    },
+    {
+      "id": "repair_standard",
+      "split": "holdout",
+      "expected": {
+        "verdict": "passed",
+        "issues": []
+      },
+      "matched": true,
+      "report": {
+        "verdict": "passed",
+        "plan_sha256": "88ae12a37a14cc787295a076ee3293b01e7ae47424bc521c814662cb3770761f",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": true
+        },
+        "issues": {}
+      },
+      "milliseconds": 53.66
+    },
+    {
+      "id": "mixed_formulas",
+      "split": "holdout",
+      "expected": {
+        "verdict": "passed",
+        "issues": []
+      },
+      "matched": true,
+      "report": {
+        "verdict": "passed",
+        "plan_sha256": "b40bd22d7910ea41e01cef8a3eee3b5a3dec29119d7494dd71e61ff00baa15d8",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": true
+        },
+        "issues": {}
+      },
+      "milliseconds": 50.77
+    },
+    {
+      "id": "rounded_dollars",
+      "split": "holdout",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "price_cents_mismatch"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "5da653791c4884b18f3e3912358068a01dc049a983dc470a5a954e4e6f7cd2cd",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": false
+        },
+        "issues": {
+          "price_cents_mismatch": {
+            "count": 3503,
+            "examples": [
+              {
+                "track_id": 1,
+                "expected_cents": 99,
+                "actual_cents": 100
+              },
+              {
+                "track_id": 2,
+                "expected_cents": 99,
+                "actual_cents": 100
+              },
+              {
+                "track_id": 3,
+                "expected_cents": 99,
+                "actual_cents": 100
+              },
+              {
+                "track_id": 4,
+                "expected_cents": 99,
+                "actual_cents": 100
+              },
+              {
+                "track_id": 5,
+                "expected_cents": 99,
+                "actual_cents": 100
+              }
+            ]
+          }
+        }
+      },
+      "milliseconds": 50.93
+    },
+    {
+      "id": "half_price",
+      "split": "holdout",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "price_cents_mismatch"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "ca1179b090caa78a7113abc276ad8d87539aab5bbfc8e168afad52d523eec1ce",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": false
+        },
+        "issues": {
+          "price_cents_mismatch": {
+            "count": 3503,
+            "examples": [
+              {
+                "track_id": 1,
+                "expected_cents": 99,
+                "actual_cents": 50
+              },
+              {
+                "track_id": 2,
+                "expected_cents": 99,
+                "actual_cents": 50
+              },
+              {
+                "track_id": 3,
+                "expected_cents": 99,
+                "actual_cents": 50
+              },
+              {
+                "track_id": 4,
+                "expected_cents": 99,
+                "actual_cents": 50
+              },
+              {
+                "track_id": 5,
+                "expected_cents": 99,
+                "actual_cents": 50
+              }
+            ]
+          }
+        }
+      },
+      "milliseconds": 51.98
+    },
+    {
+      "id": "late_null",
+      "split": "holdout",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "price_cents_mismatch"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "7bf9ddceb3e8ad666c5d4d5ed449a433de01ec258ed1e3f98ebc637567bc8788",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": false
+        },
+        "issues": {
+          "price_cents_mismatch": {
+            "count": 213,
+            "examples": [
+              {
+                "track_id": 2819,
+                "expected_cents": 199,
+                "actual_cents": null
+              },
+              {
+                "track_id": 2820,
+                "expected_cents": 199,
+                "actual_cents": null
+              },
+              {
+                "track_id": 2821,
+                "expected_cents": 199,
+                "actual_cents": null
+              },
+              {
+                "track_id": 2822,
+                "expected_cents": 199,
+                "actual_cents": null
+              },
+              {
+                "track_id": 2823,
+                "expected_cents": 199,
+                "actual_cents": null
+              }
+            ]
+          }
+        }
+      },
+      "milliseconds": 49.55
+    },
+    {
+      "id": "rewrite_invoice",
+      "split": "holdout",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "protected_records_changed"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "bf3f81d1c34e18af8aa711e4c6ed13876692c0beecd412605cc5dab2bf9edb64",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": false,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": true
+        },
+        "issues": {
+          "protected_records_changed": {
+            "count": 1,
+            "examples": [
+              "Invoice"
+            ]
+          }
+        }
+      },
+      "milliseconds": 49.58
+    },
+    {
+      "id": "lose_playlists",
+      "split": "holdout",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "protected_records_changed"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "b362011e406874c326f4330dee5bb1f252c0c0c0fc816dffcb7168c5ffcd40b0",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": false,
+          "application_queries": true,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": true
+        },
+        "issues": {
+          "protected_records_changed": {
+            "count": 1,
+            "examples": [
+              "PlaylistTrack"
+            ]
+          }
+        }
+      },
+      "milliseconds": 51.15
+    },
+    {
+      "id": "failed_after_update",
+      "split": "holdout",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "execution_error"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "850e18af1e62060be76c2a0751ed2f57a10632ba29df1aee993433abb63e59e8",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "failed",
+        "checks": {},
+        "issues": {
+          "execution_error": {
+            "count": 1,
+            "examples": [
+              {
+                "detail": "no such column: MissingColumn"
+              }
+            ]
+          }
+        }
+      },
+      "milliseconds": 25.75
+    },
+    {
+      "id": "break_legacy_query",
+      "split": "holdout",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "protected_schema_changed",
+          "application_query_changed"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "f51562ae87e43a79b072584c0229661bb9bebffdf70419d6b21ccb0f25f7ffbd",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "protected_records": false,
+          "application_queries": false,
+          "indexes": true,
+          "price_rows_checked": 3503,
+          "price_cents_exact": true
+        },
+        "issues": {
+          "protected_schema_changed": {
+            "count": 1,
+            "examples": [
+              {
+                "detail": "no such column: UnitPrice"
+              }
+            ]
+          },
+          "application_query_changed": {
+            "count": 1,
+            "examples": []
+          }
+        }
+      },
+      "milliseconds": 39.83
+    },
+    {
+      "id": "missing_index",
+      "split": "holdout",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "required_index_changed"
+        ]
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "plan_sha256": "d276dc56381536f201d7000f2ca22fd9402f1b6beadcbb9791ef773d4bddc32b",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": false,
+          "price_rows_checked": 3503,
+          "price_cents_exact": true
+        },
+        "issues": {
+          "required_index_changed": {
+            "count": 1,
+            "examples": []
+          }
+        }
+      },
+      "milliseconds": 50.98
+    },
+    {
+      "id": "currency_conversion",
+      "split": "holdout",
+      "expected": {
+        "verdict": "unsupported",
+        "issues": [
+          "unsupported_operation"
+        ],
+        "execution": "not_run"
+      },
+      "matched": true,
+      "report": {
+        "verdict": "unsupported",
+        "plan_sha256": "035a27c6282c8fe653c68a6ae91a69fefaa5bf017e1f4c3879a34fc1e353ad12",
+        "fixture_sha256": null,
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "not_run",
+        "checks": {},
+        "issues": {
+          "unsupported_operation": {
+            "count": 1,
+            "examples": []
+          }
+        }
+      },
+      "milliseconds": 1.33
+    },
+    {
+      "id": "missing_backfill_scope",
+      "split": "holdout",
+      "expected": {
+        "verdict": "unclear",
+        "issues": [
+          "scope_unspecified"
+        ],
+        "execution": "not_run"
+      },
+      "matched": true,
+      "report": {
+        "verdict": "unclear",
+        "plan_sha256": "5cbd7e674f7fdd6a1bddab644edc9d199ddc3c685bce757ac2c3e6e75f9bfc62",
+        "fixture_sha256": null,
+        "contract": "chinook-track-price-cents-v1",
+        "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+        "execution": "not_run",
+        "checks": {},
+        "issues": {
+          "scope_unspecified": {
+            "count": 1,
+            "examples": []
+          }
+        }
+      },
+      "milliseconds": 1.21
+    }
+  ],
+  "tool": "rehearse_database_migration",
+  "synapse_verified": true
+}

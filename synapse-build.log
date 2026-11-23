@@ -1,0 +1,44 @@
+  i    Local codegen on Custom endpoint — qwen2.5-coder-1.5b (generate), qwen2.5-coder-1.5b (triage)
+
+  Build MCP Server (v2)
+  ────────────────────────
+
+  i    Mode  local — custom flow
+  [working]  Scanning codebase  0s
+  ✓  Extracted 0 endpoint(s) and 13 function(s)  0s
+  i    Language  python
+
+  Generating
+  ────────────────────────
+
+  [working]  Composing MCP tool  0s
+  Generating MCP server…
+
+  ✦  Pro Tip: The best tools do one thing well. If a function does two things, consider splitting it.
+
+  ✓  Generation complete  15s
+
+  ✓  MCP Server Ready
+  custom-mode tool
+
+  Tool        rehearse_database_migration
+  Language    python
+  Output      rehearse_database_migration_server.py
+
+  Add to your MCP client:
+
+    {
+      "mcpServers": {
+        "rehearse-database-migration": {
+          "command": "python",
+          "args": [
+            ".tooling/codegen/rehearse_database_migration_server.py"
+          ]
+        }
+      }
+    }
+
+  →  pip install mcp
+  →  python rehearse_database_migration_server.py
+
+  ✦  Ready. Point your client at the config above.

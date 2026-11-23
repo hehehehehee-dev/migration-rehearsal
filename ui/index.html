@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#eeeae0">
+  <title>Migration Rehearsal</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="mast">
+    <a class="brand" href="/" aria-label="Migration Rehearsal home"><span class="mark" aria-hidden="true">↳</span> Rehearsal</a>
+    <span class="mast-label">DATABASE RELEASE REVIEW</span>
+    <span class="fixture">CHINOOK / SQLITE</span>
+  </header>
+  <main>
+    <section class="intro">
+      <div>
+        <p class="eyebrow">PRICE MIGRATION <span> / </span> CHINOOK V1.4.5</p>
+        <h1>Before it<br>ships.</h1>
+      </div>
+      <div class="brief">
+        <p class="eyebrow">RELEASE REQUIREMENT</p>
+        <p>Store prices as whole cents. Preserve the catalog, invoice data, and the queries that use them.</p>
+        <span class="runtime" id="runtime">Connecting…</span>
+      </div>
+    </section>
+
+    <details class="contract-strip">
+      <summary>
+        <span class="contract-label">PRICE CONTRACT</span>
+        <code id="contract-short">Loading SHA-256…</code>
+        <span class="pin-state" id="pin-state">Expected pin</span>
+      </summary>
+      <p>Expected SHA-256 <code id="contract-full"></code></p>
+    </details>
+
+    <section class="bench" aria-label="Migration workbench">
+      <div class="case-pane">
+        <h2 class="panel-label"><span>01</span> Candidate</h2>
+        <label for="case">Choose a migration plan</label>
+        <select id="case" disabled></select>
+        <p class="case-hint" id="case-hint"></p>
+        <pre id="plan" aria-label="Candidate plan">Loading candidate…</pre>
+        <button id="run" disabled>Run on a copy <span aria-hidden="true">↗</span></button>
+        <p class="fine">Runs on a disposable in-memory database.</p>
+      </div>
+      <div class="result-pane">
+        <h2 class="panel-label"><span>02</span> Evidence <span class="right" id="run-seq">AWAITING RUN</span></h2>
+        <div id="status" role="status" aria-live="polite">
+          <div class="empty">
+            <p class="eyebrow">REHEARSAL READY</p>
+            <h3>What did<br>the SQL change?</h3>
+            <p>Select the candidate and run it to see its effect on the database.</p>
+          </div>
+        </div>
+        <div id="details" hidden>
+          <dl class="numbers" id="numbers"></dl>
+          <div class="output" id="output"></div>
+          <details class="raw">
+            <summary>Inspect report JSON</summary>
+            <pre id="raw-json"></pre>
+          </details>
+        </div>
+      </div>
+    </section>
+    <section class="records" aria-labelledby="records-title">
+      <div class="records-bar">
+        <h2 class="panel-label" id="records-title"><span>03</span> Verification record</h2>
+        <p id="benchmark-summary">Reading test results…</p>
+      </div>
+      <div id="trace"></div>
+    </section>
+    <footer>PINNED FIXTURE <span id="fixture-hash">SHA-256 CHECKED AT RUN TIME</span> <span> VIBE-A-THON / TRACK 2</span></footer>
+  </main>
+</body>
+</html>

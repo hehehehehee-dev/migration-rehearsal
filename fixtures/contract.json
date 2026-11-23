@@ -1,0 +1,30 @@
+{
+  "id": "chinook-track-price-cents-v1",
+  "source": {
+    "currency": "USD",
+    "table": "Track",
+    "key": "TrackId",
+    "price_column": "UnitPrice"
+  },
+  "target": {
+    "column": "UnitPriceCents",
+    "type": "INTEGER",
+    "units_per_dollar": 100
+  },
+  "protected_records": {
+    "Track": "SELECT TrackId,Name,AlbumId,MediaTypeId,GenreId,Composer,Milliseconds,Bytes,UnitPrice FROM Track ORDER BY TrackId",
+    "Invoice": "SELECT * FROM Invoice ORDER BY 1,2",
+    "InvoiceLine": "SELECT * FROM InvoiceLine ORDER BY 1,2",
+    "PlaylistTrack": "SELECT * FROM PlaylistTrack ORDER BY 1,2"
+  },
+  "application_queries": [
+    "SELECT TrackId, Name, UnitPrice FROM Track ORDER BY TrackId LIMIT 10",
+    "SELECT i.InvoiceId, SUM(l.Quantity*l.UnitPrice) FROM Invoice i JOIN InvoiceLine l USING(InvoiceId) GROUP BY i.InvoiceId ORDER BY i.InvoiceId",
+    "SELECT a.AlbumId, COUNT(t.TrackId) FROM Album a JOIN Track t USING(AlbumId) GROUP BY a.AlbumId ORDER BY a.AlbumId"
+  ],
+  "database_checks": {
+    "integrity": "PRAGMA integrity_check",
+    "foreign_keys": "PRAGMA foreign_key_check"
+  },
+  "index_query": "SELECT name, sql FROM sqlite_schema WHERE type='index' AND tbl_name IN ('Track','Invoice','InvoiceLine','PlaylistTrack') ORDER BY name"
+}

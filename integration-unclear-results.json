@@ -1,0 +1,135 @@
+{
+  "synapse_verified": true,
+  "deterministic_comparison": {
+    "composed_calls_per_case": 1,
+    "separate_calls_per_case": 6,
+    "composed_matched": 26,
+    "separate_matched": 26
+  },
+  "live_comparison": {
+    "model": "qwen2.5-coder-1.5b",
+    "case_id": "missing_backfill_scope",
+    "composed": {
+      "calls": 1,
+      "verdict": "unclear",
+      "tool_issue_codes": [
+        "scope_unspecified"
+      ],
+      "agent_response": "The candidate is unclear and requires further clarification before being considered for final review.",
+      "milliseconds": 6086,
+      "trace": [
+        {
+          "name": "rehearse_database_migration",
+          "arguments": "{}",
+          "result": {
+            "verdict": "unclear",
+            "plan_sha256": "5cbd7e674f7fdd6a1bddab644edc9d199ddc3c685bce757ac2c3e6e75f9bfc62",
+            "fixture_sha256": null,
+            "contract": "chinook-track-price-cents-v1",
+            "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+            "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+            "execution": "not_run",
+            "checks": {},
+            "issues": {
+              "scope_unspecified": {
+                "count": 1,
+                "examples": []
+              }
+            }
+          }
+        }
+      ]
+    },
+    "separate": {
+      "calls": 10,
+      "verdict": "incomplete",
+      "tool_issue_codes": [],
+      "agent_response": null,
+      "milliseconds": 15602,
+      "trace": [
+        {
+          "name": "validate_request",
+          "arguments": "{}",
+          "result": {
+            "next": "create_test_snapshot",
+            "issues_so_far": [
+              "scope_unspecified"
+            ]
+          }
+        },
+        {
+          "name": "create_test_snapshot",
+          "arguments": "{}",
+          "result": {
+            "next": "capture_baseline",
+            "issues_so_far": [
+              "scope_unspecified"
+            ]
+          }
+        },
+        {
+          "name": "capture_baseline",
+          "arguments": "{}",
+          "result": {
+            "next": "execute_migration",
+            "issues_so_far": [
+              "scope_unspecified"
+            ]
+          }
+        },
+        {
+          "name": "execute_migration",
+          "arguments": "{}",
+          "result": {
+            "next": "verify_postconditions",
+            "issues_so_far": [
+              "scope_unspecified"
+            ]
+          }
+        },
+        {
+          "name": "build_evidence_report",
+          "arguments": "{}",
+          "result": {
+            "error": "Run verify_postconditions next."
+          }
+        },
+        {
+          "name": "build_evidence_report",
+          "arguments": "{}",
+          "result": {
+            "error": "Run verify_postconditions next."
+          }
+        },
+        {
+          "name": "build_evidence_report",
+          "arguments": "{}",
+          "result": {
+            "error": "Run verify_postconditions next."
+          }
+        },
+        {
+          "name": "build_evidence_report",
+          "arguments": "{}",
+          "result": {
+            "error": "Run verify_postconditions next."
+          }
+        },
+        {
+          "name": "build_evidence_report",
+          "arguments": "{}",
+          "result": {
+            "error": "Run verify_postconditions next."
+          }
+        },
+        {
+          "name": "build_evidence_report",
+          "arguments": "{}",
+          "result": {
+            "error": "Run verify_postconditions next."
+          }
+        }
+      ]
+    }
+  }
+}
