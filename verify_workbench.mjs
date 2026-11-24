@@ -30,6 +30,8 @@ try {
   await page.getByText('Block release',{exact:true}).waitFor();
   assert.match(await page.locator('#numbers').innerText(),/3,503/);
   assert.equal(await page.locator('.price-story .wrong').innerText(),'$0.00');
+  assert.equal(await page.locator('.price-story .arrow').innerText(),'→');
+  assert.equal(await page.locator('#case option:checked').innerText(),'Faulty · Truncate dollars first');
   await page.screenshot({path:'workbench-preview.png'});
   await page.locator('#case').selectOption('round_cents');
   await run.click();
@@ -40,6 +42,10 @@ try {
   assert.equal(await page.locator('#pin-state').textContent(),'Pin verified');
   await page.locator('.contract-strip summary').click();
   assert(await page.locator('#contract-full').isVisible());
+  const pinGlyph = await page.locator('.contract-strip summary').evaluate(
+    element => JSON.parse(getComputedStyle(element,'::before').content)
+  );
+  assert.equal(pinGlyph,'−');
   await page.locator('.contract-strip summary').click();
   for (const [candidate, heading, reason, capture] of [
     ['missing_backfill_scope','Needs clarification','Choose which tracks','.video-work/workbench-unclear.png'],

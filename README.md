@@ -6,9 +6,9 @@ Migration Rehearsal runs a candidate on a disposable copy of the Chinook databas
 
 Built for **Vibe-a-thon Track 2** · Python · SQLite · Synapse Custom
 
-[Watch the captioned submission demo (2:33)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233) · [Try it locally](#try-it-locally) · [Read the live results](#live-agent-comparison)
+[Watch the captioned submission demo (2:33)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233-r2) · [Try it locally](#try-it-locally) · [Read the live results](#live-agent-comparison) · [Connect an agent](#connect-another-mcp-client)
 
-[![The workbench blocks the release after SQL committed on a copy. Track 1 shows 99 cents expected and 0 observed.](workbench-preview.png)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233)
+[![The workbench blocks the release after SQL committed on a copy. Track 1 shows 99 cents expected and 0 observed.](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/workbench-preview.png?v=display-fix)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233-r2)
 
 ## Try it locally
 
@@ -84,8 +84,34 @@ The separate-tool agent hit its call limit on the missing-scope case after repea
 
 The evidence covers four live candidates, one local model, and one migration family on a single public database. The workbench is a local review tool. Its confirmation assumes a trusted local operator.
 
+## Connect another MCP client
+
+Install the Python dependencies above. In a client that supports MCP over stdio, set the command to that Python executable and pass the absolute path to the generated server. This example grants approval for the bundled faulty plan.
+
+```json
+{
+  "mcpServers": {
+    "migration-rehearsal": {
+      "command": "python",
+      "args": ["/absolute/path/to/migration-rehearsal/rehearse_database_migration_server.py"],
+      "env": {
+        "REHEARSAL_APPROVED_PLANS": "a28e5cf4e18a763adc1f27625e559b8c9cf5661b3ea1b29f81a3fbd835b3854f"
+      }
+    }
+  }
+}
+```
+
+Ask the agent to call `rehearse_database_migration` with the following exact text as the `plan_json` string. The approval hash covers those bytes, so keep the text on one line with no extra spaces.
+
+```json
+{"add_column":true,"backfills":[{"expression":"truncated_dollars","scope":"all"}],"post_step":"none"}
+```
+
+Expect `blocked`, `sqlite_committed_on_copy`, and `price_cents_mismatch.count` of `3503`. Change the approved case through the host when you want to test another plan. The benchmark runner supplies approval for all bundled cases when the operator passes `--confirm`.
+
 <details>
-<summary>Regenerate the Synapse server, rerun the live agent, or record the demo</summary>
+<summary>Rerun the live agent or rebuild the server and demo</summary>
 
 ### Regenerate the MCP server
 

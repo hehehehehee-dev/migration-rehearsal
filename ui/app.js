@@ -2,12 +2,12 @@
 const $ = (id) => document.getElementById(id);
 const choice = $('case'), run = $('run'), state = $('status'), details = $('details');
 const names = {
-  whole_dollars: 'Faulty Â· Truncate dollars first',
-  round_cents: 'Corrected Â· Round after scaling',
-  missing_backfill_scope: 'Ambiguous Â· No backfill scope',
-  currency_conversion: 'Outside scope Â· Convert currency',
-  broken_reference: 'Faulty Â· Broken album reference',
-  partial_backfill: 'Faulty Â· Only backfill 100 tracks',
+  whole_dollars: 'Faulty · Truncate dollars first',
+  round_cents: 'Corrected · Round after scaling',
+  missing_backfill_scope: 'Ambiguous · No backfill scope',
+  currency_conversion: 'Outside scope · Convert currency',
+  broken_reference: 'Faulty · Broken album reference',
+  partial_backfill: 'Faulty · Only backfill 100 tracks',
 };
 const issueNames = {
   price_cents_mismatch: 'Incorrect prices',
@@ -23,7 +23,7 @@ const issueNames = {
 let candidates = [], runs = 0;
 const number = new Intl.NumberFormat('en-US');
 const dollars = new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'});
-const count = (x) => typeof x === 'number' ? number.format(x) : 'â€”';
+const count = (x) => typeof x === 'number' ? number.format(x) : '—';
 const money = (x) => typeof x === 'number' ? dollars.format(x/100) : 'Blank';
 
 function make(tag, text, className) {
@@ -44,7 +44,7 @@ function banner(label, desc, style='') {
   state.replaceChildren(panel);
 }
 function showPin(pin, verified = null) {
-  $('contract-short').textContent = pin ? pin.slice(0, 12) + 'â€¦' + pin.slice(-6) : 'Unavailable';
+  $('contract-short').textContent = pin ? pin.slice(0, 12) + '…' + pin.slice(-6) : 'Unavailable';
   $('contract-full').textContent = pin || 'Unavailable';
   const status = $('pin-state');
   status.textContent = verified === null ? 'Expected pin' : verified ? 'Pin verified' : 'Pin unverified';
@@ -88,7 +88,7 @@ function evidence(report) {
     !!report.contract_sha256 && report.contract_sha256 === expectedPin);
   $('numbers').replaceChildren(
     metric('Tracks checked',count(checks.price_rows_checked)),
-    metric('Foreign keys',checks.foreign_keys === undefined ? 'â€”' : checks.foreign_keys ? 'OK' : 'Failed'),
+    metric('Foreign keys',checks.foreign_keys === undefined ? '—' : checks.foreign_keys ? 'OK' : 'Failed'),
     metric(passed || prices ? 'Wrong prices' : 'Issues',count(passed ? 0 : prices?.count ?? Object.keys(report.issues).length)),
   );
   const content = $('output');
@@ -97,7 +97,7 @@ function evidence(report) {
     const first = examples[0];
     const delta = make('div',undefined,'price-story');
     delta.setAttribute('aria-label', 'Track '+first.track_id+': expected '+money(first.expected_cents)+', actual '+money(first.actual_cents));
-    delta.append(make('span',money(first.expected_cents)),make('span','â†’','arrow'),make('span',money(first.actual_cents),'wrong'));
+    delta.append(make('span',money(first.expected_cents)),make('span','→','arrow'),make('span',money(first.actual_cents),'wrong'));
     content.append(delta);
     const table = make('table');
     table.createCaption().textContent = 'Example tracks';
@@ -116,10 +116,10 @@ function evidence(report) {
   } else {
     for (const [key,value] of Object.entries(report.issues ?? {})) {
       const label = issueNames[key] || key.replaceAll('_',' ');
-      content.append(make('p',report.verdict === 'blocked' ? label+' Â· '+count(value.count) : label));
+      content.append(make('p',report.verdict === 'blocked' ? label+' · '+count(value.count) : label));
     }
   }
-  if (report.fixture_sha256) $('fixture-hash').textContent = 'SHA-256 '+report.fixture_sha256.slice(0,12)+'â€¦';
+  if (report.fixture_sha256) $('fixture-hash').textContent = 'SHA-256 '+report.fixture_sha256.slice(0,12)+'…';
   $('raw-json').textContent = JSON.stringify(report,null,2);
   $('run-seq').textContent = 'RUN '+String(++runs).padStart(2,'0');
   details.hidden = false;
@@ -156,30 +156,30 @@ async function initialize() {
     const bench = await get('/api/bench');
     const holdout = bench.results?.filter(x => x.split === 'holdout') ?? [];
     $('benchmark-summary').textContent = bench.total ?
-      bench.matched+'/'+bench.total+' cases matched  Â·  '+holdout.filter(x=>x.matched).length+'/'+holdout.length+' holdout' : 'Replay results unavailable';
+      bench.matched+'/'+bench.total+' cases matched  ·  '+holdout.filter(x=>x.matched).length+'/'+holdout.length+' holdout' : 'Replay results unavailable';
     const data = await get('/api/trace');
     const live = data.live_comparison;
     const paired = data.deterministic_comparison;
     if (live) {
       const traceBox = $('trace');
-      traceBox.append(make('p',live.model+' Â· live agent Â· '+live.composed.calls+' composed / '+live.separate.calls+' separate','trace-row'));
+      traceBox.append(make('p',live.model+' · live agent · '+live.composed.calls+' composed / '+live.separate.calls+' separate','trace-row'));
       const journal = make('details',undefined,'raw');
       journal.append(make('summary','Inspect live tool trace'));
       for (const [label, record] of [['Composed tool',live.composed],['Separate tools',live.separate]]) {
-        journal.append(make('p',label+' Â· '+record.verdict));
+        journal.append(make('p',label+' · '+record.verdict));
         const list = make('ol',undefined,'trace-list');
         for (const item of record.trace) {
           const line = make('li');
           line.append(make('code',item.name));
-          if (item.result.verdict) line.append(make('span',' â†’ '+item.result.verdict));
-          if (item.result.error) line.append(make('span',' â†’ call error'));
+          if (item.result.verdict) line.append(make('span',' → '+item.result.verdict));
+          if (item.result.error) line.append(make('span',' → call error'));
           list.append(line);
         }
         journal.append(list);
       }
       traceBox.append(journal);
     } else if (paired) {
-      $('trace').append(make('p','Scripted MCP replay Â· '+paired.composed_calls_per_case+' composed call / '+paired.separate_calls_per_case+' separate calls','trace-row'));
+      $('trace').append(make('p','Scripted MCP replay · '+paired.composed_calls_per_case+' composed call / '+paired.separate_calls_per_case+' separate calls','trace-row'));
     }
   } catch {
     $('benchmark-summary').textContent = 'Replay results unavailable';
