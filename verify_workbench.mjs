@@ -68,6 +68,44 @@ try {
   const replay = await fetch(base+'/api/repair/run',{method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({proposal_id:proposal.proposal_id,confirm_plan_sha256:proposal.draft_sha256})});
   assert.equal(replay.status,404);
+  await page.getByRole('button',{name:'Try two backfills'}).click();
+  await page.getByRole('button',{name:'Round dollars first',exact:true}).click();
+  const approveTrial=page.getByRole('button',{name:'Approve trial on a copy'});
+  await approveTrial.waitFor();
+  assert.equal(await approveTrial.evaluate(button=>document.activeElement===button),true);
+  assert.match(await page.locator('#repair-after').innerText(),/ROUND\(UnitPrice\)/);
+  const [wrongResponse] = await Promise.all([
+    page.waitForResponse(response => response.url().endsWith('/api/repair/run')),
+    page.keyboard.press('Enter'),
+  ]);
+  assert(wrongResponse.ok());
+  const wrong = await wrongResponse.json();
+  assert.equal(wrong.verdict,'blocked');
+  assert.equal(wrong.issues.price_cents_mismatch.count,3503);
+  await page.getByText('Trial blocked. Choose the other backfill to compare.',{exact:true}).waitFor();
+  await page.getByRole('button',{name:'Round after scaling',exact:true}).click();
+  await approveTrial.waitFor();
+  const [correctResponse] = await Promise.all([
+    page.waitForResponse(response => response.url().endsWith('/api/repair/run')),
+    approveTrial.click(),
+  ]);
+  assert(correctResponse.ok());
+  const correct=await correctResponse.json();
+  assert.equal(correct.verdict,'passed');
+  assert.equal(correct.contract_sha256,wrong.contract_sha256);
+  assert.equal(correct.fixture_sha256,wrong.fixture_sha256);
+  assert.notEqual(correct.plan_sha256,wrong.plan_sha256);
+  await page.getByText('Trial verified.',{exact:true}).waitFor();
+  const comparison=page.locator('#repair-proof.two-trials');
+  assert.match(await comparison.innerText(),/\$0\.00[\s\S]*\$1\.00[\s\S]*\$0\.99/);
+  assert.match(await comparison.innerText(),/3,503 \/ 3,503 prices verified/);
+  await page.locator('#repair').screenshot({path:'.video-work/reviewer-proof.png'});
+  for (const width of [390,768]) {
+    await page.setViewportSize({width,height:900});
+    assert(await comparison.isVisible());
+    assert(await page.evaluate(()=>document.documentElement.scrollWidth===innerWidth));
+  }
+  await page.setViewportSize({width:1280,height:900});
   await page.locator('#case').selectOption('round_cents');
   await run.click();
   await page.getByText('Passed contract',{exact:true}).waitFor();
@@ -111,7 +149,7 @@ try {
   await page.getByRole('button',{name:'Run corrected plan on a copy'}).waitFor();
   assert(await page.evaluate(()=>document.documentElement.scrollWidth===innerWidth));
   assert.deepEqual(errors,[]);
-  console.log('Workbench passed browser checks: agent summary, confirmation, keyboard, four outcomes, repair review and rerun, replay prevention, contract pin, 390px, no page errors.');
+  console.log('Workbench passed browser checks: agent summary, confirmation, keyboard, four outcomes, agent repair, both reviewer trials, replay prevention, contract pin, 390px, no page errors.');
 } finally {
   app.kill();
   lines.close();

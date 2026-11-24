@@ -80,8 +80,13 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding
 
 @media(max-width:440px){.contract-strip summary{gap:7px;padding-inline:8px;font-size:.66rem}.pin-state{padding:3px 4px}}
 
-.repair-trigger{background:var(--acid);color:var(--black);margin-top:13px}
+.repair-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:8px;margin-top:11px}
+.repair-actions button{margin:0}
+.repair-trigger{background:var(--acid);color:var(--black)}
 .repair-trigger:hover:enabled{background:var(--black);color:#fff}
+.reviewer-option{background:var(--surface);color:var(--black)}
+.reviewer-option[aria-pressed="true"]{box-shadow:inset 4px 0 var(--blue);background:var(--lavender);color:var(--blue)}
+#reviewer-controls p{font-size:.9rem;margin:9px 0 0}
 .repair-status{font:.80rem/1.35 var(--mono);margin:8px 0;color:var(--muted)}
 .repair-status:empty{display:none}
 .repair{margin-top:19px;padding:16px 20px 12px;background:var(--surface);border:1px solid var(--black)}
@@ -90,6 +95,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding
 .repair-source,.repair-change span,.repair-result span,.repair-pin{font:700 .73rem/1.35 var(--mono);letter-spacing:.025em}
 .repair-source{background:var(--acid);padding:4px 7px;overflow-wrap:anywhere}
 .repair-diff,.repair-proof{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:11px}
+.repair-proof.two-trials{grid-template-columns:repeat(3,minmax(0,1fr))}
 .repair-change,.repair-result{padding:11px 13px;min-width:0;border-left:4px solid var(--black)}
 .repair-change.previous,.repair-result.blocked{background:var(--rust);color:var(--red);border-color:var(--red)}
 .repair-change.proposed{background:var(--lavender);color:var(--blue);border-color:var(--blue)}
@@ -104,4 +110,4 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding
 .repair-result p,.repair-pin{margin:5px 0 0;font-size:.79rem}
 .repair-pin{grid-column:1/-1}
 .repair-record{margin:8px 0 0}
-@media(max-width:600px){.repair{padding:12px}.repair-approval,.repair-diff{grid-template-columns:1fr}.repair-approval{gap:8px}}
+@media(max-width:600px){.repair{padding:12px}.repair-approval,.repair-diff,.repair-proof.two-trials{grid-template-columns:1fr}.repair-approval{gap:8px}}

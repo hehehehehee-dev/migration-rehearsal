@@ -16,11 +16,23 @@
         "price_cents_mismatch"
       ],
       "agent_response": "Blocked. Price cents mismatch (3,503).",
-      "milliseconds": 1901,
+      "milliseconds": 4155,
       "trace": [
         {
           "name": "rehearse_database_migration",
           "arguments": "{}",
+          "mcp_arguments": {
+            "plan": {
+              "add_column": true,
+              "backfills": [
+                {
+                  "expression": "truncated_dollars",
+                  "scope": "all"
+                }
+              ],
+              "post_step": "none"
+            }
+          },
           "result": {
             "verdict": "blocked",
             "plan_sha256": "a28e5cf4e18a763adc1f27625e559b8c9cf5661b3ea1b29f81a3fbd835b3854f",
@@ -82,11 +94,23 @@
         "price_cents_mismatch"
       ],
       "agent_response": "Blocked. Price cents mismatch (3,503).",
-      "milliseconds": 24535,
+      "milliseconds": 18067,
       "trace": [
         {
           "name": "validate_request",
           "arguments": "{}",
+          "mcp_arguments": {
+            "plan": {
+              "add_column": true,
+              "backfills": [
+                {
+                  "expression": "truncated_dollars",
+                  "scope": "all"
+                }
+              ],
+              "post_step": "none"
+            }
+          },
           "result": {
             "next": "create_test_snapshot",
             "issues_so_far": []
@@ -95,6 +119,7 @@
         {
           "name": "create_test_snapshot",
           "arguments": "{}",
+          "mcp_arguments": {},
           "result": {
             "next": "capture_baseline",
             "issues_so_far": []
@@ -103,6 +128,7 @@
         {
           "name": "capture_baseline",
           "arguments": "{}",
+          "mcp_arguments": {},
           "result": {
             "next": "execute_migration",
             "issues_so_far": []
@@ -111,6 +137,7 @@
         {
           "name": "execute_migration",
           "arguments": "{}",
+          "mcp_arguments": {},
           "result": {
             "next": "verify_postconditions",
             "issues_so_far": []
@@ -119,6 +146,7 @@
         {
           "name": "build_evidence_report",
           "arguments": "{}",
+          "mcp_arguments": {},
           "result": {
             "error": "Run verify_postconditions next."
           }
@@ -126,6 +154,7 @@
         {
           "name": "verify_postconditions",
           "arguments": "{}",
+          "mcp_arguments": {},
           "result": {
             "next": "build_evidence_report",
             "issues_so_far": [
@@ -136,6 +165,7 @@
         {
           "name": "build_evidence_report",
           "arguments": "{}",
+          "mcp_arguments": {},
           "result": {
             "verdict": "blocked",
             "plan_sha256": "a28e5cf4e18a763adc1f27625e559b8c9cf5661b3ea1b29f81a3fbd835b3854f",

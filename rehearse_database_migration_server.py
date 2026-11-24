@@ -7,6 +7,7 @@ Run:  python rehearse_database_migration_server.py
 from __future__ import annotations
 
 from mcp.server.fastmcp import FastMCP
+from mcp_plan import MigrationPlan
 from rehearsal import validate_request
 from rehearsal import create_test_snapshot
 from rehearsal import capture_baseline
@@ -18,8 +19,8 @@ mcp = FastMCP("rehearse_database_migration")
 
 
 @mcp.tool(name="rehearse_database_migration", description="A synchronous MCP tool for rehearsing a database migration plan.")
-def rehearse_database_migration(plan_json: str) -> dict:
-    ctx = validate_request(plan_json)
+def rehearse_database_migration(plan: MigrationPlan) -> dict:
+    ctx = validate_request(plan.canonical_json())
     ctx = create_test_snapshot(ctx)
     ctx = capture_baseline(ctx)
     ctx = execute_migration(ctx)

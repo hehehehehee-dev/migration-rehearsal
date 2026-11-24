@@ -16,11 +16,23 @@
         "scope_unspecified"
       ],
       "agent_response": "Unclear. Scope unspecified.",
-      "milliseconds": 2811,
+      "milliseconds": 3353,
       "trace": [
         {
           "name": "rehearse_database_migration",
           "arguments": "{}",
+          "mcp_arguments": {
+            "plan": {
+              "add_column": true,
+              "backfills": [
+                {
+                  "expression": "rounded_cents",
+                  "scope": null
+                }
+              ],
+              "post_step": "none"
+            }
+          },
           "result": {
             "verdict": "unclear",
             "plan_sha256": "5cbd7e674f7fdd6a1bddab644edc9d199ddc3c685bce757ac2c3e6e75f9bfc62",
@@ -47,11 +59,23 @@
         "scope_unspecified"
       ],
       "agent_response": "Unclear. Scope unspecified.",
-      "milliseconds": 18407,
+      "milliseconds": 14854,
       "trace": [
         {
           "name": "validate_request",
           "arguments": "{}",
+          "mcp_arguments": {
+            "plan": {
+              "add_column": true,
+              "backfills": [
+                {
+                  "expression": "rounded_cents",
+                  "scope": null
+                }
+              ],
+              "post_step": "none"
+            }
+          },
           "result": {
             "next": "create_test_snapshot",
             "issues_so_far": [
@@ -62,6 +86,7 @@
         {
           "name": "create_test_snapshot",
           "arguments": "{}",
+          "mcp_arguments": {},
           "result": {
             "next": "capture_baseline",
             "issues_so_far": [
@@ -72,6 +97,7 @@
         {
           "name": "capture_baseline",
           "arguments": "{}",
+          "mcp_arguments": {},
           "result": {
             "next": "execute_migration",
             "issues_so_far": [
@@ -82,6 +108,7 @@
         {
           "name": "execute_migration",
           "arguments": "{}",
+          "mcp_arguments": {},
           "result": {
             "next": "verify_postconditions",
             "issues_so_far": [
@@ -92,6 +119,7 @@
         {
           "name": "build_evidence_report",
           "arguments": "{}",
+          "mcp_arguments": {},
           "result": {
             "error": "Run verify_postconditions next."
           }
@@ -99,6 +127,7 @@
         {
           "name": "verify_postconditions",
           "arguments": "{}",
+          "mcp_arguments": {},
           "result": {
             "next": "build_evidence_report",
             "issues_so_far": [
@@ -109,6 +138,7 @@
         {
           "name": "build_evidence_report",
           "arguments": "{}",
+          "mcp_arguments": {},
           "result": {
             "verdict": "unclear",
             "plan_sha256": "5cbd7e674f7fdd6a1bddab644edc9d199ddc3c685bce757ac2c3e6e75f9bfc62",

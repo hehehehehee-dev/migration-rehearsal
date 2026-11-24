@@ -11,7 +11,10 @@ from uuid import uuid4
 from demo import approved, canonical, cases
 from mcp_replay import connect, plan_argument
 from rehearsal import CONTRACT_SHA256, fingerprint, rehearse_locally
-from repair import RepairUnavailable, call_model, eligible, live_endpoint, recorded_proposal, review_proposal
+from repair import (
+    REVIEWER_CHOICES, RepairUnavailable, call_model, eligible, live_endpoint, recorded_proposal,
+    review_proposal, reviewer_proposal,
+)
 
 ROOT = Path(__file__).resolve().parent
 UI = ROOT / "ui"
@@ -81,10 +84,12 @@ class Handler(BaseHTTPRequestHandler):
         if data.get("confirm_plan_sha256") != fingerprint(encoded):
             return self.respond({"error": "Confirm this candidate before running."}, 403)
         report = self.server.run_case(encoded)
-        if self.server.can_repair(plan, report):
+        if eligible(plan, report):
             token = self.server.store(self.server.blocked_runs, (plan, report))
+            choices = {key: label for key, label in REVIEWER_CHOICES.items()
+                       if key != plan["backfills"][0]["expression"]}
             return self.respond({**report, "repair_run_id": token,
-                                 "repair_mode": "live" if self.server.model_url else "recorded"})
+                                 "repair_mode": self.server.agent_mode(report), "reviewer_choices": choices})
         self.respond(report)
 
     def propose(self, data):
@@ -92,7 +97,10 @@ class Handler(BaseHTTPRequestHandler):
         if entry is None:
             return self.respond({"error": "Rehearse the faulty candidate before requesting a proposal."}, 404)
         plan, report = entry
-        proposal = self.server.propose_repair(plan, report)
+        if "reviewer_expression" in data:
+            proposal = reviewer_proposal(plan, report, data["reviewer_expression"])
+        else:
+            proposal = self.server.propose_repair(plan, report)
         token = self.server.store(self.server.drafts, proposal)
         self.respond({**proposal, "proposal_id": token})
 
@@ -144,9 +152,12 @@ class Workbench(ThreadingHTTPServer):
         self.blocked_runs = OrderedDict()
         self.drafts = OrderedDict()
 
-    def can_repair(self, plan, report):
-        source = self.model_url or (self.recording and self.recording["input_sha256"] == report["plan_sha256"])
-        return bool(source and eligible(plan, report))
+    def agent_mode(self, report):
+        if self.model_url:
+            return "live"
+        if self.recording and self.recording["input_sha256"] == report["plan_sha256"]:
+            return "recorded"
+        return None
 
     def lookup(self, cache, token):
         if not isinstance(token, str):

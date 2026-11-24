@@ -22,7 +22,8 @@ const issueNames = {
 };
 let candidates = [], runs = 0, runtime = 'Local Python';
 let repairRun = null, repairDraft = null;
-const proposeFix = $('propose-fix'), verifyFix = $('run-repair');
+const attempts = new Map();
+const proposeFix = $('propose-fix'), verifyFix = $('run-repair'), tryRepairs = $('try-repairs');
 const number = new Intl.NumberFormat('en-US');
 const dollars = new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'});
 const count = (x) => typeof x === 'number' ? number.format(x) : '—';
@@ -126,17 +127,22 @@ function evidence(report) {
   $('raw-json').textContent = JSON.stringify(report,null,2);
   $('run-seq').textContent = 'RUN '+String(++runs).padStart(2,'0');
   details.hidden = false;
-  if (report.repair_run_id && report.repair_mode) {
+  if (report.repair_run_id) {
     repairRun = report;
+    $('repair-actions').hidden = false;
     proposeFix.firstChild.textContent = report.repair_mode === 'live'
       ? 'Ask agent for a fix ' : 'Review recorded agent fix ';
-    proposeFix.hidden = false;
+    proposeFix.hidden = !report.repair_mode;
+    tryRepairs.hidden = !Object.keys(report.reviewer_choices ?? {}).length;
   }
 }
 function resetRepair() {
   repairRun = repairDraft = null;
-  proposeFix.hidden = $('repair').hidden = $('proposal-status').hidden = $('repair-proof').hidden = true;
-  proposeFix.disabled = verifyFix.disabled = false;
+  attempts.clear();
+  for (const id of ['repair-actions','repair','proposal-status','repair-proof','repair-draft','reviewer-controls']) {
+    $(id).hidden = true;
+  }
+  setRepairBusy(false);
   verifyFix.hidden = false;
   $('repair-status').textContent = '';
   $('records-title').firstElementChild.textContent = '03';
@@ -144,82 +150,143 @@ function resetRepair() {
 function request(url, body) {
   return get(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
 }
-async function proposeRepair() {
+function setRepairBusy(busy) {
+  proposeFix.disabled = tryRepairs.disabled = verifyFix.disabled = busy;
+  for (const button of $('reviewer-choices').children) button.disabled = busy;
+}
+function revealRepair() {
+  $('repair').hidden = false;
+  $('records-title').firstElementChild.textContent = '04';
+}
+function startReviewer() {
+  if (!repairRun) return;
+  attempts.clear();
+  repairDraft = null;
+  const options = $('reviewer-choices');
+  options.replaceChildren();
+  for (const [expression, label] of Object.entries(repairRun.reviewer_choices)) {
+    const button = make('button',label,'reviewer-option');
+    button.type = 'button';
+    button.setAttribute('aria-pressed','false');
+    button.addEventListener('click',() => prepareRepair(expression,button));
+    options.append(button);
+  }
+  $('repair-actions').hidden = $('proposal-status').hidden = $('repair-draft').hidden = $('repair-proof').hidden = true;
+  $('repair-status').textContent = '';
+  $('repair-source').textContent = 'REVIEWER TRIAL';
+  $('repair-json').textContent = JSON.stringify({original:repairRun},null,2);
+  $('reviewer-controls').hidden = false;
+  revealRepair();
+  $('repair-title').focus();
+}
+async function prepareRepair(expression, button) {
   const report = repairRun;
   if (!report) return;
-  proposeFix.disabled = true;
-  const status = $('proposal-status');
+  setRepairBusy(true);
+  const status = $(button ? 'repair-status' : 'proposal-status');
   status.hidden = false;
-  status.textContent = report.repair_mode === 'live' ? 'Asking the local agent…' : 'Loading the recorded proposal…';
+  status.textContent = button ? 'Preparing the diff…' : report.repair_mode === 'live'
+    ? 'Asking the local agent…' : 'Loading the recorded proposal…';
+  repairDraft = null;
+  $('repair-draft').hidden = true;
+  const body = {run_id:report.repair_run_id};
+  if (button) body.reviewer_expression = expression;
   try {
-    const proposed = await request('/api/repair/propose',{run_id:report.repair_run_id});
+    const proposed = await request('/api/repair/propose',body);
     if (repairRun !== report) return;
     repairDraft = proposed;
+    $('repair-draft').hidden = false;
     verifyFix.hidden = false;
-    $('repair-proof').hidden = true;
+    verifyFix.firstChild.textContent = button ? 'Approve trial on a copy ' : 'Run corrected plan on a copy ';
     $('repair-status').textContent = '';
     $('repair-before').textContent = proposed.before_expression;
     $('repair-after').textContent = proposed.after_expression;
     $('repair-why').textContent = proposed.reason;
-    $('repair-source').textContent = (proposed.mode === 'live' ? 'LIVE AGENT' : 'RECORDED AGENT') + ' / ' + proposed.model;
-    $('repair-json').textContent = JSON.stringify({proposal:proposed},null,2);
-    $('repair').hidden = false;
-    $('records-title').firstElementChild.textContent = '04';
-    status.hidden = true;
-    proposeFix.hidden = true;
-    $('repair-title').focus();
+    $('repair-json').textContent = JSON.stringify({original:report,proposal:proposed,attempts:[...attempts.values()]},null,2);
+    if (button) {
+      for (const option of $('reviewer-choices').children) option.setAttribute('aria-pressed',String(option === button));
+    } else {
+      $('repair-source').textContent = (proposed.mode === 'live' ? 'LIVE AGENT' : 'RECORDED AGENT') + ' / ' + proposed.model;
+      status.hidden = proposeFix.hidden = true;
+      revealRepair();
+    }
   } catch (error) {
     if (repairRun === report) status.textContent = error.message;
   } finally {
-    if (repairRun === report) proposeFix.disabled = false;
+    if (repairRun === report) setRepairBusy(false);
   }
+  if (repairDraft && repairRun === report) (button ? verifyFix : $('repair-title')).focus();
 }
 function repairTile(title, amount, summary, style) {
   const tile = make('div',undefined,'repair-result '+style);
   tile.append(make('span',title),make('strong',amount),make('p',summary));
   return tile;
 }
+function matchesRepair(before, proposal, report) {
+  return !!report.contract_sha256 && report.contract_sha256 === before.contract_sha256
+    && !!report.fixture_sha256 && report.fixture_sha256 === before.fixture_sha256
+    && report.plan_sha256 === proposal.draft_sha256;
+}
+function showRepairProof(before) {
+  const proof = $('repair-proof');
+  const issue = before.issues.price_cents_mismatch;
+  const track = issue.examples[0];
+  const tiles = [repairTile('Original · Blocked',track ? money(track.actual_cents) : '—',
+    count(issue.count)+' wrong prices','blocked')];
+  let same = true;
+  for (const {proposal,report} of attempts.values()) {
+    const shared = matchesRepair(before,proposal,report);
+    same &&= shared;
+    const passed = shared && report.verdict === 'passed';
+    const blocked = shared && report.verdict === 'blocked';
+    const mismatches = report.issues?.price_cents_mismatch;
+    const observed = mismatches?.examples.find(row => row.track_id === track?.track_id);
+    const price = passed && track ? money(track.expected_cents) : observed ? money(observed.actual_cents) : '—';
+    const checked = count(report.checks?.price_rows_checked);
+    const reason = Object.keys(report.issues ?? {}).join(', ').replaceAll('_',' ');
+    const summary = passed ? checked+' / '+checked+' prices verified' : blocked && mismatches
+      ? count(mismatches.count)+' wrong prices' : reason || 'Verification unavailable';
+    const label = proposal.mode === 'reviewer' ? before.reviewer_choices[proposal.expression] : 'Correction';
+    const verdict = shared ? report.verdict : 'inconclusive';
+    tiles.push(repairTile(label+' · '+verdict,price,summary,passed ? 'passed' : blocked ? 'blocked' : 'review'));
+  }
+  const pin = make('p',same ? 'Same pinned contract and fixture · '+runtime :
+    'The reports could not be matched to the approved plans and pinned inputs.','repair-pin');
+  proof.replaceChildren(...tiles,pin);
+  proof.classList.toggle('two-trials',attempts.size > 1);
+  proof.hidden = false;
+}
 async function runRepair() {
   const proposed = repairDraft, before = repairRun;
   if (!proposed || !before) return;
-  verifyFix.disabled = true;
+  setRepairBusy(true);
   const status = $('repair-status');
-  status.textContent = 'Rehearsing the corrected plan…';
+  status.textContent = 'Rehearsing the approved backfill…';
   try {
     const report = await request('/api/repair/run',{
       proposal_id:proposed.proposal_id,confirm_plan_sha256:proposed.draft_sha256,
     });
     if (repairDraft !== proposed) return;
-    const shared = !!report.contract_sha256 && report.contract_sha256 === before.contract_sha256
-      && !!report.fixture_sha256 && report.fixture_sha256 === before.fixture_sha256;
-    const checked = report.checks?.price_rows_checked;
-    const passed = report.verdict === 'passed' && shared;
-    const proof = $('repair-proof');
-    const misses = before.issues.price_cents_mismatch.count;
-    const candidate = before.issues.price_cents_mismatch.examples[0];
-    const observed = candidate && money(candidate.actual_cents);
-    const expected = candidate && money(candidate.expected_cents);
-    proof.replaceChildren(
-      repairTile('Original · Blocked',observed || '—',count(misses)+' wrong prices','blocked'),
-      repairTile(passed ? 'Correction · Passed' : 'Correction · '+(report.verdict === 'passed' ? 'Inconclusive' : report.verdict),
-        passed ? (expected || 'Pass') : '—',
-        passed ? count(checked)+' / '+count(checked)+' prices verified' :
-          Object.keys(report.issues || {}).join(', ').replaceAll('_',' ') || 'No verified correction',
-        passed ? 'passed' : 'review'),
-      make('p', shared ? 'Same pinned contract and fixture · '+runtime :
-        'The reports do not share a verified contract and fixture.','repair-pin'),
-    );
-    $('repair-json').textContent = JSON.stringify({original:before,proposal:proposed,corrected:report},null,2);
-    proof.hidden = false;
+    const reviewer = proposed.mode === 'reviewer';
+    attempts.set(proposed.expression,{proposal:proposed,report});
+    showRepairProof(before);
+    $('repair-json').textContent = JSON.stringify({original:before,attempts:[...attempts.values()]},null,2);
     verifyFix.hidden = true;
-    status.textContent = passed ? 'Correction verified.' : 'Review the corrected run report.';
+    if (matchesRepair(before,proposed,report) && report.verdict === 'passed') {
+      status.textContent = reviewer ? 'Trial verified.' : 'Correction verified.';
+    } else if (reviewer && matchesRepair(before,proposed,report) && report.verdict === 'blocked') {
+      status.textContent = 'Trial blocked. Choose the other backfill to compare.';
+    } else {
+      status.textContent = 'Review the run report.';
+    }
+    status.focus();
   } catch (error) {
     if (repairDraft !== proposed) return;
-    status.textContent = error.message + ' Request another proposal to retry.';
-    proposeFix.hidden = false;
+    status.textContent = error.message + (proposed.mode === 'reviewer' ? ' Choose a backfill to retry.' : ' Request another proposal to retry.');
+    if (proposed.mode !== 'reviewer') proposeFix.hidden = false;
     verifyFix.hidden = true;
   } finally {
-    if (repairDraft === proposed) verifyFix.disabled = false;
+    if (repairDraft === proposed) setRepairBusy(false);
   }
 }
 async function execute() {
@@ -287,6 +354,7 @@ async function initialize() {
 }
 choice.addEventListener('change',showSelection);
 run.addEventListener('click',execute);
-proposeFix.addEventListener('click',proposeRepair);
+proposeFix.addEventListener('click',() => prepareRepair());
+tryRepairs.addEventListener('click',startReviewer);
 verifyFix.addEventListener('click',runRepair);
 initialize();

@@ -4,7 +4,7 @@ import json
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
-from mcp_replay import agent_outcome, drive_agent
+from mcp_replay import agent_outcome, drive_agent, plan_argument
 
 
 TOOLS = [{"name": "rehearse", "inputSchema": {"required": ["plan_json"]}}]
@@ -15,6 +15,12 @@ def completion(message):
 
 
 class AgentOutcomeTests(TestCase):
+    def test_mcp_argument_is_a_json_object(self):
+        tool = {"inputSchema": {"required": ["plan"]}}
+        plan = '{ "post_step": "none", "backfills": [], "add_column": true }'
+        self.assertEqual(plan_argument(tool, plan),
+                         {"plan": {"post_step": "none", "backfills": [], "add_column": True}})
+
     def test_agent_uses_tool_report_and_stops_at_its_verdict(self):
         session = Mock()
         session.call.return_value = {

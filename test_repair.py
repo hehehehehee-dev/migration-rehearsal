@@ -3,7 +3,7 @@ from copy import deepcopy
 import unittest
 
 from demo import approved, canonical, cases
-from repair import RepairUnavailable, eligible, live_endpoint, recorded_proposal, review_proposal
+from repair import RepairUnavailable, eligible, live_endpoint, recorded_proposal, review_proposal, reviewer_proposal
 from rehearsal import rehearse_locally
 
 
@@ -53,6 +53,18 @@ class RepairReviewTests(unittest.TestCase):
         self.assertEqual(report["verdict"], "blocked")
         self.assertIn("price_cents_mismatch", report["issues"])
         self.assertEqual(report["contract_sha256"], proposal["contract_sha256"])
+
+    def test_reviewer_proposals_use_the_same_approval_boundary(self):
+        wrong = reviewer_proposal(self.plan, self.report, "rounded_dollars")
+        correct = reviewer_proposal(self.plan, self.report, "rounded_cents")
+        self.assertEqual(wrong["mode"], "reviewer")
+        self.assertIsNone(wrong["model"])
+        self.assertNotEqual(wrong["draft_sha256"], correct["draft_sha256"])
+        with approved([canonical(wrong["draft"])]):
+            denied = rehearse_locally(canonical(correct["draft"]))
+        self.assertEqual(denied["execution"], "not_run")
+        with self.assertRaises(RepairUnavailable):
+            reviewer_proposal(self.plan, self.report, "halved_cents")
 
     def test_model_endpoint_stays_on_loopback(self):
         self.assertEqual(live_endpoint("http://127.0.0.1:11455/v1/"), "http://127.0.0.1:11455/v1")

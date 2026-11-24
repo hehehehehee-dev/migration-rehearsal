@@ -6,9 +6,9 @@ Migration Rehearsal runs a candidate on a disposable copy of the Chinook databas
 
 Built for **Vibe-a-thon Track 2** · Python · SQLite · Synapse Custom
 
-[Watch the captioned submission demo (2:33)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233-report) · [Try the repair loop](#watch-the-agent-repair-a-failed-plan) · [Try it locally](#try-it-locally) · [Read the live results](#live-agent-comparison) · [Connect an agent](#connect-another-mcp-client)
+[Watch the captioned submission demo (2:53)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-253-reviewer) · [Try two backfills](#try-two-backfills-yourself) · [Try it locally](#try-it-locally) · [Read the live results](#live-agent-comparison) · [Connect an agent](#connect-another-mcp-client)
 
-[![The workbench blocks the release after SQL committed on a copy. Track 1 shows 99 cents expected and 0 observed.](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/workbench-preview.png?v=display-fix)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233-report)
+[![Track 1 at $0.00 in the original, $1.00 in the blocked trial, and $0.99 in the trial that verified all 3,503 prices.](reviewer-preview.png)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-253-reviewer)
 
 ## Try it locally
 
@@ -20,7 +20,7 @@ cd migration-rehearsal
 python workbench.py
 ```
 
-Open [localhost:8765](http://127.0.0.1:8765) and follow these four cases:
+Open [localhost:8765](http://127.0.0.1:8765). Start with [the two-backfill trial](#try-two-backfills-yourself) or explore these cases:
 
 1. **Truncate dollars first.** Select **Run on a copy**. SQL commits, the foreign keys pass, and the contract blocks 3,503 incorrect prices.
 2. **Round after scaling.** Change the candidate and rerun. All 3,503 prices pass the same contract.
@@ -33,6 +33,14 @@ To run the same workbench through the generated **Synapse Custom MCP server**, s
 python -m pip install -r requirements.txt
 python workbench.py --server rehearse_database_migration_server.py
 ```
+
+## Try two backfills yourself
+
+1. Run **Truncate dollars first**, then select **Try two backfills**.
+2. Select **Round dollars first**, review the SQL diff, and select **Approve trial on a copy**. The track reads **$1.00** and the report blocks all **3,503** wrong prices.
+3. Select **Round after scaling**, review the new diff, and approve this trial. The workbench keeps both results in view. The second trial reads **$0.99** and verifies **3,503/3,503** prices under the same pinned contract and fixture.
+
+The reviewer chooses these two backfills. Every verdict comes from a new run on a disposable copy.
 
 ## Watch the agent repair a failed plan
 
@@ -52,7 +60,7 @@ The [generated server](rehearse_database_migration_server.py) exposes one tool, 
 Validate → Snapshot → Capture baseline → Execute → Verify → Report
 ```
 
-The operator approves the exact candidate. The engine checks the [contract pin](fixtures/contract.json) before SQL runs and before issuing the verdict. It makes the copy from the hash-checked Chinook fixture, runs a bounded set of operations, and checks protected records, indexes, foreign keys, application queries, and every converted price. The report includes the candidate and contract identities, execution status, the verdict, and examples where a check fails.
+The tool advertises a [typed plan object](mcp_plan.py) through MCP `tools/list`. The host approves the digest of the canonical plan. The engine checks the [contract pin](fixtures/contract.json) before SQL runs and before issuing the verdict. It makes the copy from the hash-checked Chinook fixture, runs a bounded set of operations, and checks protected records, indexes, foreign keys, application queries, and every converted price. The report includes the candidate and contract identities, execution status, the verdict, and examples where a check fails.
 
 | Outcome | Meaning |
 | --- | --- |
@@ -114,13 +122,25 @@ Install the Python dependencies above. In a client that supports MCP over stdio,
 }
 ```
 
-Ask the agent to call `rehearse_database_migration` with the following exact text as the `plan_json` string. The approval hash covers those bytes, so keep the text on one line with no extra spaces.
+Ask the agent to call `rehearse_database_migration` with this `plan` object. The server canonicalizes the object for approval, so whitespace and object key order can vary. Changing a value or reordering the backfills requires a new approval.
 
 ```json
-{"add_column":true,"backfills":[{"expression":"truncated_dollars","scope":"all"}],"post_step":"none"}
+{
+  "plan": {
+    "add_column": true,
+    "backfills": [{"expression": "truncated_dollars", "scope": "all"}],
+    "post_step": "none"
+  }
+}
 ```
 
-Expect `blocked`, `sqlite_committed_on_copy`, and `price_cents_mismatch.count` of `3503`. Change the approved case through the host when you want to test another plan. The benchmark runner supplies approval for all bundled cases when the operator passes `--confirm`.
+Expect `blocked`, `sqlite_committed_on_copy`, and `price_cents_mismatch.count` of `3503`. To approve another plan, save the inner object in `plan.json`, compute its digest from the repo directory, then set `REHEARSAL_APPROVED_PLANS` in your MCP host to the result and restart the server.
+
+```sh
+python -c "import json; from rehearsal import canonical, fingerprint; print(fingerprint(canonical(json.load(open('plan.json', encoding='utf-8')))))"
+```
+
+The benchmark runner supplies approval for all bundled cases when the operator passes `--confirm`.
 
 <details>
 <summary>Rerun the live agent or rebuild the server and demo</summary>
@@ -134,7 +154,7 @@ npm install --prefix .tooling @2ndbrainlabs-ai/synapse-cli@0.1.9
 .\build_synapse.ps1 -Endpoint http://127.0.0.1:11455/v1 -Model your-model
 ```
 
-[Synapse Custom mode](https://github.com/2ndbrainlabs-ai/synapse-cli-ts#build-modes-auto-and-custom) emits the server in `.tooling/codegen`. Review the generated file before copying it to the project root. The checked-in file fixes a stray module-name line and a generated Python type annotation. Its six-phase body comes from Synapse. The [generation log](synapse-build.log) documents the build.
+[Synapse Custom mode](https://github.com/2ndbrainlabs-ai/synapse-cli-ts#build-modes-auto-and-custom) emits the six-phase composition in `.tooling/codegen`. Compare that output with the checked-in server. The checked-in MCP boundary imports `MigrationPlan`, accepts `plan: MigrationPlan`, and passes `plan.canonical_json()` to the first phase. Preserve those lines when bringing in an updated composition. The [generation log](synapse-build.log) documents the build.
 
 ### Repeat the live comparison
 
@@ -151,7 +171,7 @@ In another terminal, run:
 python mcp_replay.py --server rehearse_database_migration_server.py --confirm --base-url http://127.0.0.1:11455/v1 --model qwen2.5-coder-1.5b --agent-case whole_dollars --integration-output my-live-trace.json
 ```
 
-The other live case IDs are `round_cents`, `missing_backfill_scope`, and `currency_conversion`. The trace retains the full tool response alongside the report-based summary.
+The other live case IDs are `round_cents`, `missing_backfill_scope`, and `currency_conversion`. The trace retains the structured MCP arguments and full tool response alongside the report-based summary.
 
 ### Capture the workbench and render a local replay
 

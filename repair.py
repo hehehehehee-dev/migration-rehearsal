@@ -19,6 +19,7 @@ EXPLANATIONS = {
     "halved_cents": "Scale the original price by 50 and round.",
 }
 MODEL_CHOICES = tuple(EXPLANATIONS)
+REVIEWER_CHOICES = {"rounded_dollars": "Round dollars first", "rounded_cents": "Round after scaling"}
 
 
 class RepairUnavailable(ValueError):
@@ -117,22 +118,32 @@ def recorded_proposal():
 
 
 def review_proposal(plan, report, receipt, mode):
-    """Verify provenance and construct the one allowed draft without executing it."""
-    if not eligible(plan, report):
-        raise RepairUnavailable("This run does not have an isolated price conversion failure.")
+    """Verify the model receipt before preparing its patch for review."""
     if receipt.get("input_sha256") != report["plan_sha256"] or receipt.get("contract_sha256") != CONTRACT_SHA256:
         raise RepairUnavailable("The agent proposal belongs to a different plan or contract.")
     patch = receipt.get("patch")
-    old = plan["backfills"][0]["expression"]
     if not isinstance(patch, dict) or set(patch) != {"expression"}:
         raise RepairUnavailable("The agent must propose exactly one expression.")
-    new = patch["expression"]
+    return review_expression(plan, report, patch["expression"], mode, receipt["model"])
+
+
+def reviewer_proposal(plan, report, expression):
+    if not isinstance(expression, str) or expression not in REVIEWER_CHOICES:
+        raise RepairUnavailable("Choose one of the reviewer backfills.")
+    return review_expression(plan, report, expression, "reviewer")
+
+
+def review_expression(plan, report, new, mode, model=None):
+    """Construct the one allowed draft. The caller still has to approve its digest."""
+    if not eligible(plan, report):
+        raise RepairUnavailable("This run does not have an isolated price conversion failure.")
+    old = plan["backfills"][0]["expression"]
     if not isinstance(new, str) or new not in MODEL_CHOICES or new == old:
         raise RepairUnavailable("The proposed expression is outside the review scope.")
     draft = deepcopy(plan)
     draft["backfills"][0]["expression"] = new
     return {
-        "mode": mode, "model": receipt["model"], "reason": EXPLANATIONS[new],
+        "mode": mode, "model": model, "expression": new, "reason": EXPLANATIONS[new],
         "before_expression": EXPRESSIONS[old], "after_expression": EXPRESSIONS[new],
         "draft": draft, "draft_sha256": fingerprint(canonical(draft)),
         "original_sha256": report["plan_sha256"], "contract_sha256": CONTRACT_SHA256,

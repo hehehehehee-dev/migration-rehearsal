@@ -1,5 +1,6 @@
 """MCP baseline exposing the same six rehearsal phases as separate tools."""
 from mcp.server.fastmcp import FastMCP
+from mcp_plan import MigrationPlan
 from rehearsal import PHASES
 
 mcp = FastMCP("Migration Rehearsal — Separate Tools")
@@ -20,9 +21,9 @@ def advance(index, value=None):
             "issues_so_far": sorted(context["issues"])}
 
 @mcp.tool()
-def validate_request(plan_json: str) -> dict:
+def validate_request(plan: MigrationPlan) -> dict:
     """First phase. Validate the operator-approved JSON plan."""
-    return advance(0, plan_json)
+    return advance(0, plan.canonical_json())
 
 @mcp.tool()
 def create_test_snapshot() -> dict:

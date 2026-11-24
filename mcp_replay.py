@@ -95,7 +95,8 @@ def plan_argument(tool, plan):
     required = tool["inputSchema"].get("required", [])
     if len(required) != 1:
         raise RuntimeError(f"Expected one plan argument, found {required}")
-    return {required[0]: plan}
+    name = required[0]
+    return {name: json.loads(plan) if name == "plan" else plan}
 
 
 def agent_outcome(report, call_count):
@@ -152,17 +153,23 @@ def drive_agent(session, tools, plan, base_url, model):
         for call in msg["tool_calls"]:
             function = call["function"]
             name = function["name"]
+            mcp_arguments = None
             try:
                 args = json.loads(function["arguments"])
                 if args != {}:
                     raise ValueError("These tools use the candidate attached by the operator.")
                 if name in plan_tools:
                     args = plan_argument(plan_tools[name], plan)
-                result = session.call(name,args) if name in names else {"error":"Unknown tool"}
+                if name in names:
+                    mcp_arguments = args
+                    result = session.call(name, mcp_arguments)
+                else:
+                    result = {"error":"Unknown tool"}
             except (ValueError,RuntimeError) as exc:
                 result = {"error":str(exc)}
             next_hint = result.get("next", next_hint)
-            calls.append({"name":name,"arguments":function["arguments"],"result":result})
+            calls.append({"name":name,"arguments":function["arguments"],"mcp_arguments":mcp_arguments,
+                          "result":result})
             if "verdict" in result:
                 report = result
                 break
@@ -206,10 +213,11 @@ def main():
         print(f'{runtime}: {result["matched"]}/{result["total"]}',flush=True)
         hero=plans[[c["id"] for c in selected].index(args.agent_case)]
         with connect(ROOT/"small_tools_server.py") as (separate, small):
+            validation = next(tool for tool in small if tool["name"] == PHASES[0].__name__)
             def run_separately(plan):
                 report = None
                 for index, phase in enumerate(PHASES):
-                    report = separate.call(phase.__name__, {"plan_json":plan} if index==0 else {})
+                    report = separate.call(phase.__name__, plan_argument(validation, plan) if index == 0 else {})
                 return report
             separate_result=benchmark(selected,run_separately)
             (ROOT/"small-benchmark-results.json").write_text(json.dumps(separate_result,indent=2)+"\n")

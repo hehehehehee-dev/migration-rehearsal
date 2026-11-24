@@ -6,15 +6,12 @@ import os
 from pathlib import Path
 import time
 
-from rehearsal import APPROVAL_ENV, CONTRACT_SHA256, FIXTURE, fingerprint, rehearse_locally
+from rehearsal import APPROVAL_ENV, CONTRACT_SHA256, FIXTURE, canonical, fingerprint, rehearse_locally
 
 ROOT = Path(__file__).resolve().parent
 
 def cases():
     return [json.loads(line) for line in (ROOT / "fixtures" / "cases.jsonl").read_text().splitlines()]
-
-def canonical(plan):
-    return json.dumps(plan, sort_keys=True, separators=(",", ":"))
 
 @contextmanager
 def approved(plans):

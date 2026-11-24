@@ -44,6 +44,10 @@ POST_STEPS = {
     "edit_duration": ("UPDATE Track SET Milliseconds=1 WHERE TrackId=1",),
 }
 
+def canonical(plan):
+    return json.dumps(plan, sort_keys=True, separators=(",", ":"))
+
+
 def fingerprint(plan_json):
     """Fingerprint the plan's exact UTF-8 bytes."""
     return sha256(plan_json.encode("utf-8")).hexdigest()
@@ -52,7 +56,7 @@ def check_contract(context):
     """Check the trusted pin and keep the verified contract snapshot for this run."""
     try:
         contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"), object_pairs_hook=unique_keys)
-        digest = fingerprint(json.dumps(contract, sort_keys=True, separators=(",", ":")))
+        digest = fingerprint(canonical(contract))
     except (OSError, ValueError, RecursionError):
         context["contract_sha256"] = None
         return block(context, "contract_unavailable", verdict="unclear")
