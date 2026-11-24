@@ -13,8 +13,8 @@
       "calls": 1,
       "verdict": "passed",
       "tool_issue_codes": [],
-      "agent_response": "The candidate has been successfully rehearsed using the 'rehearse_database_migration' tool. The tool passed all checks and did not identify any issues. The candidate is ready for the next phase of the",
-      "milliseconds": 10654,
+      "agent_response": "Passed. Verified 3,503 track prices.",
+      "milliseconds": 3505,
       "trace": [
         {
           "name": "rehearse_database_migration",
@@ -46,8 +46,8 @@
       "calls": 7,
       "verdict": "passed",
       "tool_issue_codes": [],
-      "agent_response": "The candidate passed the verification postconditions phase. The evidence report shows that the contract was verified and that the integrity, foreign keys, track count, protected records, application, ",
-      "milliseconds": 15677,
+      "agent_response": "Passed. Verified 3,503 track prices.",
+      "milliseconds": 14586,
       "trace": [
         {
           "name": "validate_request",

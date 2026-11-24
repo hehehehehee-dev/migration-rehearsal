@@ -25,6 +25,9 @@ try {
   await page.goto(base);
   const run=page.getByRole('button',{name:'Run on a copy'});
   await page.getByText('Ready to run',{exact:true}).waitFor();
+  await page.getByText('Inspect live tool trace',{exact:true}).click();
+  await page.getByText('Composed tool · Blocked. Price cents mismatch (3,503).',{exact:true}).waitFor();
+  await page.getByText('Inspect live tool trace',{exact:true}).click();
   await page.screenshot({path:'.video-work/workbench-ready.png'});
   await run.focus();
   await page.keyboard.press('Enter');
@@ -108,7 +111,7 @@ try {
   await page.getByRole('button',{name:'Run corrected plan on a copy'}).waitFor();
   assert(await page.evaluate(()=>document.documentElement.scrollWidth===innerWidth));
   assert.deepEqual(errors,[]);
-  console.log('Workbench passed browser checks: confirmation, keyboard, four outcomes, repair review and rerun, replay prevention, contract pin, 390px, no page errors.');
+  console.log('Workbench passed browser checks: agent summary, confirmation, keyboard, four outcomes, repair review and rerun, replay prevention, contract pin, 390px, no page errors.');
 } finally {
   app.kill();
   lines.close();

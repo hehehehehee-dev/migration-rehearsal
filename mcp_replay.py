@@ -97,6 +97,31 @@ def plan_argument(tool, plan):
         raise RuntimeError(f"Expected one plan argument, found {required}")
     return {required[0]: plan}
 
+
+def agent_outcome(report, call_count):
+    if report is None:
+        unit = "call" if call_count == 1 else "calls"
+        return {"verdict": "incomplete", "tool_issue_codes": [],
+                "agent_response": f"Incomplete. No tool returned a verdict after {call_count} {unit}."}
+
+    verdict = report["verdict"]
+    issues = report["issues"]
+    codes = sorted(issues)
+    if codes:
+        reasons = []
+        for code in codes:
+            label = code.replace("_", " ")
+            count = issues[code]["count"]
+            reasons.append(f"{label} ({count:,})" if count != 1 else label)
+        evidence = ", ".join(reasons).capitalize()
+    elif verdict == "passed":
+        evidence = f"Verified {report['checks']['price_rows_checked']:,} track prices"
+    else:
+        evidence = "The tool returned no issue code"
+    return {"verdict": verdict, "tool_issue_codes": codes,
+            "agent_response": f"{verdict.capitalize()}. {evidence}."}
+
+
 def drive_agent(session, tools, plan, base_url, model):
     # The operator-approved candidate is pinned by the host on both sides.
     plan_tools = {t["name"]: t for t in tools if t["inputSchema"].get("required")}
@@ -104,29 +129,25 @@ def drive_agent(session, tools, plan, base_url, model):
         "name":t["name"], "description":t.get("description",""), "parameters":{"type":"object","properties":{},"additionalProperties":False}
     }} for t in tools]
     messages = [
-        {"role":"system","content":"You are a database release reviewer. Use the supplied MCP tools to rehearse the attached candidate. Call the sole tool if there is one. If there are six, start with validate_request and follow each tool result's next field to the following phase. The host supplies the exact approved candidate. End when a tool returns a verdict. State the exact outcome: passed, blocked, unclear, or unsupported. Summarize its evidence. Quote observed counts. Call row-level values examples and do not generalize them to the whole catalog."},
+        {"role":"system","content":"You are a database release reviewer. Use the supplied MCP tools to rehearse the attached candidate. Call the sole tool if there is one. If there are six, start with validate_request and follow each tool result's next field to the following phase. The host supplies the exact approved candidate. End when a tool returns a verdict."},
         {"role":"user","content":f"Rehearse this attached candidate: {plan}"},
     ]
     started = time.perf_counter()
-    calls, final = [], None
+    calls, report = [], None
     names = {t["name"] for t in tools}
     next_hint = next(iter(plan_tools), None)
     for _ in range(10):
-        choice = "auto" if any("verdict" in row["result"] for row in calls) else "required"
         prompt = list(messages)
-        if next_hint and choice == "required":
+        if next_hint:
             prompt.append({"role":"user","content":f"The tool protocol indicates the next phase is {next_hint}. Use that named tool now."})
-        elif choice == "auto":
-            prompt.append({"role":"user","content":"Choose final now. State the exact verdict and the main reason in one short sentence."})
         body = json.dumps({"model":model,"messages":prompt,"tools":definitions,
-                           "temperature":0,"max_tokens":180,"tool_choice":choice}).encode()
+                           "temperature":0,"max_tokens":180,"tool_choice":"required"}).encode()
         request = urllib.request.Request(base_url.rstrip("/")+"/chat/completions",body,
                                          {"Content-Type":"application/json"})
         with urllib.request.urlopen(request,timeout=75) as response:
             msg = json.load(response)["choices"][0]["message"]
         messages.append({k:v for k,v in msg.items() if k in {"role","content","tool_calls"}})
         if not msg.get("tool_calls"):
-            final = msg.get("content")
             break
         for call in msg["tool_calls"]:
             function = call["function"]
@@ -142,23 +163,17 @@ def drive_agent(session, tools, plan, base_url, model):
                 result = {"error":str(exc)}
             next_hint = result.get("next", next_hint)
             calls.append({"name":name,"arguments":function["arguments"],"result":result})
-            model_result = result
             if "verdict" in result:
-                model_result = {
-                    "verdict": result["verdict"], "execution": result["execution"],
-                    "contract_pin_verified": result["contract_sha256"] == result["pinned_contract_sha256"],
-                    "checks": result["checks"],
-                    "issues": {key: {"count": data["count"], "example": data["examples"][:1]}
-                               for key, data in result["issues"].items()},
-                }
+                report = result
+                break
             messages.append({"role":"tool","name":name,"tool_call_id":call["id"],
-                             "content":json.dumps(model_result)})
-    reports = [x["result"] for x in calls if "verdict" in x["result"]]
+                             "content":json.dumps(result)})
+        if report is not None:
+            break
+    outcome = agent_outcome(report, len(calls))
     unit = "call" if len(calls) == 1 else "calls"
-    print(f'Live agent: {len(calls)} {unit} - {reports[-1]["verdict"] if reports else "incomplete"}', flush=True)
-    return {"calls":len(calls), "verdict":reports[-1]["verdict"] if reports else "incomplete",
-            "tool_issue_codes":sorted(reports[-1]["issues"]) if reports else [],
-            "agent_response":final,"milliseconds":round(1000*(time.perf_counter()-started)),
+    print(f'Live agent ({len(calls)} {unit}). {outcome["agent_response"]}', flush=True)
+    return {"calls":len(calls), **outcome, "milliseconds":round(1000*(time.perf_counter()-started)),
             "trace":calls}
 
 def main():

@@ -15,8 +15,8 @@
       "tool_issue_codes": [
         "unsupported_operation"
       ],
-      "agent_response": "The candidate is unsupported by the MCP tools. The unsupported operation is 'convert_currency' with a scope of 'all'. The candidate is not supported by the MCP tools. The unsupported operation is 'add",
-      "milliseconds": 11175,
+      "agent_response": "Unsupported. Unsupported operation.",
+      "milliseconds": 1405,
       "trace": [
         {
           "name": "rehearse_database_migration",
@@ -46,8 +46,8 @@
       "tool_issue_codes": [
         "unsupported_operation"
       ],
-      "agent_response": "The candidate is unsupported. The issues are unsupported_operation.",
-      "milliseconds": 14030,
+      "agent_response": "Unsupported. Unsupported operation.",
+      "milliseconds": 17660,
       "trace": [
         {
           "name": "validate_request",

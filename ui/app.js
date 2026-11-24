@@ -266,7 +266,7 @@ async function initialize() {
       const journal = make('details',undefined,'raw');
       journal.append(make('summary','Inspect live tool trace'));
       for (const [label, record] of [['Composed tool',live.composed],['Separate tools',live.separate]]) {
-        journal.append(make('p',label+' · '+record.verdict));
+        journal.append(make('p',label+' · '+(record.agent_response || record.verdict)));
         const list = make('ol',undefined,'trace-list');
         for (const item of record.trace) {
           const line = make('li');

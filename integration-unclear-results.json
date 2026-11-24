@@ -15,8 +15,8 @@
       "tool_issue_codes": [
         "scope_unspecified"
       ],
-      "agent_response": "The candidate is unclear and requires further clarification before being considered for final review.",
-      "milliseconds": 6086,
+      "agent_response": "Unclear. Scope unspecified.",
+      "milliseconds": 2811,
       "trace": [
         {
           "name": "rehearse_database_migration",
@@ -41,11 +41,13 @@
       ]
     },
     "separate": {
-      "calls": 10,
-      "verdict": "incomplete",
-      "tool_issue_codes": [],
-      "agent_response": null,
-      "milliseconds": 15602,
+      "calls": 7,
+      "verdict": "unclear",
+      "tool_issue_codes": [
+        "scope_unspecified"
+      ],
+      "agent_response": "Unclear. Scope unspecified.",
+      "milliseconds": 18407,
       "trace": [
         {
           "name": "validate_request",
@@ -95,38 +97,33 @@
           }
         },
         {
-          "name": "build_evidence_report",
+          "name": "verify_postconditions",
           "arguments": "{}",
           "result": {
-            "error": "Run verify_postconditions next."
+            "next": "build_evidence_report",
+            "issues_so_far": [
+              "scope_unspecified"
+            ]
           }
         },
         {
           "name": "build_evidence_report",
           "arguments": "{}",
           "result": {
-            "error": "Run verify_postconditions next."
-          }
-        },
-        {
-          "name": "build_evidence_report",
-          "arguments": "{}",
-          "result": {
-            "error": "Run verify_postconditions next."
-          }
-        },
-        {
-          "name": "build_evidence_report",
-          "arguments": "{}",
-          "result": {
-            "error": "Run verify_postconditions next."
-          }
-        },
-        {
-          "name": "build_evidence_report",
-          "arguments": "{}",
-          "result": {
-            "error": "Run verify_postconditions next."
+            "verdict": "unclear",
+            "plan_sha256": "5cbd7e674f7fdd6a1bddab644edc9d199ddc3c685bce757ac2c3e6e75f9bfc62",
+            "fixture_sha256": null,
+            "contract": "chinook-track-price-cents-v1",
+            "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+            "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+            "execution": "not_run",
+            "checks": {},
+            "issues": {
+              "scope_unspecified": {
+                "count": 1,
+                "examples": []
+              }
+            }
           }
         }
       ]

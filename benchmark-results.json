@@ -32,7 +32,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 55.28
+      "milliseconds": 125.07
     },
     {
       "id": "arithmetic",
@@ -62,7 +62,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 52.39
+      "milliseconds": 104.64
     },
     {
       "id": "two_pass",
@@ -92,7 +92,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 59.5
+      "milliseconds": 118.71
     },
     {
       "id": "repaired_backfill",
@@ -122,7 +122,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 60.4
+      "milliseconds": 125.61
     },
     {
       "id": "whole_dollars",
@@ -185,7 +185,7 @@
           }
         }
       },
-      "milliseconds": 52.89
+      "milliseconds": 90.26
     },
     {
       "id": "no_schema_change",
@@ -220,7 +220,7 @@
           }
         }
       },
-      "milliseconds": 42.6
+      "milliseconds": 80.14
     },
     {
       "id": "partial_backfill",
@@ -283,7 +283,7 @@
           }
         }
       },
-      "milliseconds": 47.45
+      "milliseconds": 86.63
     },
     {
       "id": "missing_column",
@@ -315,7 +315,7 @@
           }
         }
       },
-      "milliseconds": 22.44
+      "milliseconds": 40.72
     },
     {
       "id": "touch_original",
@@ -359,7 +359,7 @@
           }
         }
       },
-      "milliseconds": 50.17
+      "milliseconds": 90.0
     },
     {
       "id": "leave_nulls",
@@ -422,7 +422,7 @@
           }
         }
       },
-      "milliseconds": 48.5
+      "milliseconds": 87.27
     },
     {
       "id": "broken_reference",
@@ -478,7 +478,7 @@
           }
         }
       },
-      "milliseconds": 49.6
+      "milliseconds": 90.23
     },
     {
       "id": "extra_contract_override",
@@ -506,7 +506,7 @@
           }
         }
       },
-      "milliseconds": 0.27
+      "milliseconds": 0.51
     },
     {
       "id": "parity_split",
@@ -536,7 +536,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 49.39
+      "milliseconds": 90.95
     },
     {
       "id": "idempotent_backfill",
@@ -566,7 +566,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 51.7
+      "milliseconds": 109.33
     },
     {
       "id": "repair_standard",
@@ -596,7 +596,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 51.52
+      "milliseconds": 114.91
     },
     {
       "id": "mixed_formulas",
@@ -626,7 +626,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 50.22
+      "milliseconds": 119.67
     },
     {
       "id": "rounded_dollars",
@@ -689,7 +689,7 @@
           }
         }
       },
-      "milliseconds": 51.73
+      "milliseconds": 97.99
     },
     {
       "id": "half_price",
@@ -752,7 +752,7 @@
           }
         }
       },
-      "milliseconds": 50.85
+      "milliseconds": 94.41
     },
     {
       "id": "late_null",
@@ -815,7 +815,7 @@
           }
         }
       },
-      "milliseconds": 50.33
+      "milliseconds": 88.81
     },
     {
       "id": "rewrite_invoice",
@@ -854,7 +854,7 @@
           }
         }
       },
-      "milliseconds": 50.21
+      "milliseconds": 88.35
     },
     {
       "id": "lose_playlists",
@@ -893,7 +893,7 @@
           }
         }
       },
-      "milliseconds": 55.77
+      "milliseconds": 87.65
     },
     {
       "id": "failed_after_update",
@@ -925,7 +925,7 @@
           }
         }
       },
-      "milliseconds": 23.59
+      "milliseconds": 42.75
     },
     {
       "id": "break_legacy_query",
@@ -970,7 +970,7 @@
           }
         }
       },
-      "milliseconds": 36.43
+      "milliseconds": 69.3
     },
     {
       "id": "missing_index",
@@ -1007,7 +1007,7 @@
           }
         }
       },
-      "milliseconds": 47.96
+      "milliseconds": 93.15
     },
     {
       "id": "currency_conversion",
@@ -1036,7 +1036,7 @@
           }
         }
       },
-      "milliseconds": 0.27
+      "milliseconds": 0.52
     },
     {
       "id": "missing_backfill_scope",
@@ -1065,7 +1065,7 @@
           }
         }
       },
-      "milliseconds": 0.17
+      "milliseconds": 0.33
     }
   ]
 }

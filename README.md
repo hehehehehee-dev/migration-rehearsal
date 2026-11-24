@@ -6,9 +6,9 @@ Migration Rehearsal runs a candidate on a disposable copy of the Chinook databas
 
 Built for **Vibe-a-thon Track 2** · Python · SQLite · Synapse Custom
 
-[Watch the captioned submission demo (2:33)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233-repair) · [Try the repair loop](#watch-the-agent-repair-a-failed-plan) · [Try it locally](#try-it-locally) · [Read the live results](#live-agent-comparison) · [Connect an agent](#connect-another-mcp-client)
+[Watch the captioned submission demo (2:33)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233-report) · [Try the repair loop](#watch-the-agent-repair-a-failed-plan) · [Try it locally](#try-it-locally) · [Read the live results](#live-agent-comparison) · [Connect an agent](#connect-another-mcp-client)
 
-[![The workbench blocks the release after SQL committed on a copy. Track 1 shows 99 cents expected and 0 observed.](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/workbench-preview.png?v=display-fix)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233-repair)
+[![The workbench blocks the release after SQL committed on a copy. Track 1 shows 99 cents expected and 0 observed.](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/workbench-preview.png?v=display-fix)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233-report)
 
 ## Try it locally
 
@@ -83,14 +83,16 @@ The first two checks use the local engine. The third uses MCP and needs the depe
 
 The same local **Qwen2.5-Coder-1.5B** model received the same approved candidates and instructions. One setup exposes the composed Synapse tool. The other exposes the same six Python phases as separate MCP tools. The agent sees the next-phase hint from each tool response while all six baseline tools remain available.
 
+The model selects which tool to call. The runner and workbench display the verdict and evidence from the final tool report. For example, the faulty plan shows **Blocked. Price cents mismatch (3,503).** The JSON trace retains the exact issue codes. A run without a final tool report appears as **Incomplete**.
+
 | Candidate | Synapse Custom | Six separate tools | Trace |
 | --- | --- | --- | --- |
 | Truncate dollars first | Blocked · 1 call | Blocked · 7 calls | [JSON](integration-results.json) |
 | Round after scaling | Passed · 1 call | Passed · 7 calls | [JSON](integration-corrected-results.json) |
-| Missing backfill scope | Unclear · 1 call | Incomplete · 10 calls | [JSON](integration-unclear-results.json) |
+| Missing backfill scope | Unclear · 1 call | Unclear · 7 calls | [JSON](integration-unclear-results.json) |
 | Currency conversion | Unsupported · 1 call | Unsupported · 7 calls | [JSON](integration-unsupported-results.json) |
 
-The separate-tool agent hit its call limit on the missing-scope case after repeatedly asking for a report before verification. The traces show every rejected call. The scripted replay demonstrates that the separate tools produce the correct result when called in order.
+Both live setups reached the expected verdict on all four candidates. The separate-tool agent requested the report before verification once per case, then recovered. The scripted replay completes the same workflow in six calls when the tools run in order.
 
 The evidence covers four live candidates, one local model, and one migration family on a single public database. The workbench is a local review tool. Its confirmation assumes a trusted local operator.
 
@@ -149,7 +151,7 @@ In another terminal, run:
 python mcp_replay.py --server rehearse_database_migration_server.py --confirm --base-url http://127.0.0.1:11455/v1 --model qwen2.5-coder-1.5b --agent-case whole_dollars --integration-output my-live-trace.json
 ```
 
-The other live case IDs are `round_cents`, `missing_backfill_scope`, and `currency_conversion`. The trace retains the full tool response. The model receives a condensed copy for its final summary.
+The other live case IDs are `round_cents`, `missing_backfill_scope`, and `currency_conversion`. The trace retains the full tool response alongside the report-based summary.
 
 ### Capture the workbench and render a local replay
 

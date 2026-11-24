@@ -15,8 +15,8 @@
       "tool_issue_codes": [
         "price_cents_mismatch"
       ],
-      "agent_response": "The candidate is blocked due to a price_cents_mismatch issue with 3503 rows, where the expected and actual cents do not match. The issue is observed in the price_rows_checked field of the contract_pin",
-      "milliseconds": 11829,
+      "agent_response": "Blocked. Price cents mismatch (3,503).",
+      "milliseconds": 1901,
       "trace": [
         {
           "name": "rehearse_database_migration",
@@ -81,8 +81,8 @@
       "tool_issue_codes": [
         "price_cents_mismatch"
       ],
-      "agent_response": "The candidate is blocked due to a price_cents_mismatch issue in the price_rows_checked.",
-      "milliseconds": 14712,
+      "agent_response": "Blocked. Price cents mismatch (3,503).",
+      "milliseconds": 24535,
       "trace": [
         {
           "name": "validate_request",
