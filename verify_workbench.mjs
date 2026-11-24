@@ -1,18 +1,19 @@
 import {spawn} from 'node:child_process';
+import {once} from 'node:events';
+import {createInterface} from 'node:readline';
 import {chromium} from './.tooling/node_modules/playwright-core/index.mjs';
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 await mkdir('.video-work',{recursive:true});
-const args=['-B','workbench.py','--port','18765'];
+const args=['-B','workbench.py','--port','0'];
 if (process.argv[2]) args.push('--server',process.argv[2]);
 const app=spawn('python',args,{stdio:['ignore','pipe','inherit'],windowsHide:true});
-const base='http://127.0.0.1:18765';
+const lines=createInterface({input:app.stdout});
 let browser;
 try {
-  for (let i=0;i<40;i++) {
-    try { if ((await fetch(base+'/api/cases')).ok) break; } catch {}
-    await new Promise(r=>setTimeout(r,150));
-  }
+  const [ready]=await once(lines,'line');
+  const base=ready.trim().split(/\s+/).at(-1);
+  assert.match(base,/^http:\/\/127.0.0.1:\d+$/);
   const denied = await fetch(base+'/api/rehearse',{method:'POST',headers:{'Content-Type':'application/json'},
      body:JSON.stringify({case_id:'whole_dollars',confirm_plan_sha256:'wrong'})});
   assert.equal(denied.status,403);
@@ -33,6 +34,37 @@ try {
   assert.equal(await page.locator('.price-story .arrow').innerText(),'→');
   assert.equal(await page.locator('#case option:checked').innerText(),'Faulty · Truncate dollars first');
   await page.screenshot({path:'workbench-preview.png'});
+  const [proposalResponse] = await Promise.all([
+    page.waitForResponse(response => response.url().endsWith('/api/repair/propose')),
+    page.getByRole('button',{name:'Review recorded agent fix'}).click(),
+  ]);
+  assert(proposalResponse.ok());
+  const proposal = await proposalResponse.json();
+  assert.equal(proposal.mode,'recorded');
+  assert.notEqual(proposal.before_expression,proposal.after_expression);
+  assert.match(await page.locator('#repair-source').innerText(),/RECORDED AGENT/);
+  assert(await page.getByRole('button',{name:'Run corrected plan on a copy'}).isVisible());
+  assert(await page.locator('#repair-proof').isHidden());
+  const invalid = await fetch(base+'/api/repair/run',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({proposal_id:proposal.proposal_id,confirm_plan_sha256:'wrong'})});
+  assert.equal(invalid.status,403);
+  await page.locator('#repair').screenshot({path:'.video-work/repair-draft.png'});
+  const [repairResponse] = await Promise.all([
+    page.waitForResponse(response => response.url().endsWith('/api/repair/run')),
+    page.getByRole('button',{name:'Run corrected plan on a copy'}).click(),
+  ]);
+  assert(repairResponse.ok());
+  const verified=await repairResponse.json();
+  assert.equal(verified.verdict,'passed');
+  assert.equal(verified.checks.price_rows_checked,3503);
+  assert.equal(verified.contract_sha256,proposal.contract_sha256);
+  await page.getByText('Correction verified.',{exact:true}).waitFor();
+  assert.match(await page.locator('#repair-proof').innerText(),/\$0\.00[\s\S]*\$0\.99/);
+  assert.match(await page.locator('#repair-proof').innerText(),/3,503 \/ 3,503 prices verified/);
+  await page.locator('#repair').screenshot({path:'.video-work/repair-proof.png'});
+  const replay = await fetch(base+'/api/repair/run',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({proposal_id:proposal.proposal_id,confirm_plan_sha256:proposal.draft_sha256})});
+  assert.equal(replay.status,404);
   await page.locator('#case').selectOption('round_cents');
   await run.click();
   await page.getByText('Passed contract',{exact:true}).waitFor();
@@ -69,9 +101,16 @@ try {
   await page.getByText('Block release',{exact:true}).waitFor();
   assert(await page.evaluate(()=>document.documentElement.scrollWidth===innerWidth));
   await page.screenshot({path:'.video-work/workbench-mobile.png',fullPage:true});
+  await page.locator('#case').selectOption('whole_dollars');
+  await run.click();
+  await page.getByText('Block release',{exact:true}).waitFor();
+  await page.getByRole('button',{name:'Review recorded agent fix'}).click();
+  await page.getByRole('button',{name:'Run corrected plan on a copy'}).waitFor();
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth===innerWidth));
   assert.deepEqual(errors,[]);
-  console.log('Workbench passed browser checks: confirmation, keyboard, all four outcomes, contract pin, foreign keys, 390px, no page errors.');
+  console.log('Workbench passed browser checks: confirmation, keyboard, four outcomes, repair review and rerun, replay prevention, contract pin, 390px, no page errors.');
 } finally {
-  if (browser) await browser.close();
   app.kill();
+  lines.close();
+  if (browser) await browser.close();
 }

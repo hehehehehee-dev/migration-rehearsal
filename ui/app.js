@@ -20,7 +20,9 @@ const issueNames = {
   protected_records_changed: 'Protected records changed',
   application_query_changed: 'Application query changed',
 };
-let candidates = [], runs = 0;
+let candidates = [], runs = 0, runtime = 'Local Python';
+let repairRun = null, repairDraft = null;
+const proposeFix = $('propose-fix'), verifyFix = $('run-repair');
 const number = new Intl.NumberFormat('en-US');
 const dollars = new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'});
 const count = (x) => typeof x === 'number' ? number.format(x) : '—';
@@ -53,6 +55,7 @@ function showPin(pin, verified = null) {
 let expectedPin;
 function current() { return candidates.find(x => x.id === choice.value); }
 function showSelection() {
+  resetRepair();
   const selected = current();
   $('case-hint').textContent = selected.description;
   $('plan').textContent = JSON.stringify(selected.plan,null,2);
@@ -123,9 +126,105 @@ function evidence(report) {
   $('raw-json').textContent = JSON.stringify(report,null,2);
   $('run-seq').textContent = 'RUN '+String(++runs).padStart(2,'0');
   details.hidden = false;
+  if (report.repair_run_id && report.repair_mode) {
+    repairRun = report;
+    proposeFix.firstChild.textContent = report.repair_mode === 'live'
+      ? 'Ask agent for a fix ' : 'Review recorded agent fix ';
+    proposeFix.hidden = false;
+  }
+}
+function resetRepair() {
+  repairRun = repairDraft = null;
+  proposeFix.hidden = $('repair').hidden = $('proposal-status').hidden = $('repair-proof').hidden = true;
+  proposeFix.disabled = verifyFix.disabled = false;
+  verifyFix.hidden = false;
+  $('repair-status').textContent = '';
+  $('records-title').firstElementChild.textContent = '03';
+}
+function request(url, body) {
+  return get(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+}
+async function proposeRepair() {
+  const report = repairRun;
+  if (!report) return;
+  proposeFix.disabled = true;
+  const status = $('proposal-status');
+  status.hidden = false;
+  status.textContent = report.repair_mode === 'live' ? 'Asking the local agent…' : 'Loading the recorded proposal…';
+  try {
+    const proposed = await request('/api/repair/propose',{run_id:report.repair_run_id});
+    if (repairRun !== report) return;
+    repairDraft = proposed;
+    verifyFix.hidden = false;
+    $('repair-proof').hidden = true;
+    $('repair-status').textContent = '';
+    $('repair-before').textContent = proposed.before_expression;
+    $('repair-after').textContent = proposed.after_expression;
+    $('repair-why').textContent = proposed.reason;
+    $('repair-source').textContent = (proposed.mode === 'live' ? 'LIVE AGENT' : 'RECORDED AGENT') + ' / ' + proposed.model;
+    $('repair-json').textContent = JSON.stringify({proposal:proposed},null,2);
+    $('repair').hidden = false;
+    $('records-title').firstElementChild.textContent = '04';
+    status.hidden = true;
+    proposeFix.hidden = true;
+    $('repair-title').focus();
+  } catch (error) {
+    if (repairRun === report) status.textContent = error.message;
+  } finally {
+    if (repairRun === report) proposeFix.disabled = false;
+  }
+}
+function repairTile(title, amount, summary, style) {
+  const tile = make('div',undefined,'repair-result '+style);
+  tile.append(make('span',title),make('strong',amount),make('p',summary));
+  return tile;
+}
+async function runRepair() {
+  const proposed = repairDraft, before = repairRun;
+  if (!proposed || !before) return;
+  verifyFix.disabled = true;
+  const status = $('repair-status');
+  status.textContent = 'Rehearsing the corrected plan…';
+  try {
+    const report = await request('/api/repair/run',{
+      proposal_id:proposed.proposal_id,confirm_plan_sha256:proposed.draft_sha256,
+    });
+    if (repairDraft !== proposed) return;
+    const shared = !!report.contract_sha256 && report.contract_sha256 === before.contract_sha256
+      && !!report.fixture_sha256 && report.fixture_sha256 === before.fixture_sha256;
+    const checked = report.checks?.price_rows_checked;
+    const passed = report.verdict === 'passed' && shared;
+    const proof = $('repair-proof');
+    const misses = before.issues.price_cents_mismatch.count;
+    const candidate = before.issues.price_cents_mismatch.examples[0];
+    const observed = candidate && money(candidate.actual_cents);
+    const expected = candidate && money(candidate.expected_cents);
+    proof.replaceChildren(
+      repairTile('Original · Blocked',observed || '—',count(misses)+' wrong prices','blocked'),
+      repairTile(passed ? 'Correction · Passed' : 'Correction · '+(report.verdict === 'passed' ? 'Inconclusive' : report.verdict),
+        passed ? (expected || 'Pass') : '—',
+        passed ? count(checked)+' / '+count(checked)+' prices verified' :
+          Object.keys(report.issues || {}).join(', ').replaceAll('_',' ') || 'No verified correction',
+        passed ? 'passed' : 'review'),
+      make('p', shared ? 'Same pinned contract and fixture · '+runtime :
+        'The reports do not share a verified contract and fixture.','repair-pin'),
+    );
+    $('repair-json').textContent = JSON.stringify({original:before,proposal:proposed,corrected:report},null,2);
+    proof.hidden = false;
+    verifyFix.hidden = true;
+    status.textContent = passed ? 'Correction verified.' : 'Review the corrected run report.';
+  } catch (error) {
+    if (repairDraft !== proposed) return;
+    status.textContent = error.message + ' Request another proposal to retry.';
+    proposeFix.hidden = false;
+    verifyFix.hidden = true;
+  } finally {
+    if (repairDraft === proposed) verifyFix.disabled = false;
+  }
 }
 async function execute() {
   const selected = current();
+  resetRepair();
   choice.disabled = run.disabled = true;
   details.hidden = true;
   banner('Running rehearsal','Checking the disposable copy.');
@@ -145,7 +244,8 @@ async function initialize() {
     const data = await get('/api/cases');
     candidates = data.cases;
     expectedPin = data.contract_pin;
-    $('runtime').textContent = data.runtime;
+    runtime = data.runtime;
+    $('runtime').textContent = runtime;
     for (const item of candidates) choice.add(new Option(names[item.id] || item.description,item.id));
     choice.disabled = run.disabled = false;
     showSelection();
@@ -187,4 +287,6 @@ async function initialize() {
 }
 choice.addEventListener('change',showSelection);
 run.addEventListener('click',execute);
+proposeFix.addEventListener('click',proposeRepair);
+verifyFix.addEventListener('click',runRepair);
 initialize();

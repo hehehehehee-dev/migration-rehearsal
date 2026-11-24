@@ -58,12 +58,40 @@
         <div id="details" hidden>
           <dl class="numbers" id="numbers"></dl>
           <div class="output" id="output"></div>
+          <button type="button" class="repair-trigger" id="propose-fix" hidden>Review agent fix <span aria-hidden="true">↗</span></button>
+          <p class="repair-status" role="status" id="proposal-status" hidden></p>
           <details class="raw">
             <summary>Inspect report JSON</summary>
             <pre id="raw-json"></pre>
           </details>
         </div>
       </div>
+    </section>
+    <section class="repair" aria-labelledby="repair-title" id="repair" hidden>
+      <header class="repair-head">
+        <h2 class="panel-label" id="repair-title" tabindex="-1"><span>03</span> Verify the fix</h2>
+        <span class="repair-source" id="repair-source"></span>
+      </header>
+      <div class="repair-diff" aria-label="Proposed SQL expression change">
+        <div class="repair-change previous">
+          <span>Original backfill</span>
+          <code id="repair-before"></code>
+        </div>
+        <div class="repair-change proposed">
+          <span>Proposed backfill</span>
+          <code id="repair-after"></code>
+        </div>
+      </div>
+      <div class="repair-approval">
+        <p id="repair-why"></p>
+        <button type="button" id="run-repair">Run corrected plan on a copy <span aria-hidden="true">↗</span></button>
+      </div>
+      <p class="repair-status" role="status" id="repair-status"></p>
+      <div id="repair-proof" class="repair-proof" hidden></div>
+      <details class="raw repair-record">
+        <summary>Inspect proposal and verification JSON</summary>
+        <pre id="repair-json"></pre>
+      </details>
     </section>
     <section class="records" aria-labelledby="records-title">
       <div class="records-bar">

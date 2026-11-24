@@ -79,3 +79,29 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding
 @media(max-width:720px){.mast-label{display:none}.intro{grid-template-columns:1fr;gap:19px;padding-top:23px}.brief{padding-left:11px}.bench{display:block}.case-pane{border-right:0;border-bottom:1px solid var(--black);padding:14px}.result-pane{padding:14px}.fixture{font-size:.62rem}.price-story{letter-spacing:-.055em}.empty{min-height:175px}.panel-label .right{font-size:.62rem}}
 
 @media(max-width:440px){.contract-strip summary{gap:7px;padding-inline:8px;font-size:.66rem}.pin-state{padding:3px 4px}}
+
+.repair-trigger{background:var(--acid);color:var(--black);margin-top:13px}
+.repair-trigger:hover:enabled{background:var(--black);color:#fff}
+.repair-status{font:.80rem/1.35 var(--mono);margin:8px 0;color:var(--muted)}
+.repair-status:empty{display:none}
+.repair{margin-top:19px;padding:16px 20px 12px;background:var(--surface);border:1px solid var(--black)}
+.repair-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--black);padding-bottom:9px}
+.repair-head .panel-label{border:0;padding:0;margin:0}
+.repair-source,.repair-change span,.repair-result span,.repair-pin{font:700 .73rem/1.35 var(--mono);letter-spacing:.025em}
+.repair-source{background:var(--acid);padding:4px 7px;overflow-wrap:anywhere}
+.repair-diff,.repair-proof{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:11px}
+.repair-change,.repair-result{padding:11px 13px;min-width:0;border-left:4px solid var(--black)}
+.repair-change.previous,.repair-result.blocked{background:var(--rust);color:var(--red);border-color:var(--red)}
+.repair-change.proposed{background:var(--lavender);color:var(--blue);border-color:var(--blue)}
+.repair-result.passed{background:var(--moss);color:var(--green);border-color:var(--green)}
+.repair-result.review{background:var(--gold);color:var(--amber);border-color:var(--amber)}
+.repair-change span,.repair-result span{display:block;margin-bottom:5px;text-transform:uppercase}
+.repair-change code{font:700 clamp(.80rem,1.5vw,1.05rem)/1.37 var(--mono);overflow-wrap:anywhere}
+.repair-approval{display:grid;grid-template-columns:minmax(0,1fr) minmax(245px,auto);align-items:center;gap:14px;margin-top:9px}
+.repair-approval p{margin:0;color:var(--muted);font-size:.94rem}
+.repair-approval button{margin:0;gap:20px}
+.repair-result strong{font:900 clamp(1.8rem,4.4vw,3.4rem)/1 var(--display);letter-spacing:-.06em}
+.repair-result p,.repair-pin{margin:5px 0 0;font-size:.79rem}
+.repair-pin{grid-column:1/-1}
+.repair-record{margin:8px 0 0}
+@media(max-width:600px){.repair{padding:12px}.repair-approval,.repair-diff{grid-template-columns:1fr}.repair-approval{gap:8px}}

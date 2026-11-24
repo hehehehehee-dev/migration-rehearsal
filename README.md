@@ -6,9 +6,9 @@ Migration Rehearsal runs a candidate on a disposable copy of the Chinook databas
 
 Built for **Vibe-a-thon Track 2** · Python · SQLite · Synapse Custom
 
-[Watch the captioned submission demo (2:33)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233-r2) · [Try it locally](#try-it-locally) · [Read the live results](#live-agent-comparison) · [Connect an agent](#connect-another-mcp-client)
+[Watch the captioned submission demo (2:33)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233-repair) · [Try the repair loop](#watch-the-agent-repair-a-failed-plan) · [Try it locally](#try-it-locally) · [Read the live results](#live-agent-comparison) · [Connect an agent](#connect-another-mcp-client)
 
-[![The workbench blocks the release after SQL committed on a copy. Track 1 shows 99 cents expected and 0 observed.](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/workbench-preview.png?v=display-fix)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233-r2)
+[![The workbench blocks the release after SQL committed on a copy. Track 1 shows 99 cents expected and 0 observed.](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/workbench-preview.png?v=display-fix)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233-repair)
 
 ## Try it locally
 
@@ -33,6 +33,16 @@ To run the same workbench through the generated **Synapse Custom MCP server**, s
 python -m pip install -r requirements.txt
 python workbench.py --server rehearse_database_migration_server.py
 ```
+
+## Watch the agent repair a failed plan
+
+Run **Truncate dollars first**, then select **Review recorded agent fix**. Review the one-expression diff and select **Run corrected plan on a copy**. The workbench shows the same track at **$0.00 before** and **$0.99 after**, with **3,503/3,503 prices verified** under the same pinned contract and fixture.
+
+![Live agent repair proof. The original backfill reports 3,503 wrong prices. The correction verifies all 3,503 prices.](repair-preview.png)
+
+The keyless quick start uses a [recorded Qwen proposal](repair-proposal.json) tied to the original plan and contract. Both rehearsals run on your machine. To generate a fresh proposal with a running local model, pass `--model-url http://127.0.0.1:11455/v1 --model qwen2.5-coder-1.5b` when starting the MCP workbench. Select **Ask agent for a fix** to try it.
+
+For an isolated price conversion failure, the model selects one permitted expression. The workbench shows the SQL diff and waits for approval of the exact draft. Synapse verifies it with one call to the same composed tool.
 
 ## What Synapse composes
 
