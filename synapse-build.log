@@ -57,6 +57,7 @@ Raw artifact SHA-256 b81c32825845ba946128ed7695599ce4ec759ca21949e39c38bc7828cbf
 Runnable server SHA-256 d11d6312887391369506fab1b134c3f1966e3a23e6c356f736d32d2ab2a37b13
 Phase calls validate_approved_plan -> create_test_snapshot -> capture_baseline -> execute_migration -> verify_postconditions -> build_evidence_report
 The raw CLI artifact is synapse-generated-server.py.txt. The checked-in server removes stray qualified names from the imports block, adds the missing MigrationPlan import, and clarifies the tool description. The function body matches the raw CLI artifact and model tool plan.
+The generated early returns are redundant because the context stays nonempty. Phases update the same dictionary in place, so calls that ignore a return value still keep the updates. Failures stay in context until the evidence report.
 
 Verification on the runnable server
 Synapse MCP: 35/35, including 20/20 holdout cases.

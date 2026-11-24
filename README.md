@@ -6,9 +6,9 @@ Migration Rehearsal tries the change on a disposable copy and shows what went wr
 
 Built for **Vibe-a-thon Track 2** · Python · SQLite · Synapse Custom
 
-[Watch the captioned submission demo (2:56)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-256-playlists) · [Try playlist migration](#rehearse-a-playlist-migration) · [Try it locally](#try-it-locally) · [Read the live results](#live-agent-comparison) · [Connect an agent](#connect-another-mcp-client)
+[Watch the captioned submission demo (2:58)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-258-paired) · [Try playlist migration](#rehearse-a-playlist-migration) · [Try it locally](#try-it-locally) · [Read the live results](#live-agent-comparison) · [Connect an agent](#connect-another-mcp-client)
 
-[![Track 1 at $0.00 in the original, $1.00 in the blocked trial, and $0.99 in the trial that verified all 3,503 prices.](reviewer-preview.png)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-256-playlists)
+[![Track 1 at $0.00 in the original, $1.00 in the blocked trial, and $0.99 in the trial that verified all 3,503 prices.](reviewer-preview.png)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-258-paired)
 
 ## Try it locally
 
@@ -80,6 +80,8 @@ The tool advertises both [typed plan objects](mcp_plan.py) through MCP `tools/li
 
 The approved fixture is read from disk and checked before use. Every mutation happens in memory. The tool accepts named operations and scopes, and the workbench binds to loopback.
 
+Chinook is the bundled demo. Using the same workflow for a different database would require a new fixture, a matching pinned contract, and a checker for that migration.
+
 ## Results you can reproduce
 
 Both MCP surfaces matched **35/35 labeled cases**, including **20/20 holdouts**, with zero misses. The nine playlist cases cover exact copying, reorder, balanced swaps, missing and duplicate links, an orphan, a missing unique constraint, and unclear or unsupported mappings. Both replays left the fixture byte for byte identical. A match requires the expected verdict, exact reason codes, the verified family pin, and any labeled counts, checks, or execution status.
@@ -120,7 +122,7 @@ The separate-tool agent repeated verification and stopped in the faulty-price ca
 The timings are from one local run on an RTX 5070 Laptop GPU. The two repetitions reverse the order of the arms at temperature zero. They show whether the result repeats in this setup.
 
 <details>
-<summary>Earlier guided run used in the current video</summary>
+<summary>Earlier guided run with Qwen 1.5B</summary>
 
 This run used **Qwen2.5-Coder-1.5B** and explicitly named the next phase in the prompt. The workbench displays the verdict from the final tool report.
 
