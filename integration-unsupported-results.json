@@ -3,8 +3,8 @@
   "deterministic_comparison": {
     "composed_calls_per_case": 1,
     "separate_calls_per_case": 6,
-    "composed_matched": 26,
-    "separate_matched": 26
+    "composed_matched": 35,
+    "separate_matched": 35
   },
   "live_comparison": {
     "model": "qwen2.5-coder-1.5b",
@@ -16,7 +16,7 @@
         "unsupported_operation"
       ],
       "agent_response": "Unsupported. Unsupported operation.",
-      "milliseconds": 2542,
+      "milliseconds": 3052,
       "trace": [
         {
           "name": "rehearse_database_migration",
@@ -35,6 +35,7 @@
           },
           "result": {
             "verdict": "unsupported",
+            "family": "price_cents",
             "plan_sha256": "035a27c6282c8fe653c68a6ae91a69fefaa5bf017e1f4c3879a34fc1e353ad12",
             "fixture_sha256": null,
             "contract": "chinook-track-price-cents-v1",
@@ -59,7 +60,7 @@
         "unsupported_operation"
       ],
       "agent_response": "Unsupported. Unsupported operation.",
-      "milliseconds": 11177,
+      "milliseconds": 19453,
       "trace": [
         {
           "name": "validate_request",
@@ -141,6 +142,7 @@
           "mcp_arguments": {},
           "result": {
             "verdict": "unsupported",
+            "family": "price_cents",
             "plan_sha256": "035a27c6282c8fe653c68a6ae91a69fefaa5bf017e1f4c3879a34fc1e353ad12",
             "fixture_sha256": null,
             "contract": "chinook-track-price-cents-v1",

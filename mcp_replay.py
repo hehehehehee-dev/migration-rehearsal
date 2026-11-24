@@ -12,7 +12,7 @@ import time
 import urllib.request
 
 from demo import approved, benchmark, canonical, cases
-from rehearsal import PHASES
+from rehearsal import PHASES, PLAYLIST_FAMILY
 
 ROOT = Path(__file__).resolve().parent
 
@@ -116,7 +116,10 @@ def agent_outcome(report, call_count):
             reasons.append(f"{label} ({count:,})" if count != 1 else label)
         evidence = ", ".join(reasons).capitalize()
     elif verdict == "passed":
-        evidence = f"Verified {report['checks']['price_rows_checked']:,} track prices"
+        if report.get("family") == PLAYLIST_FAMILY:
+            evidence = f"Verified {report['checks']['memberships_verified']:,} playlist memberships"
+        else:
+            evidence = f"Verified {report['checks']['price_rows_checked']:,} track prices"
     else:
         evidence = "The tool returned no issue code"
     return {"verdict": verdict, "tool_issue_codes": codes,
@@ -190,7 +193,9 @@ def main():
                    help="Authorize the frozen set on disposable fixture copies")
     p.add_argument("--reference", action="store_true", help="Identify a hand-authored MCP wrapper")
     p.add_argument("--base-url")
-    p.add_argument("--agent-case", default="whole_dollars", choices=("whole_dollars","round_cents","currency_conversion","missing_backfill_scope"))
+    p.add_argument("--agent-case", default="whole_dollars",
+                   choices=("whole_dollars", "round_cents", "currency_conversion", "missing_backfill_scope",
+                            "playlist_swapped", "playlist_preserved"))
     p.add_argument("--integration-output", type=Path)
     p.add_argument("--model",default="qwen2.5-coder-7b")
     args=p.parse_args()

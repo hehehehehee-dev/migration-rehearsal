@@ -8,11 +8,16 @@ import os
 import sqlite3
 import time
 
+from playlist import PLAYLIST_FAMILY, SELECTS as PLAYLIST_MAPPINGS, execute_membership_migration, verify_memberships
+
 FIXTURE = Path(__file__).resolve().parent / "fixtures" / "chinook.sqlite"
 FIXTURE_HASH = "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a"
 APPROVAL_ENV = "REHEARSAL_APPROVED_PLANS"
 CONTRACT_PATH = FIXTURE.with_name("contract.json")
 CONTRACT_SHA256 = "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f"
+PRICE_FAMILY = "price_cents"
+PLAYLIST_CONTRACT_PATH = FIXTURE.with_name("playlist-contract.json")
+PLAYLIST_CONTRACT_SHA256 = "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304"
 EXPRESSIONS = {
     "rounded_cents": "CAST(ROUND(UnitPrice * 100) AS INTEGER)",
     "rounded_cents_arithmetic": "CAST(UnitPrice * 100 + 0.5 AS INTEGER)",
@@ -52,18 +57,29 @@ def fingerprint(plan_json):
     """Fingerprint the plan's exact UTF-8 bytes."""
     return sha256(plan_json.encode("utf-8")).hexdigest()
 
+def plan_family(plan):
+    return PLAYLIST_FAMILY if isinstance(plan, dict) and plan.get("family") == PLAYLIST_FAMILY else PRICE_FAMILY
+
+
+def contract_spec(family):
+    if family == PLAYLIST_FAMILY:
+        return PLAYLIST_CONTRACT_PATH, PLAYLIST_CONTRACT_SHA256
+    return CONTRACT_PATH, CONTRACT_SHA256
+
+
 def check_contract(context):
     """Check the trusted pin and keep the verified contract snapshot for this run."""
+    path, pin = contract_spec(context["family"])
     try:
-        contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"), object_pairs_hook=unique_keys)
+        contract = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=unique_keys)
         digest = fingerprint(canonical(contract))
     except (OSError, ValueError, RecursionError):
         context["contract_sha256"] = None
         return block(context, "contract_unavailable", verdict="unclear")
-    if digest != CONTRACT_SHA256:
+    if digest != pin:
         context["contract_sha256"] = None
         return block(context, "contract_hash_mismatch",
-                     examples=[{"expected_sha256": CONTRACT_SHA256, "observed_sha256": digest}],
+                     examples=[{"expected_sha256": pin, "observed_sha256": digest}],
                      verdict="unclear")
     context.setdefault("contract_snapshot", contract)
     context["contract_sha256"] = digest
@@ -72,19 +88,21 @@ def check_contract(context):
 
 def validate_request(plan_json: str) -> dict:
     """Create a context from a JSON string containing the proposed migration plan."""
-    context = {"digest": fingerprint(plan_json), "issues": {}, "checks": {},
+    plan = None
+    if len(plan_json) <= 4096:
+        try:
+            plan = json.loads(plan_json, object_pairs_hook=unique_keys)
+        except (ValueError, RecursionError):
+            pass
+    context = {"digest": fingerprint(plan_json), "issues": {}, "checks": {}, "family": plan_family(plan),
                "source_checked": False, "execution": "not_run", "verdict": None}
     if context["digest"] not in os.environ.get(APPROVAL_ENV, "").split(","):
         return block(context, "confirmation_required")
     check_contract(context)
     if context["issues"]:
         return context
-    if len(plan_json) > 4096:
-        return block(context, "invalid_plan")
-    try:
-        plan = json.loads(plan_json, object_pairs_hook=unique_keys)
-    except (ValueError, RecursionError):
-        return block(context, "invalid_plan")
+    if context["family"] == PLAYLIST_FAMILY:
+        return validate_membership_plan(context, plan)
     if not isinstance(plan, dict) or set(plan) != {"add_column", "backfills", "post_step"}:
         return block(context, "invalid_plan")
     operations = plan["backfills"]
@@ -106,6 +124,20 @@ def validate_request(plan_json: str) -> dict:
             return block(context, "invalid_plan")
         if step["scope"] not in SCOPES:
             return block(context, "unsupported_scope", verdict="unsupported")
+    context["plan"] = plan
+    return context
+
+
+def validate_membership_plan(context, plan):
+    if set(plan) != {"family", "mapping"}:
+        return block(context, "invalid_plan")
+    mapping = plan["mapping"]
+    if mapping is None:
+        return block(context, "membership_mapping_unspecified", verdict="unclear")
+    if not isinstance(mapping, str):
+        return block(context, "invalid_plan")
+    if mapping not in PLAYLIST_MAPPINGS:
+        return block(context, "unsupported_operation", verdict="unsupported")
     context["plan"] = plan
     return context
 
@@ -185,14 +217,10 @@ def execute_migration(context: dict) -> dict:
             db.set_progress_handler(lambda: int(time.monotonic() > deadline), 1000)
             with db:
                 db.execute("BEGIN")
-                if plan["add_column"]:
-                    db.execute("ALTER TABLE Track ADD COLUMN UnitPriceCents INTEGER")
-                for step in plan["backfills"]:
-                    expression = EXPRESSIONS[step["expression"]]
-                    scope = SCOPES[step["scope"]]
-                    db.execute(f"UPDATE Track SET UnitPriceCents={expression} WHERE {scope}")
-                for statement in POST_STEPS[plan["post_step"]]:
-                    db.execute(statement)
+                if context["family"] == PLAYLIST_FAMILY:
+                    execute_membership_migration(db, plan["mapping"])
+                else:
+                    execute_price_migration(db, plan)
             context["result_snapshot"] = db.serialize()
             context["execution"] = "sqlite_committed_on_copy"
     except sqlite3.Error as exc:
@@ -201,6 +229,38 @@ def execute_migration(context: dict) -> dict:
         block(context, reason, examples=[{"detail": str(exc)}],
               verdict="unclear" if reason == "execution_timeout" else "blocked")
     return context
+
+def execute_price_migration(db, plan):
+    if plan["add_column"]:
+        db.execute("ALTER TABLE Track ADD COLUMN UnitPriceCents INTEGER")
+    for step in plan["backfills"]:
+        expression = EXPRESSIONS[step["expression"]]
+        scope = SCOPES[step["scope"]]
+        db.execute(f"UPDATE Track SET UnitPriceCents={expression} WHERE {scope}")
+    for statement in POST_STEPS[plan["post_step"]]:
+        db.execute(statement)
+
+
+def verify_prices(db, context):
+    contract = context["contract_snapshot"]
+    source, target = contract["source"], contract["target"]
+    table, key, column = source["table"], source["key"], target["column"]
+    columns = {row[1]: row[2] for row in db.execute(f"PRAGMA table_info({table})")}
+    if columns.get(column) != target["type"]:
+        block(context, "target_column_missing")
+        return
+    expected = {row[0]: int(Decimal(str(row[-1])) * target["units_per_dollar"])
+                for row in context["baseline"][table]}
+    observed = dict(db.execute(f"SELECT {key}, {column} FROM {table} ORDER BY {key}"))
+    mismatches = []
+    for track_id, cents in expected.items():
+        actual = observed.get(track_id)
+        if type(actual) is not int or actual != cents:
+            mismatches.append({"track_id": track_id, "expected_cents": cents, "actual_cents": actual})
+    context["checks"].update(price_rows_checked=len(expected), price_cents_exact=not mismatches)
+    if mismatches:
+        block(context, "price_cents_mismatch", len(mismatches), mismatches)
+
 
 def verify_postconditions(context: dict) -> dict:
     """Check SQLite and application state against the fixed preservation contract."""
@@ -244,23 +304,13 @@ def verify_postconditions(context: dict) -> dict:
             if not checks["indexes"]:
                 block(context, "required_index_changed")
 
-            source, target = contract["source"], contract["target"]
-            table, key, column = source["table"], source["key"], target["column"]
-            columns = {row[1]: row[2] for row in db.execute(f"PRAGMA table_info({table})")}
-            if columns.get(column) != target["type"]:
-                return block(context, "target_column_missing")
-            expected = {row[0]: int(Decimal(str(row[-1])) * target["units_per_dollar"])
-                        for row in context["baseline"][table]}
-            observed = dict(db.execute(f"SELECT {key}, {column} FROM {table} ORDER BY {key}"))
-            mismatches = []
-            for track_id, cents in expected.items():
-                actual = observed.get(track_id)
-                if type(actual) is not int or actual != cents:
-                    mismatches.append({"track_id": track_id, "expected_cents": cents, "actual_cents": actual})
-            checks["price_rows_checked"] = len(expected)
-            checks["price_cents_exact"] = not mismatches
-            if mismatches:
-                block(context, "price_cents_mismatch", len(mismatches), mismatches)
+            if context["family"] == PLAYLIST_FAMILY:
+                membership_checks, issues = verify_memberships(db, contract, context["baseline"])
+                checks.update(membership_checks)
+                for code, (count, examples) in issues.items():
+                    block(context, code, count, examples)
+            else:
+                verify_prices(db, context)
     except sqlite3.Error as exc:
         block(context, "verification_error", examples=[{"detail": str(exc)}], verdict="unclear")
     return context
@@ -270,17 +320,19 @@ def build_evidence_report(context: dict) -> dict:
     if context.get("contract_sha256"):
         check_contract(context)
     if not context["issues"]:
-        if context["checks"].get("price_cents_exact") is not True:
+        required = ("membership_pairs_exact", "membership_schema") if context["family"] == PLAYLIST_FAMILY else ("price_cents_exact",)
+        if any(context["checks"].get(key) is not True for key in required):
             block(context, "verification_not_completed", verdict="unclear")
         elif not context["source_checked"]:
             block(context, "source_not_checked", verdict="unclear")
     return {
         "verdict": context["verdict"] or "passed",
+        "family": context["family"],
         "plan_sha256": context["digest"],
         "fixture_sha256": FIXTURE_HASH if context["source_checked"] else None,
         "contract": context.get("contract_snapshot", {}).get("id"),
         "contract_sha256": context.get("contract_sha256"),
-        "pinned_contract_sha256": CONTRACT_SHA256,
+        "pinned_contract_sha256": contract_spec(context["family"])[1],
         "execution": context["execution"],
         "checks": context["checks"],
         "issues": context["issues"],

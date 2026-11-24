@@ -10,7 +10,7 @@ from uuid import uuid4
 
 from demo import approved, canonical, cases
 from mcp_replay import connect, plan_argument
-from rehearsal import CONTRACT_SHA256, fingerprint, rehearse_locally
+from rehearsal import CONTRACT_SHA256, contract_spec, fingerprint, plan_family, rehearse_locally
 from repair import (
     REVIEWER_CHOICES, RepairUnavailable, call_model, eligible, live_endpoint, recorded_proposal,
     review_proposal, reviewer_proposal,
@@ -20,8 +20,16 @@ ROOT = Path(__file__).resolve().parent
 UI = ROOT / "ui"
 CASES = {case["id"]: case for case in cases()}
 DEMO_CASES = ("whole_dollars", "round_cents", "missing_backfill_scope",
-              "currency_conversion", "broken_reference", "partial_backfill")
+              "currency_conversion", "broken_reference", "partial_backfill", "playlist_swapped", "playlist_preserved")
 STATE_LIMIT = 32
+
+
+def describe_case(case_id):
+    case = CASES[case_id]
+    plan = canonical(case["plan"])
+    family = plan_family(case["plan"])
+    return {**case, "plan_json": plan, "sha256": fingerprint(plan),
+            "family": family, "contract_pin": contract_spec(family)[1]}
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -29,9 +37,7 @@ class Handler(BaseHTTPRequestHandler):
         path = urlsplit(self.path).path
         if path == "/api/cases":
             return self.respond({
-                "cases": [{**CASES[id], "plan_json": canonical(CASES[id]["plan"]),
-                           "sha256": fingerprint(canonical(CASES[id]["plan"]))}
-                          for id in DEMO_CASES],
+                "cases": [describe_case(case_id) for case_id in DEMO_CASES],
                 "runtime": self.server.runtime, "contract_pin": CONTRACT_SHA256,
             })
         if path in ("/api/bench", "/api/trace"):

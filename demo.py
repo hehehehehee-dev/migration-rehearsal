@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 import time
 
-from rehearsal import APPROVAL_ENV, CONTRACT_SHA256, FIXTURE, canonical, fingerprint, rehearse_locally
+from rehearsal import APPROVAL_ENV, FIXTURE, canonical, contract_spec, fingerprint, plan_family, rehearse_locally
 
 ROOT = Path(__file__).resolve().parent
 
@@ -27,9 +27,14 @@ def approved(plans):
 
 def score(case, report):
     expected = case["expected"]
+    family = plan_family(case["plan"])
+    _, pin = contract_spec(family)
+    checks, issues = report.get("checks", {}), report.get("issues", {})
     return (report.get("verdict") == expected["verdict"]
-            and set(report.get("issues", {})) == set(expected["issues"])
-            and report.get("contract_sha256") == CONTRACT_SHA256
+            and set(issues) == set(expected["issues"])
+            and report.get("contract_sha256") == pin
+            and all(checks.get(key) == value for key, value in expected.get("checks", {}).items())
+            and all(issues.get(code, {}).get("count") == count for code, count in expected.get("issue_counts", {}).items())
             and ("execution" not in expected or report.get("execution") == expected["execution"]))
 
 def benchmark(selected, run):

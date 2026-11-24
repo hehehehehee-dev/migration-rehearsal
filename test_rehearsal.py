@@ -82,10 +82,36 @@ class RehearsalTests(unittest.TestCase):
         selected = list(self.cases.values())
         with approved([canonical(case["plan"]) for case in selected]):
             result = benchmark(selected,engine.rehearse_locally)
-        self.assertEqual(result["total"],26)
+        self.assertEqual(result["total"],35)
         self.assertEqual(result["misses"],[])
         self.assertTrue(result["source_unchanged"])
         self.assertEqual(hashlib.sha256(engine.FIXTURE.read_bytes()).hexdigest(),engine.FIXTURE_HASH)
+
+    def test_equal_playlist_counts_can_hide_reassigned_tracks(self):
+        swapped = canonical(self.cases["playlist_swapped"]["plan"])
+        clean = canonical(self.cases["playlist_preserved"]["plan"])
+        with approved([swapped, clean]):
+            blocked, passed = map(engine.rehearse_locally, (swapped, clean))
+        self.assertEqual(blocked["execution"], "sqlite_committed_on_copy")
+        self.assertEqual(blocked["verdict"], "blocked")
+        self.assertTrue(blocked["checks"]["playlist_counts_exact"])
+        self.assertTrue(blocked["checks"]["foreign_keys"])
+        self.assertEqual(blocked["issues"]["missing_memberships"]["count"], 50)
+        self.assertEqual(blocked["issues"]["unexpected_memberships"]["count"], 50)
+        self.assertEqual(blocked["contract_sha256"], passed["contract_sha256"])
+        self.assertEqual(passed["verdict"], "passed")
+        self.assertEqual(passed["checks"]["memberships_verified"], 8715)
+        self.assertNotIn("price_cents_exact", passed["checks"])
+
+    def test_wrong_playlist_contract_pin_stops_sql_without_touching_fixture(self):
+        plan = canonical(self.cases["playlist_preserved"]["plan"])
+        with approved([plan]), patch.object(engine, "PLAYLIST_CONTRACT_PATH") as policy, patch.object(engine, "FIXTURE") as source:
+            policy.read_text.return_value = engine.CONTRACT_PATH.read_text(encoding="utf-8")
+            report = engine.rehearse_locally(plan)
+        self.assertEqual(report["verdict"], "unclear")
+        self.assertEqual(report["pinned_contract_sha256"], engine.PLAYLIST_CONTRACT_SHA256)
+        self.assertEqual(report["execution"], "not_run")
+        source.read_bytes.assert_not_called()
 
 if __name__ == "__main__":
     unittest.main()

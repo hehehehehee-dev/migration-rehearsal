@@ -1,0 +1,349 @@
+{
+  "synapse_verified": true,
+  "deterministic_comparison": {
+    "composed_calls_per_case": 1,
+    "separate_calls_per_case": 6,
+    "composed_matched": 35,
+    "separate_matched": 35
+  },
+  "live_comparison": {
+    "model": "qwen2.5-coder-1.5b",
+    "case_id": "playlist_swapped",
+    "composed": {
+      "calls": 1,
+      "verdict": "blocked",
+      "tool_issue_codes": [
+        "missing_memberships",
+        "unexpected_memberships"
+      ],
+      "agent_response": "Blocked. Missing memberships (50), unexpected memberships (50).",
+      "milliseconds": 3781,
+      "trace": [
+        {
+          "name": "rehearse_database_migration",
+          "arguments": "{}",
+          "mcp_arguments": {
+            "plan": {
+              "family": "playlist_membership",
+              "mapping": "swap_equal_size_playlists"
+            }
+          },
+          "result": {
+            "verdict": "blocked",
+            "family": "playlist_membership",
+            "plan_sha256": "d1a1cb4b0de4e030bd81d86ef708ab8074f5a8e82c175ddc5eacf42d13b2a24d",
+            "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+            "contract": "chinook-playlist-membership-v1",
+            "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+            "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+            "execution": "sqlite_committed_on_copy",
+            "checks": {
+              "integrity": true,
+              "foreign_keys": true,
+              "track_count": 3503,
+              "protected_records": true,
+              "application_queries": true,
+              "indexes": true,
+              "membership_schema": true,
+              "playlist_rows_expected": 8715,
+              "playlist_rows_observed": 8715,
+              "playlist_counts_exact": true,
+              "membership_pairs_exact": false,
+              "memberships_verified": 8665,
+              "missing_memberships": 50,
+              "unexpected_memberships": 50
+            },
+            "issues": {
+              "missing_memberships": {
+                "count": 50,
+                "examples": [
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3479,
+                    "track": "Prometheus Overture, Op. 43",
+                    "expected": 1,
+                    "observed": 0
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3480,
+                    "track": "Sonata for Solo Violin: IV: Presto",
+                    "expected": 1,
+                    "observed": 0
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3481,
+                    "track": "A Midsummer Night's Dream, Op.61 Incidental Music: No.7 Notturno",
+                    "expected": 1,
+                    "observed": 0
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3482,
+                    "track": "Suite No. 3 in D, BWV 1068: III. Gavotte I & II",
+                    "expected": 1,
+                    "observed": 0
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3483,
+                    "track": "Concert pour 4 Parties de V**les, H. 545: I. Prelude",
+                    "expected": 1,
+                    "observed": 0
+                  }
+                ]
+              },
+              "unexpected_memberships": {
+                "count": 50,
+                "examples": [
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3430,
+                    "track": "Toccata and Fugue in D Minor, BWV 565: I. Toccata",
+                    "expected": 0,
+                    "observed": 1
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3431,
+                    "track": "Symphony No.1 in D Major, Op.25 \"Classical\", Allegro Con Brio",
+                    "expected": 0,
+                    "observed": 1
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3432,
+                    "track": "Scheherazade, Op. 35: I. The Sea and Sindbad's Ship",
+                    "expected": 0,
+                    "observed": 1
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3433,
+                    "track": "Concerto No.2 in F Major, BWV1047, I. Allegro",
+                    "expected": 0,
+                    "observed": 1
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3434,
+                    "track": "Concerto for Piano No. 2 in F Minor, Op. 21: II. Larghetto",
+                    "expected": 0,
+                    "observed": 1
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "separate": {
+      "calls": 7,
+      "verdict": "blocked",
+      "tool_issue_codes": [
+        "missing_memberships",
+        "unexpected_memberships"
+      ],
+      "agent_response": "Blocked. Missing memberships (50), unexpected memberships (50).",
+      "milliseconds": 11560,
+      "trace": [
+        {
+          "name": "validate_request",
+          "arguments": "{}",
+          "mcp_arguments": {
+            "plan": {
+              "family": "playlist_membership",
+              "mapping": "swap_equal_size_playlists"
+            }
+          },
+          "result": {
+            "next": "create_test_snapshot",
+            "issues_so_far": []
+          }
+        },
+        {
+          "name": "create_test_snapshot",
+          "arguments": "{}",
+          "mcp_arguments": {},
+          "result": {
+            "next": "capture_baseline",
+            "issues_so_far": []
+          }
+        },
+        {
+          "name": "capture_baseline",
+          "arguments": "{}",
+          "mcp_arguments": {},
+          "result": {
+            "next": "execute_migration",
+            "issues_so_far": []
+          }
+        },
+        {
+          "name": "execute_migration",
+          "arguments": "{}",
+          "mcp_arguments": {},
+          "result": {
+            "next": "verify_postconditions",
+            "issues_so_far": []
+          }
+        },
+        {
+          "name": "build_evidence_report",
+          "arguments": "{}",
+          "mcp_arguments": {},
+          "result": {
+            "error": "Run verify_postconditions next."
+          }
+        },
+        {
+          "name": "verify_postconditions",
+          "arguments": "{}",
+          "mcp_arguments": {},
+          "result": {
+            "next": "build_evidence_report",
+            "issues_so_far": [
+              "missing_memberships",
+              "unexpected_memberships"
+            ]
+          }
+        },
+        {
+          "name": "build_evidence_report",
+          "arguments": "{}",
+          "mcp_arguments": {},
+          "result": {
+            "verdict": "blocked",
+            "family": "playlist_membership",
+            "plan_sha256": "d1a1cb4b0de4e030bd81d86ef708ab8074f5a8e82c175ddc5eacf42d13b2a24d",
+            "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+            "contract": "chinook-playlist-membership-v1",
+            "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+            "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+            "execution": "sqlite_committed_on_copy",
+            "checks": {
+              "integrity": true,
+              "foreign_keys": true,
+              "track_count": 3503,
+              "protected_records": true,
+              "application_queries": true,
+              "indexes": true,
+              "membership_schema": true,
+              "playlist_rows_expected": 8715,
+              "playlist_rows_observed": 8715,
+              "playlist_counts_exact": true,
+              "membership_pairs_exact": false,
+              "memberships_verified": 8665,
+              "missing_memberships": 50,
+              "unexpected_memberships": 50
+            },
+            "issues": {
+              "missing_memberships": {
+                "count": 50,
+                "examples": [
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3479,
+                    "track": "Prometheus Overture, Op. 43",
+                    "expected": 1,
+                    "observed": 0
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3480,
+                    "track": "Sonata for Solo Violin: IV: Presto",
+                    "expected": 1,
+                    "observed": 0
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3481,
+                    "track": "A Midsummer Night's Dream, Op.61 Incidental Music: No.7 Notturno",
+                    "expected": 1,
+                    "observed": 0
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3482,
+                    "track": "Suite No. 3 in D, BWV 1068: III. Gavotte I & II",
+                    "expected": 1,
+                    "observed": 0
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3483,
+                    "track": "Concert pour 4 Parties de V**les, H. 545: I. Prelude",
+                    "expected": 1,
+                    "observed": 0
+                  }
+                ]
+              },
+              "unexpected_memberships": {
+                "count": 50,
+                "examples": [
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3430,
+                    "track": "Toccata and Fugue in D Minor, BWV 565: I. Toccata",
+                    "expected": 0,
+                    "observed": 1
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3431,
+                    "track": "Symphony No.1 in D Major, Op.25 \"Classical\", Allegro Con Brio",
+                    "expected": 0,
+                    "observed": 1
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3432,
+                    "track": "Scheherazade, Op. 35: I. The Sea and Sindbad's Ship",
+                    "expected": 0,
+                    "observed": 1
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3433,
+                    "track": "Concerto No.2 in F Major, BWV1047, I. Allegro",
+                    "expected": 0,
+                    "observed": 1
+                  },
+                  {
+                    "playlist_id": 13,
+                    "playlist": "Classical 101 - Deep Cuts",
+                    "track_id": 3434,
+                    "track": "Concerto for Piano No. 2 in F Minor, Op. 21: II. Larghetto",
+                    "expected": 0,
+                    "observed": 1
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

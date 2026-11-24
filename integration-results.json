@@ -3,8 +3,8 @@
   "deterministic_comparison": {
     "composed_calls_per_case": 1,
     "separate_calls_per_case": 6,
-    "composed_matched": 26,
-    "separate_matched": 26
+    "composed_matched": 35,
+    "separate_matched": 35
   },
   "live_comparison": {
     "model": "qwen2.5-coder-1.5b",
@@ -16,7 +16,7 @@
         "price_cents_mismatch"
       ],
       "agent_response": "Blocked. Price cents mismatch (3,503).",
-      "milliseconds": 4155,
+      "milliseconds": 3867,
       "trace": [
         {
           "name": "rehearse_database_migration",
@@ -35,6 +35,7 @@
           },
           "result": {
             "verdict": "blocked",
+            "family": "price_cents",
             "plan_sha256": "a28e5cf4e18a763adc1f27625e559b8c9cf5661b3ea1b29f81a3fbd835b3854f",
             "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
             "contract": "chinook-track-price-cents-v1",
@@ -94,7 +95,7 @@
         "price_cents_mismatch"
       ],
       "agent_response": "Blocked. Price cents mismatch (3,503).",
-      "milliseconds": 18067,
+      "milliseconds": 11588,
       "trace": [
         {
           "name": "validate_request",
@@ -168,6 +169,7 @@
           "mcp_arguments": {},
           "result": {
             "verdict": "blocked",
+            "family": "price_cents",
             "plan_sha256": "a28e5cf4e18a763adc1f27625e559b8c9cf5661b3ea1b29f81a3fbd835b3854f",
             "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
             "contract": "chinook-track-price-cents-v1",

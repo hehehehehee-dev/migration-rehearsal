@@ -1,6 +1,6 @@
 {
-  "total": 26,
-  "matched": 26,
+  "total": 35,
+  "matched": 35,
   "source_unchanged": true,
   "misses": [],
   "results": [
@@ -14,6 +14,7 @@
       "matched": true,
       "report": {
         "verdict": "passed",
+        "family": "price_cents",
         "plan_sha256": "f3b8a97ca34cea5ace5bc400b13656c83694616e7ba494de33501c15975a7582",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -32,7 +33,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 186.38
+      "milliseconds": 133.75
     },
     {
       "id": "arithmetic",
@@ -44,6 +45,7 @@
       "matched": true,
       "report": {
         "verdict": "passed",
+        "family": "price_cents",
         "plan_sha256": "cb405ca182060d96d213667c0f6a556448c5664b1255490b79f6eb48a9d08280",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -62,7 +64,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 146.75
+      "milliseconds": 145.38
     },
     {
       "id": "two_pass",
@@ -74,6 +76,7 @@
       "matched": true,
       "report": {
         "verdict": "passed",
+        "family": "price_cents",
         "plan_sha256": "f01b9798e9b7e9f25b56f649537a7a7990bbf38dba0fe5d4dee3ac06ee42e778",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -92,7 +95,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 139.11
+      "milliseconds": 148.51
     },
     {
       "id": "repaired_backfill",
@@ -104,6 +107,7 @@
       "matched": true,
       "report": {
         "verdict": "passed",
+        "family": "price_cents",
         "plan_sha256": "18d6a9f2aaf9e5894f99ce83ad6950bc3e305a9ad5b2a39f53ba0302ce712115",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -122,7 +126,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 168.78
+      "milliseconds": 144.33
     },
     {
       "id": "whole_dollars",
@@ -136,6 +140,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "a28e5cf4e18a763adc1f27625e559b8c9cf5661b3ea1b29f81a3fbd835b3854f",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -185,7 +190,7 @@
           }
         }
       },
-      "milliseconds": 132.13
+      "milliseconds": 146.85
     },
     {
       "id": "no_schema_change",
@@ -199,6 +204,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "8fc43e6226c0a8f8601b9e5ce8532ff9771fe9f6517f88d0014541524bdd883b",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -220,7 +226,7 @@
           }
         }
       },
-      "milliseconds": 120.58
+      "milliseconds": 106.06
     },
     {
       "id": "partial_backfill",
@@ -234,6 +240,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "0e11c079d852637b8f5a9ac2abfab05a3535abb9cc6c6740b14201c1d4f76b60",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -283,7 +290,7 @@
           }
         }
       },
-      "milliseconds": 135.92
+      "milliseconds": 111.84
     },
     {
       "id": "missing_column",
@@ -297,6 +304,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "b7dfddc17033182e849cf4009f0b36b18f573896323c135bce67a4c6cc640512",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -315,7 +323,7 @@
           }
         }
       },
-      "milliseconds": 82.54
+      "milliseconds": 74.45
     },
     {
       "id": "touch_original",
@@ -330,6 +338,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "fa89d807dddf37530f838422b70d304835894cb033a77b72e372291e7f054bb3",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -359,7 +368,7 @@
           }
         }
       },
-      "milliseconds": 139.4
+      "milliseconds": 197.1
     },
     {
       "id": "leave_nulls",
@@ -373,6 +382,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "dca554ce01833ead49c0c7caa044944c53a6af668bd971776fa0681b8b958d36",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -422,7 +432,7 @@
           }
         }
       },
-      "milliseconds": 113.62
+      "milliseconds": 362.61
     },
     {
       "id": "broken_reference",
@@ -438,6 +448,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "3472c8e545bcb9476ca3b38ef6f66a410419fb8c2fc4e4e418194f0995421682",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -478,7 +489,7 @@
           }
         }
       },
-      "milliseconds": 111.7
+      "milliseconds": 286.87
     },
     {
       "id": "extra_contract_override",
@@ -492,6 +503,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "61a47266cd2715844dfa8b95474dda4b5d8d1aee0973569b4520733a5107580a",
         "fixture_sha256": null,
         "contract": "chinook-track-price-cents-v1",
@@ -506,7 +518,7 @@
           }
         }
       },
-      "milliseconds": 18.51
+      "milliseconds": 32.23
     },
     {
       "id": "parity_split",
@@ -518,6 +530,7 @@
       "matched": true,
       "report": {
         "verdict": "passed",
+        "family": "price_cents",
         "plan_sha256": "23004e3f7f688bde12d92d33d0967cdf46df15cb36e494a35a0e46ac2cfff41c",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -536,7 +549,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 125.71
+      "milliseconds": 348.24
     },
     {
       "id": "idempotent_backfill",
@@ -548,6 +561,7 @@
       "matched": true,
       "report": {
         "verdict": "passed",
+        "family": "price_cents",
         "plan_sha256": "00cf2a007c7f4c8090cc76079d1b38ec1106bf77653d36cd6e27ceda6e02aac1",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -566,7 +580,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 110.92
+      "milliseconds": 300.09
     },
     {
       "id": "repair_standard",
@@ -578,6 +592,7 @@
       "matched": true,
       "report": {
         "verdict": "passed",
+        "family": "price_cents",
         "plan_sha256": "88ae12a37a14cc787295a076ee3293b01e7ae47424bc521c814662cb3770761f",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -596,7 +611,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 115.77
+      "milliseconds": 253.43
     },
     {
       "id": "mixed_formulas",
@@ -608,6 +623,7 @@
       "matched": true,
       "report": {
         "verdict": "passed",
+        "family": "price_cents",
         "plan_sha256": "b40bd22d7910ea41e01cef8a3eee3b5a3dec29119d7494dd71e61ff00baa15d8",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -626,7 +642,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 116.2
+      "milliseconds": 237.43
     },
     {
       "id": "rounded_dollars",
@@ -640,6 +656,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "5da653791c4884b18f3e3912358068a01dc049a983dc470a5a954e4e6f7cd2cd",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -689,7 +706,7 @@
           }
         }
       },
-      "milliseconds": 120.8
+      "milliseconds": 226.44
     },
     {
       "id": "half_price",
@@ -703,6 +720,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "ca1179b090caa78a7113abc276ad8d87539aab5bbfc8e168afad52d523eec1ce",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -752,7 +770,7 @@
           }
         }
       },
-      "milliseconds": 128.67
+      "milliseconds": 251.16
     },
     {
       "id": "late_null",
@@ -766,6 +784,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "7bf9ddceb3e8ad666c5d4d5ed449a433de01ec258ed1e3f98ebc637567bc8788",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -815,7 +834,7 @@
           }
         }
       },
-      "milliseconds": 136.7
+      "milliseconds": 233.02
     },
     {
       "id": "rewrite_invoice",
@@ -829,6 +848,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "bf3f81d1c34e18af8aa711e4c6ed13876692c0beecd412605cc5dab2bf9edb64",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -854,7 +874,7 @@
           }
         }
       },
-      "milliseconds": 128.83
+      "milliseconds": 242.29
     },
     {
       "id": "lose_playlists",
@@ -868,6 +888,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "b362011e406874c326f4330dee5bb1f252c0c0c0fc816dffcb7168c5ffcd40b0",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -893,7 +914,7 @@
           }
         }
       },
-      "milliseconds": 115.68
+      "milliseconds": 237.97
     },
     {
       "id": "failed_after_update",
@@ -907,6 +928,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "850e18af1e62060be76c2a0751ed2f57a10632ba29df1aee993433abb63e59e8",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -925,7 +947,7 @@
           }
         }
       },
-      "milliseconds": 59.12
+      "milliseconds": 120.31
     },
     {
       "id": "break_legacy_query",
@@ -940,6 +962,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "f51562ae87e43a79b072584c0229661bb9bebffdf70419d6b21ccb0f25f7ffbd",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -970,7 +993,7 @@
           }
         }
       },
-      "milliseconds": 86.73
+      "milliseconds": 178.19
     },
     {
       "id": "missing_index",
@@ -984,6 +1007,7 @@
       "matched": true,
       "report": {
         "verdict": "blocked",
+        "family": "price_cents",
         "plan_sha256": "d276dc56381536f201d7000f2ca22fd9402f1b6beadcbb9791ef773d4bddc32b",
         "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
         "contract": "chinook-track-price-cents-v1",
@@ -1007,7 +1031,7 @@
           }
         }
       },
-      "milliseconds": 111.62
+      "milliseconds": 216.45
     },
     {
       "id": "currency_conversion",
@@ -1022,6 +1046,7 @@
       "matched": true,
       "report": {
         "verdict": "unsupported",
+        "family": "price_cents",
         "plan_sha256": "035a27c6282c8fe653c68a6ae91a69fefaa5bf017e1f4c3879a34fc1e353ad12",
         "fixture_sha256": null,
         "contract": "chinook-track-price-cents-v1",
@@ -1036,7 +1061,7 @@
           }
         }
       },
-      "milliseconds": 19.0
+      "milliseconds": 21.75
     },
     {
       "id": "missing_backfill_scope",
@@ -1051,6 +1076,7 @@
       "matched": true,
       "report": {
         "verdict": "unclear",
+        "family": "price_cents",
         "plan_sha256": "5cbd7e674f7fdd6a1bddab644edc9d199ddc3c685bce757ac2c3e6e75f9bfc62",
         "fixture_sha256": null,
         "contract": "chinook-track-price-cents-v1",
@@ -1065,7 +1091,552 @@
           }
         }
       },
-      "milliseconds": 13.61
+      "milliseconds": 21.97
+    },
+    {
+      "id": "playlist_preserved",
+      "split": "dev",
+      "expected": {
+        "verdict": "passed",
+        "issues": [],
+        "checks": {
+          "memberships_verified": 8715,
+          "membership_pairs_exact": true,
+          "membership_schema": true
+        }
+      },
+      "matched": true,
+      "report": {
+        "verdict": "passed",
+        "family": "playlist_membership",
+        "plan_sha256": "481fdce1ced72328eb57aed1c4540e7e39febf3d9f1db4e3d977c0aac6e4da55",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-playlist-membership-v1",
+        "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "membership_schema": true,
+          "playlist_rows_expected": 8715,
+          "playlist_rows_observed": 8715,
+          "playlist_counts_exact": true,
+          "membership_pairs_exact": true,
+          "memberships_verified": 8715,
+          "missing_memberships": 0,
+          "unexpected_memberships": 0
+        },
+        "issues": {}
+      },
+      "milliseconds": 256.07
+    },
+    {
+      "id": "playlist_swapped",
+      "split": "dev",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "missing_memberships",
+          "unexpected_memberships"
+        ],
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "playlist_rows_expected": 8715,
+          "playlist_rows_observed": 8715,
+          "playlist_counts_exact": true,
+          "foreign_keys": true
+        },
+        "issue_counts": {
+          "missing_memberships": 50,
+          "unexpected_memberships": 50
+        }
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "family": "playlist_membership",
+        "plan_sha256": "d1a1cb4b0de4e030bd81d86ef708ab8074f5a8e82c175ddc5eacf42d13b2a24d",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-playlist-membership-v1",
+        "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "membership_schema": true,
+          "playlist_rows_expected": 8715,
+          "playlist_rows_observed": 8715,
+          "playlist_counts_exact": true,
+          "membership_pairs_exact": false,
+          "memberships_verified": 8665,
+          "missing_memberships": 50,
+          "unexpected_memberships": 50
+        },
+        "issues": {
+          "missing_memberships": {
+            "count": 50,
+            "examples": [
+              {
+                "playlist_id": 13,
+                "playlist": "Classical 101 - Deep Cuts",
+                "track_id": 3479,
+                "track": "Prometheus Overture, Op. 43",
+                "expected": 1,
+                "observed": 0
+              },
+              {
+                "playlist_id": 13,
+                "playlist": "Classical 101 - Deep Cuts",
+                "track_id": 3480,
+                "track": "Sonata for Solo Violin: IV: Presto",
+                "expected": 1,
+                "observed": 0
+              },
+              {
+                "playlist_id": 13,
+                "playlist": "Classical 101 - Deep Cuts",
+                "track_id": 3481,
+                "track": "A Midsummer Night's Dream, Op.61 Incidental Music: No.7 Notturno",
+                "expected": 1,
+                "observed": 0
+              },
+              {
+                "playlist_id": 13,
+                "playlist": "Classical 101 - Deep Cuts",
+                "track_id": 3482,
+                "track": "Suite No. 3 in D, BWV 1068: III. Gavotte I & II",
+                "expected": 1,
+                "observed": 0
+              },
+              {
+                "playlist_id": 13,
+                "playlist": "Classical 101 - Deep Cuts",
+                "track_id": 3483,
+                "track": "Concert pour 4 Parties de V**les, H. 545: I. Prelude",
+                "expected": 1,
+                "observed": 0
+              }
+            ]
+          },
+          "unexpected_memberships": {
+            "count": 50,
+            "examples": [
+              {
+                "playlist_id": 13,
+                "playlist": "Classical 101 - Deep Cuts",
+                "track_id": 3430,
+                "track": "Toccata and Fugue in D Minor, BWV 565: I. Toccata",
+                "expected": 0,
+                "observed": 1
+              },
+              {
+                "playlist_id": 13,
+                "playlist": "Classical 101 - Deep Cuts",
+                "track_id": 3431,
+                "track": "Symphony No.1 in D Major, Op.25 \"Classical\", Allegro Con Brio",
+                "expected": 0,
+                "observed": 1
+              },
+              {
+                "playlist_id": 13,
+                "playlist": "Classical 101 - Deep Cuts",
+                "track_id": 3432,
+                "track": "Scheherazade, Op. 35: I. The Sea and Sindbad's Ship",
+                "expected": 0,
+                "observed": 1
+              },
+              {
+                "playlist_id": 13,
+                "playlist": "Classical 101 - Deep Cuts",
+                "track_id": 3433,
+                "track": "Concerto No.2 in F Major, BWV1047, I. Allegro",
+                "expected": 0,
+                "observed": 1
+              },
+              {
+                "playlist_id": 13,
+                "playlist": "Classical 101 - Deep Cuts",
+                "track_id": 3434,
+                "track": "Concerto for Piano No. 2 in F Minor, Op. 21: II. Larghetto",
+                "expected": 0,
+                "observed": 1
+              }
+            ]
+          }
+        }
+      },
+      "milliseconds": 263.76
+    },
+    {
+      "id": "playlist_dropped_pair",
+      "split": "dev",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "missing_memberships"
+        ],
+        "checks": {
+          "playlist_rows_observed": 8714
+        },
+        "issue_counts": {
+          "missing_memberships": 1
+        }
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "family": "playlist_membership",
+        "plan_sha256": "9c776651226cf65dd9288182e5bdc211b3f2f1f31a76261790f9c9e9e198d910",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-playlist-membership-v1",
+        "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "membership_schema": true,
+          "playlist_rows_expected": 8715,
+          "playlist_rows_observed": 8714,
+          "playlist_counts_exact": false,
+          "membership_pairs_exact": false,
+          "memberships_verified": 8714,
+          "missing_memberships": 1,
+          "unexpected_memberships": 0
+        },
+        "issues": {
+          "missing_memberships": {
+            "count": 1,
+            "examples": [
+              {
+                "playlist_id": 1,
+                "playlist": "Music",
+                "track_id": 1,
+                "track": "For Those About To Rock (We Salute You)",
+                "expected": 1,
+                "observed": 0
+              }
+            ]
+          }
+        }
+      },
+      "milliseconds": 249.39
+    },
+    {
+      "id": "playlist_reverse_order",
+      "split": "holdout",
+      "expected": {
+        "verdict": "passed",
+        "issues": [],
+        "checks": {
+          "memberships_verified": 8715,
+          "membership_pairs_exact": true
+        }
+      },
+      "matched": true,
+      "report": {
+        "verdict": "passed",
+        "family": "playlist_membership",
+        "plan_sha256": "bd74861b899e18d60a9b2aad00c777d9588a7e29994737f30f5b59ea3c2092db",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-playlist-membership-v1",
+        "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "membership_schema": true,
+          "playlist_rows_expected": 8715,
+          "playlist_rows_observed": 8715,
+          "playlist_counts_exact": true,
+          "membership_pairs_exact": true,
+          "memberships_verified": 8715,
+          "missing_memberships": 0,
+          "unexpected_memberships": 0
+        },
+        "issues": {}
+      },
+      "milliseconds": 281.55
+    },
+    {
+      "id": "playlist_duplicate_pair",
+      "split": "holdout",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "membership_schema_mismatch",
+          "unexpected_memberships"
+        ],
+        "checks": {
+          "playlist_rows_observed": 8716,
+          "memberships_verified": 8715
+        },
+        "issue_counts": {
+          "unexpected_memberships": 1
+        }
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "family": "playlist_membership",
+        "plan_sha256": "15781d48d36be782828d48e2caf03cc73a1a9b46feb9ef034a43eac5065c955b",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-playlist-membership-v1",
+        "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "membership_schema": false,
+          "playlist_rows_expected": 8715,
+          "playlist_rows_observed": 8716,
+          "playlist_counts_exact": false,
+          "membership_pairs_exact": false,
+          "memberships_verified": 8715,
+          "missing_memberships": 0,
+          "unexpected_memberships": 1
+        },
+        "issues": {
+          "membership_schema_mismatch": {
+            "count": 1,
+            "examples": []
+          },
+          "unexpected_memberships": {
+            "count": 1,
+            "examples": [
+              {
+                "playlist_id": 1,
+                "playlist": "Music",
+                "track_id": 1,
+                "track": "For Those About To Rock (We Salute You)",
+                "expected": 1,
+                "observed": 2
+              }
+            ]
+          }
+        }
+      },
+      "milliseconds": 256.15
+    },
+    {
+      "id": "playlist_orphan_track",
+      "split": "holdout",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "foreign_key_violation",
+          "missing_memberships",
+          "unexpected_memberships"
+        ],
+        "checks": {
+          "playlist_counts_exact": true,
+          "foreign_keys": false
+        },
+        "issue_counts": {
+          "missing_memberships": 1,
+          "unexpected_memberships": 1,
+          "foreign_key_violation": 1
+        }
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "family": "playlist_membership",
+        "plan_sha256": "5553dcd64355d0e41cb1309a6efe277c67a9090e73518a7da562d191781f40d6",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-playlist-membership-v1",
+        "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": false,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "membership_schema": true,
+          "playlist_rows_expected": 8715,
+          "playlist_rows_observed": 8715,
+          "playlist_counts_exact": true,
+          "membership_pairs_exact": false,
+          "memberships_verified": 8714,
+          "missing_memberships": 1,
+          "unexpected_memberships": 1
+        },
+        "issues": {
+          "foreign_key_violation": {
+            "count": 1,
+            "examples": [
+              [
+                "PlaylistMembership",
+                1911,
+                "Track",
+                0
+              ]
+            ]
+          },
+          "missing_memberships": {
+            "count": 1,
+            "examples": [
+              {
+                "playlist_id": 1,
+                "playlist": "Music",
+                "track_id": 1,
+                "track": "For Those About To Rock (We Salute You)",
+                "expected": 1,
+                "observed": 0
+              }
+            ]
+          },
+          "unexpected_memberships": {
+            "count": 1,
+            "examples": [
+              {
+                "playlist_id": 1,
+                "playlist": "Music",
+                "track_id": -1,
+                "track": null,
+                "expected": 0,
+                "observed": 1
+              }
+            ]
+          }
+        }
+      },
+      "milliseconds": 291.83
+    },
+    {
+      "id": "playlist_missing_unique",
+      "split": "holdout",
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "membership_schema_mismatch"
+        ],
+        "checks": {
+          "membership_pairs_exact": true,
+          "membership_schema": false
+        }
+      },
+      "matched": true,
+      "report": {
+        "verdict": "blocked",
+        "family": "playlist_membership",
+        "plan_sha256": "c43b69b13a6311164fad43f5ac20ba396d0f246b57bca97b7a12f9c8c1a4762a",
+        "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+        "contract": "chinook-playlist-membership-v1",
+        "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "integrity": true,
+          "foreign_keys": true,
+          "track_count": 3503,
+          "protected_records": true,
+          "application_queries": true,
+          "indexes": true,
+          "membership_schema": false,
+          "playlist_rows_expected": 8715,
+          "playlist_rows_observed": 8715,
+          "playlist_counts_exact": true,
+          "membership_pairs_exact": true,
+          "memberships_verified": 8715,
+          "missing_memberships": 0,
+          "unexpected_memberships": 0
+        },
+        "issues": {
+          "membership_schema_mismatch": {
+            "count": 1,
+            "examples": []
+          }
+        }
+      },
+      "milliseconds": 326.29
+    },
+    {
+      "id": "playlist_mapping_unspecified",
+      "split": "holdout",
+      "expected": {
+        "verdict": "unclear",
+        "issues": [
+          "membership_mapping_unspecified"
+        ],
+        "execution": "not_run"
+      },
+      "matched": true,
+      "report": {
+        "verdict": "unclear",
+        "family": "playlist_membership",
+        "plan_sha256": "6255c7361c4a32e5225a8903d65909666399d15dbc205c7405d4a1348dc814d9",
+        "fixture_sha256": null,
+        "contract": "chinook-playlist-membership-v1",
+        "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "execution": "not_run",
+        "checks": {},
+        "issues": {
+          "membership_mapping_unspecified": {
+            "count": 1,
+            "examples": []
+          }
+        }
+      },
+      "milliseconds": 31.92
+    },
+    {
+      "id": "playlist_unsupported_merge",
+      "split": "holdout",
+      "expected": {
+        "verdict": "unsupported",
+        "issues": [
+          "unsupported_operation"
+        ],
+        "execution": "not_run"
+      },
+      "matched": true,
+      "report": {
+        "verdict": "unsupported",
+        "family": "playlist_membership",
+        "plan_sha256": "848e0dab301c2bea76c2bbfbb3514676a756573ebbcf76107ce3827958a5b06b",
+        "fixture_sha256": null,
+        "contract": "chinook-playlist-membership-v1",
+        "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+        "execution": "not_run",
+        "checks": {},
+        "issues": {
+          "unsupported_operation": {
+            "count": 1,
+            "examples": []
+          }
+        }
+      },
+      "milliseconds": 27.5
     }
   ]
 }

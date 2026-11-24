@@ -8,6 +8,8 @@ const names = {
   currency_conversion: 'Outside scope · Convert currency',
   broken_reference: 'Faulty · Broken album reference',
   partial_backfill: 'Faulty · Only backfill 100 tracks',
+  playlist_swapped: 'Playlist · Swap two equal-size lists',
+  playlist_preserved: 'Playlist · Preserve every membership',
 };
 const issueNames = {
   price_cents_mismatch: 'Incorrect prices',
@@ -19,6 +21,8 @@ const issueNames = {
   foreign_key_violation: 'Foreign key violations',
   protected_records_changed: 'Protected records changed',
   application_query_changed: 'Application query changed',
+  membership_mapping_unspecified: 'Choose how to copy playlist memberships.',
+  membership_schema_mismatch: 'The new membership table is missing a required constraint.',
 };
 let candidates = [], runs = 0, runtime = 'Local Python';
 let repairRun = null, repairDraft = null;
@@ -58,6 +62,11 @@ function current() { return candidates.find(x => x.id === choice.value); }
 function showSelection() {
   resetRepair();
   const selected = current();
+  const playlist = selected.family === 'playlist_membership';
+  expectedPin = selected.contract_pin;
+  $('contract-label').textContent = playlist ? 'PLAYLIST CONTRACT' : 'PRICE CONTRACT';
+  $('requirement').textContent = playlist ? 'Create the new membership table. Preserve which tracks belong to each playlist.' :
+    'Store prices as whole cents. Preserve the catalog, invoice data, and the queries that use them.';
   $('case-hint').textContent = selected.description;
   $('plan').textContent = JSON.stringify(selected.plan,null,2);
   details.hidden = true;
@@ -70,14 +79,53 @@ function metric(label, value) {
   list.append(make('dt',label),make('dd',value));
   return list;
 }
+function membershipEvidence(report, content) {
+  const checks = report.checks;
+  const pairsKnown = typeof checks.playlist_rows_observed === 'number';
+  $('numbers').replaceChildren(
+    metric('Rows copied',pairsKnown ? count(checks.playlist_rows_observed)+' / '+count(checks.playlist_rows_expected) : '—'),
+    metric('Foreign keys',checks.foreign_keys === undefined ? '—' : checks.foreign_keys ? 'OK' : 'Failed'),
+    metric('Links missing / extra',pairsKnown ? count(checks.missing_memberships)+' / '+count(checks.unexpected_memberships) : '—'),
+  );
+  if (report.verdict === 'passed') {
+    content.append(make('p',count(checks.memberships_verified)+' playlist memberships verified.','membership-fact'));
+    return;
+  }
+  if (checks.playlist_counts_exact) content.append(make('p','Every playlist kept the same track count.','membership-fact'));
+  for (const code of Object.keys(report.issues)) {
+    if (!['missing_memberships','unexpected_memberships'].includes(code)) {
+      const message = code === 'unsupported_operation' ? 'This contract preserves the original playlist memberships.' :
+        issueNames[code] || code.replaceAll('_',' ');
+      content.append(make('p',message));
+    }
+  }
+  const rows = ['missing_memberships','unexpected_memberships'].flatMap(code => (report.issues[code]?.examples ?? []).slice(0,2));
+  if (!rows.length) return;
+  const table = make('table',undefined,'membership-table');
+  table.createCaption().textContent = 'Example playlist links';
+  const head = table.createTHead().insertRow();
+  for (const name of ['Playlist','Track','Expected','Observed']) {
+    const column = make('th',name);
+    column.scope = 'col';
+    head.append(column);
+  }
+  const body = table.createTBody();
+  for (const row of rows) {
+    const tr = body.insertRow();
+    tr.append(make('td',row.playlist ?? 'Playlist '+row.playlist_id),make('td',row.track ?? 'Track '+row.track_id),
+      make('td',count(row.expected)),make('td',count(row.observed)));
+  }
+  content.append(table);
+}
 function evidence(report) {
+  const playlist = report.family === 'playlist_membership';
   const passed = report.verdict === 'passed';
   const checks = report.checks ?? {};
   const prices = report.issues?.price_cents_mismatch;
   const examples = prices?.examples ?? [];
   const verdicts = {
     passed: 'Passed contract', blocked: 'Block release',
-    unclear: report.issues?.scope_unspecified ? 'Needs clarification' : 'Unable to verify',
+    unclear: report.issues?.scope_unspecified || report.issues?.membership_mapping_unspecified ? 'Needs clarification' : 'Unable to verify',
     unsupported: 'Unsupported',
   };
   const execution = {
@@ -97,7 +145,9 @@ function evidence(report) {
   );
   const content = $('output');
   content.replaceChildren();
-  if (examples.length) {
+  if (playlist) {
+    membershipEvidence(report,content);
+  } else if (examples.length) {
     const first = examples[0];
     const delta = make('div',undefined,'price-story');
     delta.setAttribute('aria-label', 'Track '+first.track_id+': expected '+money(first.expected_cents)+', actual '+money(first.actual_cents));

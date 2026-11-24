@@ -12,7 +12,7 @@ if (!(Test-Path -LiteralPath $shim)) {
     throw 'Install the pinned Synapse CLI with npm install --prefix .tooling @2ndbrainlabs-ai/synapse-cli@0.1.9'
 }
 New-Item -ItemType Directory -Path $stage -Force | Out-Null
-Copy-Item -LiteralPath (Join-Path $project 'rehearsal.py'),(Join-Path $project 'requirements.txt') -Destination $stage
+Copy-Item -LiteralPath (Join-Path $project 'rehearsal.py'),(Join-Path $project 'playlist.py'),(Join-Path $project 'requirements.txt') -Destination $stage
 if (Test-Path -LiteralPath $toolingPython) {
     $env:PYTHONPATH = "$toolingPython;$toolingPython/win32;$toolingPython/win32/lib;$toolingPython/pywin32_system32;$env:PYTHONPATH"
 }

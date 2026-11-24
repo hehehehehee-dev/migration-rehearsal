@@ -148,8 +148,20 @@ try {
   await page.getByRole('button',{name:'Review recorded agent fix'}).click();
   await page.getByRole('button',{name:'Run corrected plan on a copy'}).waitFor();
   assert(await page.evaluate(()=>document.documentElement.scrollWidth===innerWidth));
+  await page.locator('#case').selectOption('playlist_swapped');
+  assert.equal(await page.locator('#contract-label').innerText(),'PLAYLIST CONTRACT');
+  await run.click();
+  await page.getByText('Block release',{exact:true}).waitFor();
+  assert.match(await page.locator('#numbers').innerText(),/8,715 \/ 8,715[\s\S]*OK[\s\S]*50 \/ 50/);
+  await page.getByText('Every playlist kept the same track count.',{exact:true}).waitFor();
+  assert(await page.locator('#repair-actions').isHidden());
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth===innerWidth));
+  await page.locator('#case').selectOption('playlist_preserved');
+  await run.click();
+  await page.getByText('8,715 playlist memberships verified.',{exact:true}).waitFor();
+  assert.equal(await page.locator('#pin-state').textContent(),'Pin verified');
   assert.deepEqual(errors,[]);
-  console.log('Workbench passed browser checks: agent summary, confirmation, keyboard, four outcomes, agent repair, both reviewer trials, replay prevention, contract pin, 390px, no page errors.');
+  console.log('Workbench passed browser checks for both migration families, confirmation, agent repair, reviewer trials, contract pins, and mobile.');
 } finally {
   app.kill();
   lines.close();

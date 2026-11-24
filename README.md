@@ -2,13 +2,13 @@
 
 **SQLite committed the migration. All 3,503 converted prices were wrong.**
 
-Migration Rehearsal runs a candidate on a disposable copy of the Chinook database, then checks the result against a pinned contract. In the demo, track 1 goes from **$0.99 to $0.00** while the foreign key check still passes. One Synapse Custom MCP call catches the error and returns the affected count and example rows.
+Migration Rehearsal runs a candidate on a disposable copy of Chinook and checks the result against a pinned contract. One Synapse Custom MCP call can catch silent price corruption or playlist tracks reassigned to the wrong lists, even when SQLite commits and the foreign key checks pass.
 
 Built for **Vibe-a-thon Track 2** · Python · SQLite · Synapse Custom
 
-[Watch the captioned submission demo (2:53)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-253-reviewer) · [Try two backfills](#try-two-backfills-yourself) · [Try it locally](#try-it-locally) · [Read the live results](#live-agent-comparison) · [Connect an agent](#connect-another-mcp-client)
+[Watch the captioned submission demo (2:56)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-256-playlists) · [Try playlist migration](#rehearse-a-playlist-migration) · [Try it locally](#try-it-locally) · [Read the live results](#live-agent-comparison) · [Connect an agent](#connect-another-mcp-client)
 
-[![Track 1 at $0.00 in the original, $1.00 in the blocked trial, and $0.99 in the trial that verified all 3,503 prices.](reviewer-preview.png)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-253-reviewer)
+[![Track 1 at $0.00 in the original, $1.00 in the blocked trial, and $0.99 in the trial that verified all 3,503 prices.](reviewer-preview.png)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-256-playlists)
 
 ## Try it locally
 
@@ -42,6 +42,15 @@ python workbench.py --server rehearse_database_migration_server.py
 
 The reviewer chooses these two backfills. Every verdict comes from a new run on a disposable copy.
 
+## Rehearse a playlist migration
+
+1. Select **Playlist · Swap two equal-size lists** and **Run on a copy**. The migration copies **8,715 rows**, foreign keys pass, and every playlist keeps the same track count. The checker finds **50 missing links and 50 unexpected links**.
+2. Select **Playlist · Preserve every membership** and approve another run. The same checker verifies **8,715/8,715 memberships** under the same playlist contract.
+
+![The playlist migration is blocked with 8,715 rows, valid foreign keys, and 50 missing and 50 extra links.](playlist-preview.png)
+
+The migration gives each membership a new surrogate ID. The [playlist checker](playlist.py) reads the original and new `(PlaylistId, TrackId)` pairs and compares their multiplicities. It also checks the new table's foreign keys and unique pair constraint against the [playlist contract](fixtures/playlist-contract.json). Reordering inserts passes, and moving or duplicating relationships is blocked.
+
 ## Watch the agent repair a failed plan
 
 Run **Truncate dollars first**, then select **Review recorded agent fix**. Review the one-expression diff and select **Run corrected plan on a copy**. The workbench shows the same track at **$0.00 before** and **$0.99 after**, with **3,503/3,503 prices verified** under the same pinned contract and fixture.
@@ -60,20 +69,20 @@ The [generated server](rehearse_database_migration_server.py) exposes one tool, 
 Validate → Snapshot → Capture baseline → Execute → Verify → Report
 ```
 
-The tool advertises a [typed plan object](mcp_plan.py) through MCP `tools/list`. The host approves the digest of the canonical plan. The engine checks the [contract pin](fixtures/contract.json) before SQL runs and before issuing the verdict. It makes the copy from the hash-checked Chinook fixture, runs a bounded set of operations, and checks protected records, indexes, foreign keys, application queries, and every converted price. The report includes the candidate and contract identities, execution status, the verdict, and examples where a check fails.
+The tool advertises both [typed plan objects](mcp_plan.py) through MCP `tools/list`. The host approves the digest of the canonical plan. The engine checks the family-specific pin before SQL runs and before issuing the verdict. It runs bounded operations on a copy of the hash-checked Chinook fixture. Both workflows check protected records, indexes, foreign keys, and application queries. The [price contract](fixtures/contract.json) verifies every converted price. The playlist contract verifies the relationship pairs and target schema. The report includes the candidate and contract identities, execution status, verdict, and examples where a check fails.
 
 | Outcome | Meaning |
 | --- | --- |
 | **Passed** | The result satisfies the pinned checks on this copy. |
 | **Blocked** | A check failed or the candidate could not run as submitted. |
 | **Unclear** | The tool could not establish a result, for example because the scope is missing, a run timed out, or the contract changed. |
-| **Unsupported** | The operation or scope falls outside the USD-to-integer-cents workflow. |
+| **Unsupported** | The operation or scope falls outside the selected migration contract. |
 
 The approved fixture is read from disk and checked before use. Every mutation happens in memory. The tool accepts named operations and scopes, and the workbench binds to loopback.
 
 ## Results you can reproduce
 
-Both MCP surfaces matched **26/26 labeled cases**, including **14/14 holdouts**, with zero misses. Both replays left the fixture byte for byte identical. A match requires the expected verdict, exact reason codes, and the verified contract digest. The two scope cases also require that SQL never ran.
+Both MCP surfaces matched **35/35 labeled cases**, including **20/20 holdouts**, with zero misses. The nine playlist cases cover exact copying, reorder, balanced swaps, missing and duplicate links, an orphan, a missing unique constraint, and unclear or unsupported mappings. Both replays left the fixture byte for byte identical. A match requires the expected verdict, exact reason codes, the verified family pin, and any labeled counts, checks, or execution status.
 
 - [Labeled plans and expected results](fixtures/cases.jsonl)
 - [Synapse MCP benchmark](mcp-benchmark-results.json) and [separate-tool benchmark](small-benchmark-results.json)
@@ -99,10 +108,12 @@ The model selects which tool to call. The runner and workbench display the verdi
 | Round after scaling | Passed · 1 call | Passed · 7 calls | [JSON](integration-corrected-results.json) |
 | Missing backfill scope | Unclear · 1 call | Unclear · 7 calls | [JSON](integration-unclear-results.json) |
 | Currency conversion | Unsupported · 1 call | Unsupported · 7 calls | [JSON](integration-unsupported-results.json) |
+| Swap equal-size playlists | Blocked · 1 call | Blocked · 7 calls | [JSON](integration-playlist-swapped.json) |
+| Preserve playlist memberships | Passed · 1 call | Passed · 7 calls | [JSON](integration-playlist-preserved.json) |
 
-Both live setups reached the expected verdict on all four candidates. The separate-tool agent requested the report before verification once per case, then recovered. The scripted replay completes the same workflow in six calls when the tools run in order.
+Both live setups reached the expected verdict on all six candidates. The separate-tool agent requested the report before verification once per case, then recovered. The scripted replay completes the same workflow in six calls when the tools run in order.
 
-The evidence covers four live candidates, one local model, and one migration family on a single public database. The workbench is a local review tool. Its confirmation assumes a trusted local operator.
+The evidence covers two migration families on one public database and one local model. Its confirmation assumes a trusted local operator.
 
 ## Connect another MCP client
 
@@ -142,6 +153,8 @@ python -c "import json; from rehearsal import canonical, fingerprint; print(fing
 
 The benchmark runner supplies approval for all bundled cases when the operator passes `--confirm`.
 
+For the playlist workflow, send a plan such as `{"plan":{"family":"playlist_membership","mapping":"copy_pairs"}}` after approving that inner plan's hash. It should return `passed` with `memberships_verified` of `8715`.
+
 <details>
 <summary>Rerun the live agent or rebuild the server and demo</summary>
 
@@ -171,7 +184,7 @@ In another terminal, run:
 python mcp_replay.py --server rehearse_database_migration_server.py --confirm --base-url http://127.0.0.1:11455/v1 --model qwen2.5-coder-1.5b --agent-case whole_dollars --integration-output my-live-trace.json
 ```
 
-The other live case IDs are `round_cents`, `missing_backfill_scope`, and `currency_conversion`. The trace retains the structured MCP arguments and full tool response alongside the report-based summary.
+The other live case IDs are `round_cents`, `missing_backfill_scope`, `currency_conversion`, `playlist_swapped`, and `playlist_preserved`. The trace retains the structured MCP arguments and full tool response alongside the report-based summary.
 
 ### Capture the workbench and render a local replay
 

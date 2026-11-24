@@ -1,0 +1,24 @@
+{
+  "id": "chinook-playlist-membership-v1",
+  "target": {
+    "columns": [["MembershipId", "INTEGER", 0, 1], ["PlaylistId", "INTEGER", 1, 0], ["TrackId", "INTEGER", 1, 0]],
+    "foreign_keys": [["Playlist", "PlaylistId", "PlaylistId"], ["Track", "TrackId", "TrackId"]],
+    "unique_pair": ["PlaylistId", "TrackId"],
+    "memberships_query": "SELECT PlaylistId, TrackId FROM PlaylistMembership ORDER BY PlaylistId, TrackId"
+  },
+  "protected_records": {
+    "Playlist": "SELECT PlaylistId, Name FROM Playlist ORDER BY PlaylistId",
+    "PlaylistTrack": "SELECT PlaylistId, TrackId FROM PlaylistTrack ORDER BY PlaylistId, TrackId",
+    "Track": "SELECT * FROM Track ORDER BY TrackId",
+    "Invoice": "SELECT * FROM Invoice ORDER BY InvoiceId",
+    "InvoiceLine": "SELECT * FROM InvoiceLine ORDER BY InvoiceLineId"
+  },
+  "application_queries": [
+    "SELECT p.PlaylistId, COUNT(pt.TrackId) FROM Playlist p LEFT JOIN PlaylistTrack pt USING(PlaylistId) GROUP BY p.PlaylistId ORDER BY p.PlaylistId"
+  ],
+  "database_checks": {
+    "integrity": "PRAGMA integrity_check",
+    "foreign_keys": "PRAGMA foreign_key_check"
+  },
+  "index_query": "SELECT name, sql FROM sqlite_schema WHERE type='index' AND tbl_name IN ('Playlist','PlaylistTrack','Track','Invoice','InvoiceLine') ORDER BY name"
+}
