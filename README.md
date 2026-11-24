@@ -6,9 +6,9 @@ Migration Rehearsal runs a candidate on a disposable copy of the Chinook databas
 
 Built for **Vibe-a-thon Track 2** · Python · SQLite · Synapse Custom
 
-[Watch the captioned demo](migration-rehearsal-demo.mp4?raw=1) · [Try it locally](#try-it-locally) · [Read the live results](#live-agent-comparison)
+[Watch the captioned submission demo (2:33)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233) · [Try it locally](#try-it-locally) · [Read the live results](#live-agent-comparison)
 
-[![The workbench blocks the release after SQL committed on a copy. Track 1 shows 99 cents expected and 0 observed.](workbench-preview.png)](migration-rehearsal-demo.mp4?raw=1)
+[![The workbench blocks the release after SQL committed on a copy. Track 1 shows 99 cents expected and 0 observed.](workbench-preview.png)](https://raw.githubusercontent.com/hehehehehee-dev/migration-rehearsal/main/migration-rehearsal-demo.mp4?v=submission-233)
 
 ## Try it locally
 
@@ -115,7 +115,9 @@ python mcp_replay.py --server rehearse_database_migration_server.py --confirm --
 
 The other live case IDs are `round_cents`, `missing_backfill_scope`, and `currency_conversion`. The trace retains the full tool response. The model receives a condensed copy for its final summary.
 
-### Capture the workbench and render the MP4
+### Capture the workbench and render a local replay
+
+This recipe renders the short local replay. The extended submission cut uses separate narration and is linked above.
 
 On Windows with Edge and the Python dependencies installed:
 
