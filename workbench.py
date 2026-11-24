@@ -2,6 +2,7 @@
 import argparse
 from collections import OrderedDict
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+import gzip
 import json
 from pathlib import Path
 import threading
@@ -40,11 +41,21 @@ class Handler(BaseHTTPRequestHandler):
                 "cases": [describe_case(case_id) for case_id in DEMO_CASES],
                 "runtime": self.server.runtime, "contract_pin": CONTRACT_SHA256,
             })
-        if path in ("/api/bench", "/api/trace"):
-            name = (("mcp-benchmark-results.json" if self.server.mcp_path else "benchmark-results.json")
-                    if path.endswith("bench") else "integration-results.json")
-            artifact = ROOT / name
-            return self.respond(json.loads(artifact.read_text(encoding="utf-8")) if artifact.exists() else {})
+        reports = {
+            "/api/bench": "mcp-benchmark-results.json" if self.server.mcp_path else "benchmark-results.json",
+            "/api/trace": "integration-results.json",
+            "/api/comparison": "live-comparison-results.json",
+        }
+        if path in reports:
+            artifact = ROOT / reports[path]
+            data = json.loads(artifact.read_text(encoding="utf-8")) if artifact.exists() else {}
+            if path == "/api/comparison":
+                payload = json.dumps(data, separators=(",", ":")).encode()
+                encodings = self.headers.get("Accept-Encoding", "").split(",")
+                if any(encoding.strip() == "gzip" for encoding in encodings):
+                    return self.respond(gzip.compress(payload), content_encoding="gzip")
+                return self.respond(payload)
+            return self.respond(data)
         assets = {"/": ("index.html", "text/html"), "/style.css": ("style.css", "text/css"),
                   "/app.js": ("app.js", "text/javascript")}
         if path in assets:
@@ -124,11 +135,14 @@ class Handler(BaseHTTPRequestHandler):
         report = self.server.run_case(canonical(draft["draft"]))
         self.respond(report)
 
-    def respond(self, payload, status=200, content_type="application/json"):
+    def respond(self, payload, status=200, content_type="application/json", *, content_encoding=None):
         if not isinstance(payload, bytes):
             payload = json.dumps(payload).encode()
         self.send_response(status)
         self.send_header("Content-Type", content_type + "; charset=utf-8")
+        if content_encoding:
+            self.send_header("Content-Encoding", content_encoding)
+            self.send_header("Vary", "Accept-Encoding")
         self.send_header("Content-Length", str(len(payload)))
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")

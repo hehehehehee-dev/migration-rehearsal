@@ -25,6 +25,13 @@ try {
   await page.goto(base);
   const run=page.getByRole('button',{name:'Run on a copy'});
   await page.getByText('Ready to run',{exact:true}).waitFor();
+  const comparisonLink=page.locator('#trace a[href="/api/comparison"]');
+  await comparisonLink.waitFor({state:'attached'});
+  assert.equal(await comparisonLink.getAttribute('href'),'/api/comparison');
+  assert.equal(await comparisonLink.innerText(),'View measured traces');
+  const {summary}=await (await fetch(base+'/api/comparison')).json();
+  const ratio=record=>`${record.matched_plan_runs}/${record.plan_runs}`;
+  assert((await page.locator('#trace p').first().innerText()).includes(`correct plan reports ${ratio(summary.composed)} vs ${ratio(summary.separate)}`));
   await page.getByText('Inspect live tool trace',{exact:true}).click();
   await page.getByText('Composed tool · Blocked. Price cents mismatch (3,503).',{exact:true}).waitFor();
   await page.getByText('Inspect live tool trace',{exact:true}).click();

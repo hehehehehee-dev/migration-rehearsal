@@ -1,5 +1,6 @@
 {
   "synapse_verified": true,
+  "server_sha256": "d11d6312887391369506fab1b134c3f1966e3a23e6c356f736d32d2ab2a37b13",
   "deterministic_comparison": {
     "composed_calls_per_case": 1,
     "separate_calls_per_case": 6,
@@ -17,7 +18,7 @@
         "unexpected_memberships"
       ],
       "agent_response": "Blocked. Missing memberships (50), unexpected memberships (50).",
-      "milliseconds": 3781,
+      "milliseconds": 553,
       "trace": [
         {
           "name": "rehearse_database_migration",
@@ -157,7 +158,7 @@
         "unexpected_memberships"
       ],
       "agent_response": "Blocked. Missing memberships (50), unexpected memberships (50).",
-      "milliseconds": 11560,
+      "milliseconds": 5603,
       "trace": [
         {
           "name": "validate_request",

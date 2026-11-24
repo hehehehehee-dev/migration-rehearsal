@@ -10,7 +10,7 @@ next_phase = 0
 def advance(index, value=None):
     global context, next_phase
     if index != next_phase:
-        return {"error": f"Run {PHASES[next_phase].__name__} next."}
+        return {"error": f"Run {PHASES[next_phase].__name__} next.", "code": "phase_out_of_order"}
     context = PHASES[index](value if index == 0 else context)
     if index == len(PHASES) - 1:
         report, context = context, None

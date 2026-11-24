@@ -2,7 +2,7 @@
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Literal
 
-from rehearsal import canonical
+from rehearsal import canonical, validate_request
 
 
 class Backfill(BaseModel):
@@ -32,3 +32,8 @@ class PlaylistPlan(PlanObject):
 
 
 MigrationPlan = PricePlan | PlaylistPlan
+
+
+def validate_approved_plan(plan: MigrationPlan) -> dict:
+    """Validate the typed MCP plan and create the rehearsal context, including any approval or contract failure."""
+    return validate_request(plan.canonical_json())

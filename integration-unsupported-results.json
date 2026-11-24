@@ -1,5 +1,6 @@
 {
   "synapse_verified": true,
+  "server_sha256": "d11d6312887391369506fab1b134c3f1966e3a23e6c356f736d32d2ab2a37b13",
   "deterministic_comparison": {
     "composed_calls_per_case": 1,
     "separate_calls_per_case": 6,
@@ -16,7 +17,7 @@
         "unsupported_operation"
       ],
       "agent_response": "Unsupported. Unsupported operation.",
-      "milliseconds": 3052,
+      "milliseconds": 507,
       "trace": [
         {
           "name": "rehearse_database_migration",
@@ -60,7 +61,7 @@
         "unsupported_operation"
       ],
       "agent_response": "Unsupported. Unsupported operation.",
-      "milliseconds": 19453,
+      "milliseconds": 5586,
       "trace": [
         {
           "name": "validate_request",

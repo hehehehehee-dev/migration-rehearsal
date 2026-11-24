@@ -87,7 +87,7 @@ def check_contract(context):
 
 
 def validate_request(plan_json: str) -> dict:
-    """Create a context from a JSON string containing the proposed migration plan."""
+    """Validate canonical JSON for the local engine. MCP callers enter through the typed plan validator."""
     plan = None
     if len(plan_json) <= 4096:
         try:
@@ -129,6 +129,7 @@ def validate_request(plan_json: str) -> dict:
 
 
 def validate_membership_plan(context, plan):
+    """Validate the fields of a playlist plan from inside the shared request validator."""
     if set(plan) != {"family", "mapping"}:
         return block(context, "invalid_plan")
     mapping = plan["mapping"]
@@ -155,7 +156,7 @@ def block(context, code, count=1, examples=(), *, verdict="blocked"):
     return context
 
 def create_test_snapshot(context: dict) -> dict:
-    """Copy the pinned, read-only Chinook fixture to a disposable in-memory database."""
+    """Add a disposable database snapshot to the validated context unless validation failed."""
     if context["issues"]:
         return context
     try:
@@ -186,7 +187,7 @@ def read_indexes(db, contract):
 
 
 def capture_baseline(context: dict) -> dict:
-    """Capture protected records, application query results, and indexes before mutation."""
+    """Record baseline data and queries from the snapshot for later contract checks."""
     if context["issues"]:
         return context
     try:
@@ -201,7 +202,7 @@ def capture_baseline(context: dict) -> dict:
     return context
 
 def execute_migration(context: dict) -> dict:
-    """Run the bounded migration transaction in memory with a deadline."""
+    """Execute the bounded change on the snapshot after the baseline is captured, with a deadline."""
     if context["issues"]:
         return context
     if "baseline" not in context:
@@ -242,6 +243,7 @@ def execute_price_migration(db, plan):
 
 
 def verify_prices(db, context):
+    """Check prices as part of shared postcondition verification. Applies only to price plans."""
     contract = context["contract_snapshot"]
     source, target = contract["source"], contract["target"]
     table, key, column = source["table"], source["key"], target["column"]
@@ -263,7 +265,7 @@ def verify_prices(db, context):
 
 
 def verify_postconditions(context: dict) -> dict:
-    """Check SQLite and application state against the fixed preservation contract."""
+    """Compare the migration result to the captured baseline using the selected contract."""
     if context["issues"]:
         return context
     if "result_snapshot" not in context:
@@ -316,7 +318,7 @@ def verify_postconditions(context: dict) -> dict:
     return context
 
 def build_evidence_report(context: dict) -> dict:
-    """Return a JSON-safe verdict with check coverage and concrete counterexamples."""
+    """Finalize the rehearsal context as a JSON report, including any failure or incomplete result."""
     if context.get("contract_sha256"):
         check_contract(context)
     if not context["issues"]:

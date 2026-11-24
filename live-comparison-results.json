@@ -1,0 +1,3438 @@
+{
+  "protocol": "shared prompt, optional tool calls, no next-step hints",
+  "model": "qwen2.5-coder-7b",
+  "repetitions": 2,
+  "temperature": 0,
+  "source_unchanged": true,
+  "server_sha256": {
+    "composed": "d11d6312887391369506fab1b134c3f1966e3a23e6c356f736d32d2ab2a37b13",
+    "separate": "620ead76f0c75eb1749080a17b94008c01184f1b67e97563c207f9d6c4507f75"
+  },
+  "summary": {
+    "composed": {
+      "runs": 16,
+      "matched": 12,
+      "attempts": 16,
+      "mcp_calls": 12,
+      "wrong_calls": 4,
+      "runs_with_errors": 4,
+      "recovered_runs": 0,
+      "plan_runs": 12,
+      "matched_plan_runs": 12,
+      "ambiguity_runs": 4,
+      "clarified_without_attempt": 0,
+      "clarified_eventually": 0,
+      "median_ms": 1060.5,
+      "median_plan_ms": 1050.5,
+      "tokens": {
+        "prompt_tokens": 6126,
+        "completion_tokens": 306,
+        "total_tokens": 6432
+      }
+    },
+    "separate": {
+      "runs": 16,
+      "matched": 6,
+      "attempts": 56,
+      "mcp_calls": 52,
+      "wrong_calls": 6,
+      "runs_with_errors": 6,
+      "recovered_runs": 0,
+      "plan_runs": 12,
+      "matched_plan_runs": 6,
+      "ambiguity_runs": 4,
+      "clarified_without_attempt": 0,
+      "clarified_eventually": 0,
+      "median_ms": 4815.0,
+      "median_plan_ms": 5884.0,
+      "tokens": {
+        "prompt_tokens": 26812,
+        "completion_tokens": 916,
+        "total_tokens": 27728
+      }
+    }
+  },
+  "successful_pair_costs": {
+    "pairs": 6,
+    "composed": {
+      "mcp_calls": 6,
+      "tokens": 1928,
+      "median_ms": 1053.5
+    },
+    "separate": {
+      "mcp_calls": 36,
+      "tokens": 15080,
+      "median_ms": 6258.5
+    }
+  },
+  "pairs": [
+    {
+      "id": "whole_dollars",
+      "repetition": 1,
+      "request": "Rehearse this attached approved plan and check whether we should release it: {\"add_column\":true,\"backfills\":[{\"expression\":\"truncated_dollars\",\"scope\":\"all\"}],\"post_step\":\"none\"}",
+      "run_order": [
+        "composed",
+        "separate"
+      ],
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "price_cents_mismatch"
+        ]
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "blocked",
+        "tool_issue_codes": [
+          "price_cents_mismatch"
+        ],
+        "agent_response": "Blocked. Price cents mismatch (3,503).",
+        "milliseconds": 1338,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "truncated_dollars",
+                    "scope": "all"
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "verdict": "blocked",
+              "family": "price_cents",
+              "plan_sha256": "a28e5cf4e18a763adc1f27625e559b8c9cf5661b3ea1b29f81a3fbd835b3854f",
+              "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+              "contract": "chinook-track-price-cents-v1",
+              "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "execution": "sqlite_committed_on_copy",
+              "checks": {
+                "integrity": true,
+                "foreign_keys": true,
+                "track_count": 3503,
+                "protected_records": true,
+                "application_queries": true,
+                "indexes": true,
+                "price_rows_checked": 3503,
+                "price_cents_exact": false
+              },
+              "issues": {
+                "price_cents_mismatch": {
+                  "count": 3503,
+                  "examples": [
+                    {
+                      "track_id": 1,
+                      "expected_cents": 99,
+                      "actual_cents": 0
+                    },
+                    {
+                      "track_id": 2,
+                      "expected_cents": 99,
+                      "actual_cents": 0
+                    },
+                    {
+                      "track_id": 3,
+                      "expected_cents": 99,
+                      "actual_cents": 0
+                    },
+                    {
+                      "track_id": 4,
+                      "expected_cents": 99,
+                      "actual_cents": 0
+                    },
+                    {
+                      "track_id": 5,
+                      "expected_cents": 99,
+                      "actual_cents": 0
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 330,
+              "completion_tokens": 12,
+              "total_tokens": 342
+            },
+            "milliseconds": 1285
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 330,
+          "completion_tokens": 12,
+          "total_tokens": 342
+        }
+      },
+      "separate": {
+        "calls": 6,
+        "verdict": "incomplete",
+        "tool_issue_codes": [],
+        "agent_response": "Incomplete. No tool returned a verdict after 6 calls.",
+        "milliseconds": 10332,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "truncated_dollars",
+                    "scope": "all"
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "next": "create_test_snapshot",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "create_test_snapshot",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "capture_baseline",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "capture_baseline",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "execute_migration",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "execute_migration",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "verify_postconditions",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "verify_postconditions",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "build_evidence_report",
+              "issues_so_far": [
+                "price_cents_mismatch"
+              ]
+            }
+          },
+          {
+            "name": "verify_postconditions",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "error": "Run build_evidence_report next.",
+              "code": "phase_out_of_order"
+            }
+          }
+        ],
+        "model_message": "The 'verify_postconditions' phase cannot run at the current stage of the rehearsal. Please provide the necessary details or clarify the request before proceeding.",
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 404,
+              "completion_tokens": 9,
+              "total_tokens": 413
+            },
+            "milliseconds": 893
+          },
+          {
+            "usage": {
+              "prompt_tokens": 386,
+              "completion_tokens": 10,
+              "total_tokens": 396
+            },
+            "milliseconds": 940
+          },
+          {
+            "usage": {
+              "prompt_tokens": 405,
+              "completion_tokens": 9,
+              "total_tokens": 414
+            },
+            "milliseconds": 896
+          },
+          {
+            "usage": {
+              "prompt_tokens": 422,
+              "completion_tokens": 9,
+              "total_tokens": 431
+            },
+            "milliseconds": 888
+          },
+          {
+            "usage": {
+              "prompt_tokens": 439,
+              "completion_tokens": 10,
+              "total_tokens": 449
+            },
+            "milliseconds": 915
+          },
+          {
+            "usage": {
+              "prompt_tokens": 469,
+              "completion_tokens": 31,
+              "total_tokens": 500
+            },
+            "milliseconds": 2603
+          },
+          {
+            "usage": {
+              "prompt_tokens": 519,
+              "completion_tokens": 37,
+              "total_tokens": 556
+            },
+            "milliseconds": 3134
+          }
+        ],
+        "matched": false,
+        "mcp_calls": 6,
+        "wrong_calls": 1,
+        "wrong_call_indices": [
+          6
+        ],
+        "recovered_after_error": false,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 3044,
+          "completion_tokens": 115,
+          "total_tokens": 3159
+        }
+      }
+    },
+    {
+      "id": "round_cents",
+      "repetition": 1,
+      "request": "Rehearse this attached approved plan and check whether we should release it: {\"add_column\":true,\"backfills\":[{\"expression\":\"rounded_cents\",\"scope\":\"all\"}],\"post_step\":\"none\"}",
+      "run_order": [
+        "separate",
+        "composed"
+      ],
+      "expected": {
+        "verdict": "passed",
+        "issues": []
+      },
+      "separate": {
+        "calls": 6,
+        "verdict": "passed",
+        "tool_issue_codes": [],
+        "agent_response": "Passed. Verified 3,503 track prices.",
+        "milliseconds": 5534,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "rounded_cents",
+                    "scope": "all"
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "next": "create_test_snapshot",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "create_test_snapshot",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "capture_baseline",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "capture_baseline",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "execute_migration",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "execute_migration",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "verify_postconditions",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "verify_postconditions",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "build_evidence_report",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "build_evidence_report",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "verdict": "passed",
+              "family": "price_cents",
+              "plan_sha256": "f3b8a97ca34cea5ace5bc400b13656c83694616e7ba494de33501c15975a7582",
+              "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+              "contract": "chinook-track-price-cents-v1",
+              "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "execution": "sqlite_committed_on_copy",
+              "checks": {
+                "integrity": true,
+                "foreign_keys": true,
+                "track_count": 3503,
+                "protected_records": true,
+                "application_queries": true,
+                "indexes": true,
+                "price_rows_checked": 3503,
+                "price_cents_exact": true
+              },
+              "issues": {}
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 400,
+              "completion_tokens": 9,
+              "total_tokens": 409
+            },
+            "milliseconds": 889
+          },
+          {
+            "usage": {
+              "prompt_tokens": 384,
+              "completion_tokens": 10,
+              "total_tokens": 394
+            },
+            "milliseconds": 908
+          },
+          {
+            "usage": {
+              "prompt_tokens": 403,
+              "completion_tokens": 9,
+              "total_tokens": 412
+            },
+            "milliseconds": 859
+          },
+          {
+            "usage": {
+              "prompt_tokens": 420,
+              "completion_tokens": 9,
+              "total_tokens": 429
+            },
+            "milliseconds": 861
+          },
+          {
+            "usage": {
+              "prompt_tokens": 437,
+              "completion_tokens": 10,
+              "total_tokens": 447
+            },
+            "milliseconds": 945
+          },
+          {
+            "usage": {
+              "prompt_tokens": 456,
+              "completion_tokens": 11,
+              "total_tokens": 467
+            },
+            "milliseconds": 997
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 6,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 2500,
+          "completion_tokens": 58,
+          "total_tokens": 2558
+        }
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "passed",
+        "tool_issue_codes": [],
+        "agent_response": "Passed. Verified 3,503 track prices.",
+        "milliseconds": 1132,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "rounded_cents",
+                    "scope": "all"
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "verdict": "passed",
+              "family": "price_cents",
+              "plan_sha256": "f3b8a97ca34cea5ace5bc400b13656c83694616e7ba494de33501c15975a7582",
+              "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+              "contract": "chinook-track-price-cents-v1",
+              "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "execution": "sqlite_committed_on_copy",
+              "checks": {
+                "integrity": true,
+                "foreign_keys": true,
+                "track_count": 3503,
+                "protected_records": true,
+                "application_queries": true,
+                "indexes": true,
+                "price_rows_checked": 3503,
+                "price_cents_exact": true
+              },
+              "issues": {}
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 326,
+              "completion_tokens": 12,
+              "total_tokens": 338
+            },
+            "milliseconds": 1076
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 326,
+          "completion_tokens": 12,
+          "total_tokens": 338
+        }
+      }
+    },
+    {
+      "id": "missing_backfill_scope",
+      "repetition": 1,
+      "request": "Rehearse this attached approved plan and check whether we should release it: {\"add_column\":true,\"backfills\":[{\"expression\":\"rounded_cents\",\"scope\":null}],\"post_step\":\"none\"}",
+      "run_order": [
+        "composed",
+        "separate"
+      ],
+      "expected": {
+        "verdict": "unclear",
+        "issues": [
+          "scope_unspecified"
+        ],
+        "execution": "not_run"
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "unclear",
+        "tool_issue_codes": [
+          "scope_unspecified"
+        ],
+        "agent_response": "Unclear. Scope unspecified.",
+        "milliseconds": 998,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "rounded_cents",
+                    "scope": null
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "verdict": "unclear",
+              "family": "price_cents",
+              "plan_sha256": "5cbd7e674f7fdd6a1bddab644edc9d199ddc3c685bce757ac2c3e6e75f9bfc62",
+              "fixture_sha256": null,
+              "contract": "chinook-track-price-cents-v1",
+              "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "execution": "not_run",
+              "checks": {},
+              "issues": {
+                "scope_unspecified": {
+                  "count": 1,
+                  "examples": []
+                }
+              }
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 326,
+              "completion_tokens": 12,
+              "total_tokens": 338
+            },
+            "milliseconds": 996
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 326,
+          "completion_tokens": 12,
+          "total_tokens": 338
+        }
+      },
+      "separate": {
+        "calls": 1,
+        "verdict": "incomplete",
+        "tool_issue_codes": [],
+        "agent_response": "Incomplete. No tool returned a verdict after 1 call.",
+        "milliseconds": 4127,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "rounded_cents",
+                    "scope": null
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "next": "create_test_snapshot",
+              "issues_so_far": [
+                "scope_unspecified"
+              ]
+            }
+          }
+        ],
+        "model_message": "The plan specifies adding a column with a backfill expression, but the scope is not specified. Please provide the scope for the backfill before proceeding.",
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 400,
+              "completion_tokens": 9,
+              "total_tokens": 409
+            },
+            "milliseconds": 907
+          },
+          {
+            "usage": {
+              "prompt_tokens": 391,
+              "completion_tokens": 38,
+              "total_tokens": 429
+            },
+            "milliseconds": 3218
+          }
+        ],
+        "matched": false,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 791,
+          "completion_tokens": 47,
+          "total_tokens": 838
+        }
+      }
+    },
+    {
+      "id": "currency_conversion",
+      "repetition": 1,
+      "request": "Rehearse this attached approved plan and check whether we should release it: {\"add_column\":true,\"backfills\":[{\"expression\":\"convert_currency\",\"scope\":\"all\"}],\"post_step\":\"none\"}",
+      "run_order": [
+        "separate",
+        "composed"
+      ],
+      "expected": {
+        "verdict": "unsupported",
+        "issues": [
+          "unsupported_operation"
+        ],
+        "execution": "not_run"
+      },
+      "separate": {
+        "calls": 1,
+        "verdict": "incomplete",
+        "tool_issue_codes": [],
+        "agent_response": "Incomplete. No tool returned a verdict after 1 call.",
+        "milliseconds": 2997,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "convert_currency",
+                    "scope": "all"
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "next": "create_test_snapshot",
+              "issues_so_far": [
+                "unsupported_operation"
+              ]
+            }
+          }
+        ],
+        "model_message": "The plan contains an unsupported operation. Please review and provide a corrected plan.",
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 398,
+              "completion_tokens": 9,
+              "total_tokens": 407
+            },
+            "milliseconds": 944
+          },
+          {
+            "usage": {
+              "prompt_tokens": 388,
+              "completion_tokens": 23,
+              "total_tokens": 411
+            },
+            "milliseconds": 2050
+          }
+        ],
+        "matched": false,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 786,
+          "completion_tokens": 32,
+          "total_tokens": 818
+        }
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "unsupported",
+        "tool_issue_codes": [
+          "unsupported_operation"
+        ],
+        "agent_response": "Unsupported. Unsupported operation.",
+        "milliseconds": 1048,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "convert_currency",
+                    "scope": "all"
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "verdict": "unsupported",
+              "family": "price_cents",
+              "plan_sha256": "035a27c6282c8fe653c68a6ae91a69fefaa5bf017e1f4c3879a34fc1e353ad12",
+              "fixture_sha256": null,
+              "contract": "chinook-track-price-cents-v1",
+              "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "execution": "not_run",
+              "checks": {},
+              "issues": {
+                "unsupported_operation": {
+                  "count": 1,
+                  "examples": []
+                }
+              }
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 324,
+              "completion_tokens": 12,
+              "total_tokens": 336
+            },
+            "milliseconds": 1044
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 324,
+          "completion_tokens": 12,
+          "total_tokens": 336
+        }
+      }
+    },
+    {
+      "id": "playlist_swapped",
+      "repetition": 1,
+      "request": "Rehearse this attached approved plan and check whether we should release it: {\"family\":\"playlist_membership\",\"mapping\":\"swap_equal_size_playlists\"}",
+      "run_order": [
+        "composed",
+        "separate"
+      ],
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "missing_memberships",
+          "unexpected_memberships"
+        ],
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "playlist_rows_expected": 8715,
+          "playlist_rows_observed": 8715,
+          "playlist_counts_exact": true,
+          "foreign_keys": true
+        },
+        "issue_counts": {
+          "missing_memberships": 50,
+          "unexpected_memberships": 50
+        }
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "blocked",
+        "tool_issue_codes": [
+          "missing_memberships",
+          "unexpected_memberships"
+        ],
+        "agent_response": "Blocked. Missing memberships (50), unexpected memberships (50).",
+        "milliseconds": 1054,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "family": "playlist_membership",
+                "mapping": "swap_equal_size_playlists"
+              }
+            },
+            "result": {
+              "verdict": "blocked",
+              "family": "playlist_membership",
+              "plan_sha256": "d1a1cb4b0de4e030bd81d86ef708ab8074f5a8e82c175ddc5eacf42d13b2a24d",
+              "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+              "contract": "chinook-playlist-membership-v1",
+              "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "execution": "sqlite_committed_on_copy",
+              "checks": {
+                "integrity": true,
+                "foreign_keys": true,
+                "track_count": 3503,
+                "protected_records": true,
+                "application_queries": true,
+                "indexes": true,
+                "membership_schema": true,
+                "playlist_rows_expected": 8715,
+                "playlist_rows_observed": 8715,
+                "playlist_counts_exact": true,
+                "membership_pairs_exact": false,
+                "memberships_verified": 8665,
+                "missing_memberships": 50,
+                "unexpected_memberships": 50
+              },
+              "issues": {
+                "missing_memberships": {
+                  "count": 50,
+                  "examples": [
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3479,
+                      "track": "Prometheus Overture, Op. 43",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3480,
+                      "track": "Sonata for Solo Violin: IV: Presto",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3481,
+                      "track": "A Midsummer Night's Dream, Op.61 Incidental Music: No.7 Notturno",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3482,
+                      "track": "Suite No. 3 in D, BWV 1068: III. Gavotte I & II",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3483,
+                      "track": "Concert pour 4 Parties de V**les, H. 545: I. Prelude",
+                      "expected": 1,
+                      "observed": 0
+                    }
+                  ]
+                },
+                "unexpected_memberships": {
+                  "count": 50,
+                  "examples": [
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3430,
+                      "track": "Toccata and Fugue in D Minor, BWV 565: I. Toccata",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3431,
+                      "track": "Symphony No.1 in D Major, Op.25 \"Classical\", Allegro Con Brio",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3432,
+                      "track": "Scheherazade, Op. 35: I. The Sea and Sindbad's Ship",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3433,
+                      "track": "Concerto No.2 in F Major, BWV1047, I. Allegro",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3434,
+                      "track": "Concerto for Piano No. 2 in F Minor, Op. 21: II. Larghetto",
+                      "expected": 0,
+                      "observed": 1
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 304,
+              "completion_tokens": 12,
+              "total_tokens": 316
+            },
+            "milliseconds": 991
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 304,
+          "completion_tokens": 12,
+          "total_tokens": 316
+        }
+      },
+      "separate": {
+        "calls": 6,
+        "verdict": "blocked",
+        "tool_issue_codes": [
+          "missing_memberships",
+          "unexpected_memberships"
+        ],
+        "agent_response": "Blocked. Missing memberships (50), unexpected memberships (50).",
+        "milliseconds": 6234,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "family": "playlist_membership",
+                "mapping": "swap_equal_size_playlists"
+              }
+            },
+            "result": {
+              "next": "create_test_snapshot",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "create_test_snapshot",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "capture_baseline",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "capture_baseline",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "execute_migration",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "execute_migration",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "verify_postconditions",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "verify_postconditions",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "build_evidence_report",
+              "issues_so_far": [
+                "missing_memberships",
+                "unexpected_memberships"
+              ]
+            }
+          },
+          {
+            "name": "build_evidence_report",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "verdict": "blocked",
+              "family": "playlist_membership",
+              "plan_sha256": "d1a1cb4b0de4e030bd81d86ef708ab8074f5a8e82c175ddc5eacf42d13b2a24d",
+              "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+              "contract": "chinook-playlist-membership-v1",
+              "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "execution": "sqlite_committed_on_copy",
+              "checks": {
+                "integrity": true,
+                "foreign_keys": true,
+                "track_count": 3503,
+                "protected_records": true,
+                "application_queries": true,
+                "indexes": true,
+                "membership_schema": true,
+                "playlist_rows_expected": 8715,
+                "playlist_rows_observed": 8715,
+                "playlist_counts_exact": true,
+                "membership_pairs_exact": false,
+                "memberships_verified": 8665,
+                "missing_memberships": 50,
+                "unexpected_memberships": 50
+              },
+              "issues": {
+                "missing_memberships": {
+                  "count": 50,
+                  "examples": [
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3479,
+                      "track": "Prometheus Overture, Op. 43",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3480,
+                      "track": "Sonata for Solo Violin: IV: Presto",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3481,
+                      "track": "A Midsummer Night's Dream, Op.61 Incidental Music: No.7 Notturno",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3482,
+                      "track": "Suite No. 3 in D, BWV 1068: III. Gavotte I & II",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3483,
+                      "track": "Concert pour 4 Parties de V**les, H. 545: I. Prelude",
+                      "expected": 1,
+                      "observed": 0
+                    }
+                  ]
+                },
+                "unexpected_memberships": {
+                  "count": 50,
+                  "examples": [
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3430,
+                      "track": "Toccata and Fugue in D Minor, BWV 565: I. Toccata",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3431,
+                      "track": "Symphony No.1 in D Major, Op.25 \"Classical\", Allegro Con Brio",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3432,
+                      "track": "Scheherazade, Op. 35: I. The Sea and Sindbad's Ship",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3433,
+                      "track": "Concerto No.2 in F Major, BWV1047, I. Allegro",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3434,
+                      "track": "Concerto for Piano No. 2 in F Minor, Op. 21: II. Larghetto",
+                      "expected": 0,
+                      "observed": 1
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 378,
+              "completion_tokens": 9,
+              "total_tokens": 387
+            },
+            "milliseconds": 844
+          },
+          {
+            "usage": {
+              "prompt_tokens": 373,
+              "completion_tokens": 10,
+              "total_tokens": 383
+            },
+            "milliseconds": 857
+          },
+          {
+            "usage": {
+              "prompt_tokens": 392,
+              "completion_tokens": 12,
+              "total_tokens": 404
+            },
+            "milliseconds": 1078
+          },
+          {
+            "usage": {
+              "prompt_tokens": 409,
+              "completion_tokens": 12,
+              "total_tokens": 421
+            },
+            "milliseconds": 1053
+          },
+          {
+            "usage": {
+              "prompt_tokens": 426,
+              "completion_tokens": 13,
+              "total_tokens": 439
+            },
+            "milliseconds": 1129
+          },
+          {
+            "usage": {
+              "prompt_tokens": 462,
+              "completion_tokens": 14,
+              "total_tokens": 476
+            },
+            "milliseconds": 1199
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 6,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 2440,
+          "completion_tokens": 70,
+          "total_tokens": 2510
+        }
+      }
+    },
+    {
+      "id": "playlist_preserved",
+      "repetition": 1,
+      "request": "Rehearse this attached approved plan and check whether we should release it: {\"family\":\"playlist_membership\",\"mapping\":\"copy_pairs\"}",
+      "run_order": [
+        "separate",
+        "composed"
+      ],
+      "expected": {
+        "verdict": "passed",
+        "issues": [],
+        "checks": {
+          "memberships_verified": 8715,
+          "membership_pairs_exact": true,
+          "membership_schema": true
+        }
+      },
+      "separate": {
+        "calls": 6,
+        "verdict": "passed",
+        "tool_issue_codes": [],
+        "agent_response": "Passed. Verified 8,715 playlist memberships.",
+        "milliseconds": 6328,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "family": "playlist_membership",
+                "mapping": "copy_pairs"
+              }
+            },
+            "result": {
+              "next": "create_test_snapshot",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "create_test_snapshot",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "capture_baseline",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "capture_baseline",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "execute_migration",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "execute_migration",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "verify_postconditions",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "verify_postconditions",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "build_evidence_report",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "build_evidence_report",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "verdict": "passed",
+              "family": "playlist_membership",
+              "plan_sha256": "481fdce1ced72328eb57aed1c4540e7e39febf3d9f1db4e3d977c0aac6e4da55",
+              "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+              "contract": "chinook-playlist-membership-v1",
+              "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "execution": "sqlite_committed_on_copy",
+              "checks": {
+                "integrity": true,
+                "foreign_keys": true,
+                "track_count": 3503,
+                "protected_records": true,
+                "application_queries": true,
+                "indexes": true,
+                "membership_schema": true,
+                "playlist_rows_expected": 8715,
+                "playlist_rows_observed": 8715,
+                "playlist_counts_exact": true,
+                "membership_pairs_exact": true,
+                "memberships_verified": 8715,
+                "missing_memberships": 0,
+                "unexpected_memberships": 0
+              },
+              "issues": {}
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 372,
+              "completion_tokens": 9,
+              "total_tokens": 381
+            },
+            "milliseconds": 840
+          },
+          {
+            "usage": {
+              "prompt_tokens": 370,
+              "completion_tokens": 10,
+              "total_tokens": 380
+            },
+            "milliseconds": 897
+          },
+          {
+            "usage": {
+              "prompt_tokens": 389,
+              "completion_tokens": 12,
+              "total_tokens": 401
+            },
+            "milliseconds": 1083
+          },
+          {
+            "usage": {
+              "prompt_tokens": 406,
+              "completion_tokens": 12,
+              "total_tokens": 418
+            },
+            "milliseconds": 1086
+          },
+          {
+            "usage": {
+              "prompt_tokens": 423,
+              "completion_tokens": 13,
+              "total_tokens": 436
+            },
+            "milliseconds": 1146
+          },
+          {
+            "usage": {
+              "prompt_tokens": 442,
+              "completion_tokens": 14,
+              "total_tokens": 456
+            },
+            "milliseconds": 1200
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 6,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 2402,
+          "completion_tokens": 70,
+          "total_tokens": 2472
+        }
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "passed",
+        "tool_issue_codes": [],
+        "agent_response": "Passed. Verified 8,715 playlist memberships.",
+        "milliseconds": 1045,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "family": "playlist_membership",
+                "mapping": "copy_pairs"
+              }
+            },
+            "result": {
+              "verdict": "passed",
+              "family": "playlist_membership",
+              "plan_sha256": "481fdce1ced72328eb57aed1c4540e7e39febf3d9f1db4e3d977c0aac6e4da55",
+              "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+              "contract": "chinook-playlist-membership-v1",
+              "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "execution": "sqlite_committed_on_copy",
+              "checks": {
+                "integrity": true,
+                "foreign_keys": true,
+                "track_count": 3503,
+                "protected_records": true,
+                "application_queries": true,
+                "indexes": true,
+                "membership_schema": true,
+                "playlist_rows_expected": 8715,
+                "playlist_rows_observed": 8715,
+                "playlist_counts_exact": true,
+                "membership_pairs_exact": true,
+                "memberships_verified": 8715,
+                "missing_memberships": 0,
+                "unexpected_memberships": 0
+              },
+              "issues": {}
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 298,
+              "completion_tokens": 12,
+              "total_tokens": 310
+            },
+            "milliseconds": 982
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 298,
+          "completion_tokens": 12,
+          "total_tokens": 310
+        }
+      }
+    },
+    {
+      "id": "ambiguous_price_request",
+      "repetition": 1,
+      "request": "Check the migration from dollars to cents for the affected tracks.",
+      "run_order": [
+        "composed",
+        "separate"
+      ],
+      "expected": {
+        "action": "clarify",
+        "subject_pattern": "\\b(?:scope|tracks?|rows?|subset|catalog|songs?)\\b"
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "incomplete",
+        "tool_issue_codes": [],
+        "agent_response": "Incomplete. No tool returned a verdict after 1 call.",
+        "milliseconds": 3382,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": null,
+            "result": {
+              "error": "No approved plan is attached to this request."
+            }
+          }
+        ],
+        "model_message": "Please provide the approved plan for the migration from dollars to cents for the affected tracks.",
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 270,
+              "completion_tokens": 15,
+              "total_tokens": 285
+            },
+            "milliseconds": 1164
+          },
+          {
+            "usage": {
+              "prompt_tokens": 300,
+              "completion_tokens": 28,
+              "total_tokens": 328
+            },
+            "milliseconds": 2218
+          }
+        ],
+        "matched": false,
+        "mcp_calls": 0,
+        "wrong_calls": 1,
+        "wrong_call_indices": [
+          1
+        ],
+        "recovered_after_error": false,
+        "clarified_before_tool_attempt": false,
+        "tokens": {
+          "prompt_tokens": 570,
+          "completion_tokens": 43,
+          "total_tokens": 613
+        }
+      },
+      "separate": {
+        "calls": 1,
+        "verdict": "incomplete",
+        "tool_issue_codes": [],
+        "agent_response": "Incomplete. No tool returned a verdict after 1 call.",
+        "milliseconds": 2962,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": null,
+            "result": {
+              "error": "No approved plan is attached to this request."
+            }
+          }
+        ],
+        "model_message": "Please provide the approved plan for the migration from dollars to cents for the affected tracks.",
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 344,
+              "completion_tokens": 9,
+              "total_tokens": 353
+            },
+            "milliseconds": 830
+          },
+          {
+            "usage": {
+              "prompt_tokens": 370,
+              "completion_tokens": 25,
+              "total_tokens": 395
+            },
+            "milliseconds": 2132
+          }
+        ],
+        "matched": false,
+        "mcp_calls": 0,
+        "wrong_calls": 1,
+        "wrong_call_indices": [
+          1
+        ],
+        "recovered_after_error": false,
+        "clarified_before_tool_attempt": false,
+        "tokens": {
+          "prompt_tokens": 714,
+          "completion_tokens": 34,
+          "total_tokens": 748
+        }
+      }
+    },
+    {
+      "id": "ambiguous_playlist_request",
+      "repetition": 1,
+      "request": "Check the migration to the new playlist membership table. Some of the memberships should move.",
+      "run_order": [
+        "separate",
+        "composed"
+      ],
+      "expected": {
+        "action": "clarify",
+        "subject_pattern": "\\b(?:playlists?|memberships?|mappings?|tracks?|move|move[ds]|pairs|relationships?)\\b"
+      },
+      "separate": {
+        "calls": 1,
+        "verdict": "incomplete",
+        "tool_issue_codes": [],
+        "agent_response": "Incomplete. No tool returned a verdict after 1 call.",
+        "milliseconds": 2758,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": null,
+            "result": {
+              "error": "No approved plan is attached to this request."
+            }
+          }
+        ],
+        "model_message": "Please provide the approved plan for the migration to the new playlist membership table.",
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 354,
+              "completion_tokens": 9,
+              "total_tokens": 363
+            },
+            "milliseconds": 836
+          },
+          {
+            "usage": {
+              "prompt_tokens": 375,
+              "completion_tokens": 23,
+              "total_tokens": 398
+            },
+            "milliseconds": 1921
+          }
+        ],
+        "matched": false,
+        "mcp_calls": 0,
+        "wrong_calls": 1,
+        "wrong_call_indices": [
+          1
+        ],
+        "recovered_after_error": false,
+        "clarified_before_tool_attempt": false,
+        "tokens": {
+          "prompt_tokens": 729,
+          "completion_tokens": 32,
+          "total_tokens": 761
+        }
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "incomplete",
+        "tool_issue_codes": [],
+        "agent_response": "Incomplete. No tool returned a verdict after 1 call.",
+        "milliseconds": 3110,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": null,
+            "result": {
+              "error": "No approved plan is attached to this request."
+            }
+          }
+        ],
+        "model_message": "Please provide the approved plan for the migration to the new playlist membership table.",
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 280,
+              "completion_tokens": 12,
+              "total_tokens": 292
+            },
+            "milliseconds": 990
+          },
+          {
+            "usage": {
+              "prompt_tokens": 305,
+              "completion_tokens": 26,
+              "total_tokens": 331
+            },
+            "milliseconds": 2119
+          }
+        ],
+        "matched": false,
+        "mcp_calls": 0,
+        "wrong_calls": 1,
+        "wrong_call_indices": [
+          1
+        ],
+        "recovered_after_error": false,
+        "clarified_before_tool_attempt": false,
+        "tokens": {
+          "prompt_tokens": 585,
+          "completion_tokens": 38,
+          "total_tokens": 623
+        }
+      }
+    },
+    {
+      "id": "whole_dollars",
+      "repetition": 2,
+      "request": "Rehearse this attached approved plan and check whether we should release it: {\"add_column\":true,\"backfills\":[{\"expression\":\"truncated_dollars\",\"scope\":\"all\"}],\"post_step\":\"none\"}",
+      "run_order": [
+        "separate",
+        "composed"
+      ],
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "price_cents_mismatch"
+        ]
+      },
+      "separate": {
+        "calls": 6,
+        "verdict": "incomplete",
+        "tool_issue_codes": [],
+        "agent_response": "Incomplete. No tool returned a verdict after 6 calls.",
+        "milliseconds": 10186,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "truncated_dollars",
+                    "scope": "all"
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "next": "create_test_snapshot",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "create_test_snapshot",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "capture_baseline",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "capture_baseline",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "execute_migration",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "execute_migration",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "verify_postconditions",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "verify_postconditions",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "build_evidence_report",
+              "issues_so_far": [
+                "price_cents_mismatch"
+              ]
+            }
+          },
+          {
+            "name": "verify_postconditions",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "error": "Run build_evidence_report next.",
+              "code": "phase_out_of_order"
+            }
+          }
+        ],
+        "model_message": "The 'verify_postconditions' phase cannot run at the current stage of the rehearsal. Please provide the necessary details or clarify the request before proceeding.",
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 404,
+              "completion_tokens": 9,
+              "total_tokens": 413
+            },
+            "milliseconds": 879
+          },
+          {
+            "usage": {
+              "prompt_tokens": 386,
+              "completion_tokens": 10,
+              "total_tokens": 396
+            },
+            "milliseconds": 898
+          },
+          {
+            "usage": {
+              "prompt_tokens": 405,
+              "completion_tokens": 9,
+              "total_tokens": 414
+            },
+            "milliseconds": 861
+          },
+          {
+            "usage": {
+              "prompt_tokens": 422,
+              "completion_tokens": 9,
+              "total_tokens": 431
+            },
+            "milliseconds": 851
+          },
+          {
+            "usage": {
+              "prompt_tokens": 439,
+              "completion_tokens": 10,
+              "total_tokens": 449
+            },
+            "milliseconds": 896
+          },
+          {
+            "usage": {
+              "prompt_tokens": 469,
+              "completion_tokens": 31,
+              "total_tokens": 500
+            },
+            "milliseconds": 2584
+          },
+          {
+            "usage": {
+              "prompt_tokens": 519,
+              "completion_tokens": 37,
+              "total_tokens": 556
+            },
+            "milliseconds": 3155
+          }
+        ],
+        "matched": false,
+        "mcp_calls": 6,
+        "wrong_calls": 1,
+        "wrong_call_indices": [
+          6
+        ],
+        "recovered_after_error": false,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 3044,
+          "completion_tokens": 115,
+          "total_tokens": 3159
+        }
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "blocked",
+        "tool_issue_codes": [
+          "price_cents_mismatch"
+        ],
+        "agent_response": "Blocked. Price cents mismatch (3,503).",
+        "milliseconds": 1067,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "truncated_dollars",
+                    "scope": "all"
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "verdict": "blocked",
+              "family": "price_cents",
+              "plan_sha256": "a28e5cf4e18a763adc1f27625e559b8c9cf5661b3ea1b29f81a3fbd835b3854f",
+              "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+              "contract": "chinook-track-price-cents-v1",
+              "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "execution": "sqlite_committed_on_copy",
+              "checks": {
+                "integrity": true,
+                "foreign_keys": true,
+                "track_count": 3503,
+                "protected_records": true,
+                "application_queries": true,
+                "indexes": true,
+                "price_rows_checked": 3503,
+                "price_cents_exact": false
+              },
+              "issues": {
+                "price_cents_mismatch": {
+                  "count": 3503,
+                  "examples": [
+                    {
+                      "track_id": 1,
+                      "expected_cents": 99,
+                      "actual_cents": 0
+                    },
+                    {
+                      "track_id": 2,
+                      "expected_cents": 99,
+                      "actual_cents": 0
+                    },
+                    {
+                      "track_id": 3,
+                      "expected_cents": 99,
+                      "actual_cents": 0
+                    },
+                    {
+                      "track_id": 4,
+                      "expected_cents": 99,
+                      "actual_cents": 0
+                    },
+                    {
+                      "track_id": 5,
+                      "expected_cents": 99,
+                      "actual_cents": 0
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 330,
+              "completion_tokens": 12,
+              "total_tokens": 342
+            },
+            "milliseconds": 1009
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 330,
+          "completion_tokens": 12,
+          "total_tokens": 342
+        }
+      }
+    },
+    {
+      "id": "round_cents",
+      "repetition": 2,
+      "request": "Rehearse this attached approved plan and check whether we should release it: {\"add_column\":true,\"backfills\":[{\"expression\":\"rounded_cents\",\"scope\":\"all\"}],\"post_step\":\"none\"}",
+      "run_order": [
+        "composed",
+        "separate"
+      ],
+      "expected": {
+        "verdict": "passed",
+        "issues": []
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "passed",
+        "tool_issue_codes": [],
+        "agent_response": "Passed. Verified 3,503 track prices.",
+        "milliseconds": 1071,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "rounded_cents",
+                    "scope": "all"
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "verdict": "passed",
+              "family": "price_cents",
+              "plan_sha256": "f3b8a97ca34cea5ace5bc400b13656c83694616e7ba494de33501c15975a7582",
+              "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+              "contract": "chinook-track-price-cents-v1",
+              "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "execution": "sqlite_committed_on_copy",
+              "checks": {
+                "integrity": true,
+                "foreign_keys": true,
+                "track_count": 3503,
+                "protected_records": true,
+                "application_queries": true,
+                "indexes": true,
+                "price_rows_checked": 3503,
+                "price_cents_exact": true
+              },
+              "issues": {}
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 326,
+              "completion_tokens": 12,
+              "total_tokens": 338
+            },
+            "milliseconds": 1020
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 326,
+          "completion_tokens": 12,
+          "total_tokens": 338
+        }
+      },
+      "separate": {
+        "calls": 6,
+        "verdict": "passed",
+        "tool_issue_codes": [],
+        "agent_response": "Passed. Verified 3,503 track prices.",
+        "milliseconds": 5503,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "rounded_cents",
+                    "scope": "all"
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "next": "create_test_snapshot",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "create_test_snapshot",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "capture_baseline",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "capture_baseline",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "execute_migration",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "execute_migration",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "verify_postconditions",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "verify_postconditions",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "build_evidence_report",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "build_evidence_report",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "verdict": "passed",
+              "family": "price_cents",
+              "plan_sha256": "f3b8a97ca34cea5ace5bc400b13656c83694616e7ba494de33501c15975a7582",
+              "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+              "contract": "chinook-track-price-cents-v1",
+              "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "execution": "sqlite_committed_on_copy",
+              "checks": {
+                "integrity": true,
+                "foreign_keys": true,
+                "track_count": 3503,
+                "protected_records": true,
+                "application_queries": true,
+                "indexes": true,
+                "price_rows_checked": 3503,
+                "price_cents_exact": true
+              },
+              "issues": {}
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 400,
+              "completion_tokens": 9,
+              "total_tokens": 409
+            },
+            "milliseconds": 881
+          },
+          {
+            "usage": {
+              "prompt_tokens": 384,
+              "completion_tokens": 10,
+              "total_tokens": 394
+            },
+            "milliseconds": 921
+          },
+          {
+            "usage": {
+              "prompt_tokens": 403,
+              "completion_tokens": 9,
+              "total_tokens": 412
+            },
+            "milliseconds": 866
+          },
+          {
+            "usage": {
+              "prompt_tokens": 420,
+              "completion_tokens": 9,
+              "total_tokens": 429
+            },
+            "milliseconds": 877
+          },
+          {
+            "usage": {
+              "prompt_tokens": 437,
+              "completion_tokens": 10,
+              "total_tokens": 447
+            },
+            "milliseconds": 904
+          },
+          {
+            "usage": {
+              "prompt_tokens": 456,
+              "completion_tokens": 11,
+              "total_tokens": 467
+            },
+            "milliseconds": 974
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 6,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 2500,
+          "completion_tokens": 58,
+          "total_tokens": 2558
+        }
+      }
+    },
+    {
+      "id": "missing_backfill_scope",
+      "repetition": 2,
+      "request": "Rehearse this attached approved plan and check whether we should release it: {\"add_column\":true,\"backfills\":[{\"expression\":\"rounded_cents\",\"scope\":null}],\"post_step\":\"none\"}",
+      "run_order": [
+        "separate",
+        "composed"
+      ],
+      "expected": {
+        "verdict": "unclear",
+        "issues": [
+          "scope_unspecified"
+        ],
+        "execution": "not_run"
+      },
+      "separate": {
+        "calls": 1,
+        "verdict": "incomplete",
+        "tool_issue_codes": [],
+        "agent_response": "Incomplete. No tool returned a verdict after 1 call.",
+        "milliseconds": 4033,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "rounded_cents",
+                    "scope": null
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "next": "create_test_snapshot",
+              "issues_so_far": [
+                "scope_unspecified"
+              ]
+            }
+          }
+        ],
+        "model_message": "The plan specifies adding a column with a backfill expression, but the scope is not specified. Please provide the scope for the backfill before proceeding.",
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 400,
+              "completion_tokens": 9,
+              "total_tokens": 409
+            },
+            "milliseconds": 904
+          },
+          {
+            "usage": {
+              "prompt_tokens": 391,
+              "completion_tokens": 38,
+              "total_tokens": 429
+            },
+            "milliseconds": 3126
+          }
+        ],
+        "matched": false,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 791,
+          "completion_tokens": 47,
+          "total_tokens": 838
+        }
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "unclear",
+        "tool_issue_codes": [
+          "scope_unspecified"
+        ],
+        "agent_response": "Unclear. Scope unspecified.",
+        "milliseconds": 1020,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "rounded_cents",
+                    "scope": null
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "verdict": "unclear",
+              "family": "price_cents",
+              "plan_sha256": "5cbd7e674f7fdd6a1bddab644edc9d199ddc3c685bce757ac2c3e6e75f9bfc62",
+              "fixture_sha256": null,
+              "contract": "chinook-track-price-cents-v1",
+              "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "execution": "not_run",
+              "checks": {},
+              "issues": {
+                "scope_unspecified": {
+                  "count": 1,
+                  "examples": []
+                }
+              }
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 326,
+              "completion_tokens": 12,
+              "total_tokens": 338
+            },
+            "milliseconds": 1018
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 326,
+          "completion_tokens": 12,
+          "total_tokens": 338
+        }
+      }
+    },
+    {
+      "id": "currency_conversion",
+      "repetition": 2,
+      "request": "Rehearse this attached approved plan and check whether we should release it: {\"add_column\":true,\"backfills\":[{\"expression\":\"convert_currency\",\"scope\":\"all\"}],\"post_step\":\"none\"}",
+      "run_order": [
+        "composed",
+        "separate"
+      ],
+      "expected": {
+        "verdict": "unsupported",
+        "issues": [
+          "unsupported_operation"
+        ],
+        "execution": "not_run"
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "unsupported",
+        "tool_issue_codes": [
+          "unsupported_operation"
+        ],
+        "agent_response": "Unsupported. Unsupported operation.",
+        "milliseconds": 999,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "convert_currency",
+                    "scope": "all"
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "verdict": "unsupported",
+              "family": "price_cents",
+              "plan_sha256": "035a27c6282c8fe653c68a6ae91a69fefaa5bf017e1f4c3879a34fc1e353ad12",
+              "fixture_sha256": null,
+              "contract": "chinook-track-price-cents-v1",
+              "contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "pinned_contract_sha256": "16c95b1c9f27fe02f42376ce13069668dfdfd8f36be1d5a52c3557b720f9c07f",
+              "execution": "not_run",
+              "checks": {},
+              "issues": {
+                "unsupported_operation": {
+                  "count": 1,
+                  "examples": []
+                }
+              }
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 324,
+              "completion_tokens": 12,
+              "total_tokens": 336
+            },
+            "milliseconds": 997
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 324,
+          "completion_tokens": 12,
+          "total_tokens": 336
+        }
+      },
+      "separate": {
+        "calls": 1,
+        "verdict": "incomplete",
+        "tool_issue_codes": [],
+        "agent_response": "Incomplete. No tool returned a verdict after 1 call.",
+        "milliseconds": 2854,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "add_column": true,
+                "backfills": [
+                  {
+                    "expression": "convert_currency",
+                    "scope": "all"
+                  }
+                ],
+                "post_step": "none"
+              }
+            },
+            "result": {
+              "next": "create_test_snapshot",
+              "issues_so_far": [
+                "unsupported_operation"
+              ]
+            }
+          }
+        ],
+        "model_message": "The plan contains an unsupported operation. Please review and provide a corrected plan.",
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 398,
+              "completion_tokens": 9,
+              "total_tokens": 407
+            },
+            "milliseconds": 861
+          },
+          {
+            "usage": {
+              "prompt_tokens": 388,
+              "completion_tokens": 23,
+              "total_tokens": 411
+            },
+            "milliseconds": 1990
+          }
+        ],
+        "matched": false,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 786,
+          "completion_tokens": 32,
+          "total_tokens": 818
+        }
+      }
+    },
+    {
+      "id": "playlist_swapped",
+      "repetition": 2,
+      "request": "Rehearse this attached approved plan and check whether we should release it: {\"family\":\"playlist_membership\",\"mapping\":\"swap_equal_size_playlists\"}",
+      "run_order": [
+        "separate",
+        "composed"
+      ],
+      "expected": {
+        "verdict": "blocked",
+        "issues": [
+          "missing_memberships",
+          "unexpected_memberships"
+        ],
+        "execution": "sqlite_committed_on_copy",
+        "checks": {
+          "playlist_rows_expected": 8715,
+          "playlist_rows_observed": 8715,
+          "playlist_counts_exact": true,
+          "foreign_keys": true
+        },
+        "issue_counts": {
+          "missing_memberships": 50,
+          "unexpected_memberships": 50
+        }
+      },
+      "separate": {
+        "calls": 6,
+        "verdict": "blocked",
+        "tool_issue_codes": [
+          "missing_memberships",
+          "unexpected_memberships"
+        ],
+        "agent_response": "Blocked. Missing memberships (50), unexpected memberships (50).",
+        "milliseconds": 6347,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "family": "playlist_membership",
+                "mapping": "swap_equal_size_playlists"
+              }
+            },
+            "result": {
+              "next": "create_test_snapshot",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "create_test_snapshot",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "capture_baseline",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "capture_baseline",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "execute_migration",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "execute_migration",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "verify_postconditions",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "verify_postconditions",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "build_evidence_report",
+              "issues_so_far": [
+                "missing_memberships",
+                "unexpected_memberships"
+              ]
+            }
+          },
+          {
+            "name": "build_evidence_report",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "verdict": "blocked",
+              "family": "playlist_membership",
+              "plan_sha256": "d1a1cb4b0de4e030bd81d86ef708ab8074f5a8e82c175ddc5eacf42d13b2a24d",
+              "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+              "contract": "chinook-playlist-membership-v1",
+              "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "execution": "sqlite_committed_on_copy",
+              "checks": {
+                "integrity": true,
+                "foreign_keys": true,
+                "track_count": 3503,
+                "protected_records": true,
+                "application_queries": true,
+                "indexes": true,
+                "membership_schema": true,
+                "playlist_rows_expected": 8715,
+                "playlist_rows_observed": 8715,
+                "playlist_counts_exact": true,
+                "membership_pairs_exact": false,
+                "memberships_verified": 8665,
+                "missing_memberships": 50,
+                "unexpected_memberships": 50
+              },
+              "issues": {
+                "missing_memberships": {
+                  "count": 50,
+                  "examples": [
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3479,
+                      "track": "Prometheus Overture, Op. 43",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3480,
+                      "track": "Sonata for Solo Violin: IV: Presto",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3481,
+                      "track": "A Midsummer Night's Dream, Op.61 Incidental Music: No.7 Notturno",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3482,
+                      "track": "Suite No. 3 in D, BWV 1068: III. Gavotte I & II",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3483,
+                      "track": "Concert pour 4 Parties de V**les, H. 545: I. Prelude",
+                      "expected": 1,
+                      "observed": 0
+                    }
+                  ]
+                },
+                "unexpected_memberships": {
+                  "count": 50,
+                  "examples": [
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3430,
+                      "track": "Toccata and Fugue in D Minor, BWV 565: I. Toccata",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3431,
+                      "track": "Symphony No.1 in D Major, Op.25 \"Classical\", Allegro Con Brio",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3432,
+                      "track": "Scheherazade, Op. 35: I. The Sea and Sindbad's Ship",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3433,
+                      "track": "Concerto No.2 in F Major, BWV1047, I. Allegro",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3434,
+                      "track": "Concerto for Piano No. 2 in F Minor, Op. 21: II. Larghetto",
+                      "expected": 0,
+                      "observed": 1
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 378,
+              "completion_tokens": 9,
+              "total_tokens": 387
+            },
+            "milliseconds": 846
+          },
+          {
+            "usage": {
+              "prompt_tokens": 373,
+              "completion_tokens": 10,
+              "total_tokens": 383
+            },
+            "milliseconds": 876
+          },
+          {
+            "usage": {
+              "prompt_tokens": 392,
+              "completion_tokens": 12,
+              "total_tokens": 404
+            },
+            "milliseconds": 1094
+          },
+          {
+            "usage": {
+              "prompt_tokens": 409,
+              "completion_tokens": 12,
+              "total_tokens": 421
+            },
+            "milliseconds": 1100
+          },
+          {
+            "usage": {
+              "prompt_tokens": 426,
+              "completion_tokens": 13,
+              "total_tokens": 439
+            },
+            "milliseconds": 1152
+          },
+          {
+            "usage": {
+              "prompt_tokens": 462,
+              "completion_tokens": 14,
+              "total_tokens": 476
+            },
+            "milliseconds": 1200
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 6,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 2440,
+          "completion_tokens": 70,
+          "total_tokens": 2510
+        }
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "blocked",
+        "tool_issue_codes": [
+          "missing_memberships",
+          "unexpected_memberships"
+        ],
+        "agent_response": "Blocked. Missing memberships (50), unexpected memberships (50).",
+        "milliseconds": 1053,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "family": "playlist_membership",
+                "mapping": "swap_equal_size_playlists"
+              }
+            },
+            "result": {
+              "verdict": "blocked",
+              "family": "playlist_membership",
+              "plan_sha256": "d1a1cb4b0de4e030bd81d86ef708ab8074f5a8e82c175ddc5eacf42d13b2a24d",
+              "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+              "contract": "chinook-playlist-membership-v1",
+              "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "execution": "sqlite_committed_on_copy",
+              "checks": {
+                "integrity": true,
+                "foreign_keys": true,
+                "track_count": 3503,
+                "protected_records": true,
+                "application_queries": true,
+                "indexes": true,
+                "membership_schema": true,
+                "playlist_rows_expected": 8715,
+                "playlist_rows_observed": 8715,
+                "playlist_counts_exact": true,
+                "membership_pairs_exact": false,
+                "memberships_verified": 8665,
+                "missing_memberships": 50,
+                "unexpected_memberships": 50
+              },
+              "issues": {
+                "missing_memberships": {
+                  "count": 50,
+                  "examples": [
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3479,
+                      "track": "Prometheus Overture, Op. 43",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3480,
+                      "track": "Sonata for Solo Violin: IV: Presto",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3481,
+                      "track": "A Midsummer Night's Dream, Op.61 Incidental Music: No.7 Notturno",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3482,
+                      "track": "Suite No. 3 in D, BWV 1068: III. Gavotte I & II",
+                      "expected": 1,
+                      "observed": 0
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3483,
+                      "track": "Concert pour 4 Parties de V**les, H. 545: I. Prelude",
+                      "expected": 1,
+                      "observed": 0
+                    }
+                  ]
+                },
+                "unexpected_memberships": {
+                  "count": 50,
+                  "examples": [
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3430,
+                      "track": "Toccata and Fugue in D Minor, BWV 565: I. Toccata",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3431,
+                      "track": "Symphony No.1 in D Major, Op.25 \"Classical\", Allegro Con Brio",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3432,
+                      "track": "Scheherazade, Op. 35: I. The Sea and Sindbad's Ship",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3433,
+                      "track": "Concerto No.2 in F Major, BWV1047, I. Allegro",
+                      "expected": 0,
+                      "observed": 1
+                    },
+                    {
+                      "playlist_id": 13,
+                      "playlist": "Classical 101 - Deep Cuts",
+                      "track_id": 3434,
+                      "track": "Concerto for Piano No. 2 in F Minor, Op. 21: II. Larghetto",
+                      "expected": 0,
+                      "observed": 1
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 304,
+              "completion_tokens": 12,
+              "total_tokens": 316
+            },
+            "milliseconds": 990
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 304,
+          "completion_tokens": 12,
+          "total_tokens": 316
+        }
+      }
+    },
+    {
+      "id": "playlist_preserved",
+      "repetition": 2,
+      "request": "Rehearse this attached approved plan and check whether we should release it: {\"family\":\"playlist_membership\",\"mapping\":\"copy_pairs\"}",
+      "run_order": [
+        "composed",
+        "separate"
+      ],
+      "expected": {
+        "verdict": "passed",
+        "issues": [],
+        "checks": {
+          "memberships_verified": 8715,
+          "membership_pairs_exact": true,
+          "membership_schema": true
+        }
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "passed",
+        "tool_issue_codes": [],
+        "agent_response": "Passed. Verified 8,715 playlist memberships.",
+        "milliseconds": 1045,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "family": "playlist_membership",
+                "mapping": "copy_pairs"
+              }
+            },
+            "result": {
+              "verdict": "passed",
+              "family": "playlist_membership",
+              "plan_sha256": "481fdce1ced72328eb57aed1c4540e7e39febf3d9f1db4e3d977c0aac6e4da55",
+              "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+              "contract": "chinook-playlist-membership-v1",
+              "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "execution": "sqlite_committed_on_copy",
+              "checks": {
+                "integrity": true,
+                "foreign_keys": true,
+                "track_count": 3503,
+                "protected_records": true,
+                "application_queries": true,
+                "indexes": true,
+                "membership_schema": true,
+                "playlist_rows_expected": 8715,
+                "playlist_rows_observed": 8715,
+                "playlist_counts_exact": true,
+                "membership_pairs_exact": true,
+                "memberships_verified": 8715,
+                "missing_memberships": 0,
+                "unexpected_memberships": 0
+              },
+              "issues": {}
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 298,
+              "completion_tokens": 12,
+              "total_tokens": 310
+            },
+            "milliseconds": 980
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 1,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 298,
+          "completion_tokens": 12,
+          "total_tokens": 310
+        }
+      },
+      "separate": {
+        "calls": 6,
+        "verdict": "passed",
+        "tool_issue_codes": [],
+        "agent_response": "Passed. Verified 8,715 playlist memberships.",
+        "milliseconds": 6283,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": {
+              "plan": {
+                "family": "playlist_membership",
+                "mapping": "copy_pairs"
+              }
+            },
+            "result": {
+              "next": "create_test_snapshot",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "create_test_snapshot",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "capture_baseline",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "capture_baseline",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "execute_migration",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "execute_migration",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "verify_postconditions",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "verify_postconditions",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "next": "build_evidence_report",
+              "issues_so_far": []
+            }
+          },
+          {
+            "name": "build_evidence_report",
+            "arguments": "{}",
+            "mcp_arguments": {},
+            "result": {
+              "verdict": "passed",
+              "family": "playlist_membership",
+              "plan_sha256": "481fdce1ced72328eb57aed1c4540e7e39febf3d9f1db4e3d977c0aac6e4da55",
+              "fixture_sha256": "bdf635be69850bd3be09c9a2dbeef7ddfb80036bd3ef3381383cd03b61e4a61a",
+              "contract": "chinook-playlist-membership-v1",
+              "contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "pinned_contract_sha256": "62041bc427da2b860e34ca7738a0687ecc8d360f0fdfac813673bb733b43e304",
+              "execution": "sqlite_committed_on_copy",
+              "checks": {
+                "integrity": true,
+                "foreign_keys": true,
+                "track_count": 3503,
+                "protected_records": true,
+                "application_queries": true,
+                "indexes": true,
+                "membership_schema": true,
+                "playlist_rows_expected": 8715,
+                "playlist_rows_observed": 8715,
+                "playlist_counts_exact": true,
+                "membership_pairs_exact": true,
+                "memberships_verified": 8715,
+                "missing_memberships": 0,
+                "unexpected_memberships": 0
+              },
+              "issues": {}
+            }
+          }
+        ],
+        "model_message": null,
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 372,
+              "completion_tokens": 9,
+              "total_tokens": 381
+            },
+            "milliseconds": 841
+          },
+          {
+            "usage": {
+              "prompt_tokens": 370,
+              "completion_tokens": 10,
+              "total_tokens": 380
+            },
+            "milliseconds": 879
+          },
+          {
+            "usage": {
+              "prompt_tokens": 389,
+              "completion_tokens": 12,
+              "total_tokens": 401
+            },
+            "milliseconds": 1097
+          },
+          {
+            "usage": {
+              "prompt_tokens": 406,
+              "completion_tokens": 12,
+              "total_tokens": 418
+            },
+            "milliseconds": 1072
+          },
+          {
+            "usage": {
+              "prompt_tokens": 423,
+              "completion_tokens": 13,
+              "total_tokens": 436
+            },
+            "milliseconds": 1124
+          },
+          {
+            "usage": {
+              "prompt_tokens": 442,
+              "completion_tokens": 14,
+              "total_tokens": 456
+            },
+            "milliseconds": 1193
+          }
+        ],
+        "matched": true,
+        "mcp_calls": 6,
+        "wrong_calls": 0,
+        "wrong_call_indices": [],
+        "recovered_after_error": null,
+        "clarified_before_tool_attempt": null,
+        "tokens": {
+          "prompt_tokens": 2402,
+          "completion_tokens": 70,
+          "total_tokens": 2472
+        }
+      }
+    },
+    {
+      "id": "ambiguous_price_request",
+      "repetition": 2,
+      "request": "Check the migration from dollars to cents for the affected tracks.",
+      "run_order": [
+        "separate",
+        "composed"
+      ],
+      "expected": {
+        "action": "clarify",
+        "subject_pattern": "\\b(?:scope|tracks?|rows?|subset|catalog|songs?)\\b"
+      },
+      "separate": {
+        "calls": 1,
+        "verdict": "incomplete",
+        "tool_issue_codes": [],
+        "agent_response": "Incomplete. No tool returned a verdict after 1 call.",
+        "milliseconds": 2953,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": null,
+            "result": {
+              "error": "No approved plan is attached to this request."
+            }
+          }
+        ],
+        "model_message": "Please provide the approved plan for the migration from dollars to cents for the affected tracks.",
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 344,
+              "completion_tokens": 9,
+              "total_tokens": 353
+            },
+            "milliseconds": 849
+          },
+          {
+            "usage": {
+              "prompt_tokens": 370,
+              "completion_tokens": 25,
+              "total_tokens": 395
+            },
+            "milliseconds": 2104
+          }
+        ],
+        "matched": false,
+        "mcp_calls": 0,
+        "wrong_calls": 1,
+        "wrong_call_indices": [
+          1
+        ],
+        "recovered_after_error": false,
+        "clarified_before_tool_attempt": false,
+        "tokens": {
+          "prompt_tokens": 714,
+          "completion_tokens": 34,
+          "total_tokens": 748
+        }
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "incomplete",
+        "tool_issue_codes": [],
+        "agent_response": "Incomplete. No tool returned a verdict after 1 call.",
+        "milliseconds": 3422,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": null,
+            "result": {
+              "error": "No approved plan is attached to this request."
+            }
+          }
+        ],
+        "model_message": "Please provide the approved plan for the migration from dollars to cents for the affected tracks.",
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 270,
+              "completion_tokens": 15,
+              "total_tokens": 285
+            },
+            "milliseconds": 1200
+          },
+          {
+            "usage": {
+              "prompt_tokens": 300,
+              "completion_tokens": 28,
+              "total_tokens": 328
+            },
+            "milliseconds": 2221
+          }
+        ],
+        "matched": false,
+        "mcp_calls": 0,
+        "wrong_calls": 1,
+        "wrong_call_indices": [
+          1
+        ],
+        "recovered_after_error": false,
+        "clarified_before_tool_attempt": false,
+        "tokens": {
+          "prompt_tokens": 570,
+          "completion_tokens": 43,
+          "total_tokens": 613
+        }
+      }
+    },
+    {
+      "id": "ambiguous_playlist_request",
+      "repetition": 2,
+      "request": "Check the migration to the new playlist membership table. Some of the memberships should move.",
+      "run_order": [
+        "composed",
+        "separate"
+      ],
+      "expected": {
+        "action": "clarify",
+        "subject_pattern": "\\b(?:playlists?|memberships?|mappings?|tracks?|move|move[ds]|pairs|relationships?)\\b"
+      },
+      "composed": {
+        "calls": 1,
+        "verdict": "incomplete",
+        "tool_issue_codes": [],
+        "agent_response": "Incomplete. No tool returned a verdict after 1 call.",
+        "milliseconds": 3159,
+        "trace": [
+          {
+            "name": "rehearse_database_migration",
+            "arguments": "{}",
+            "mcp_arguments": null,
+            "result": {
+              "error": "No approved plan is attached to this request."
+            }
+          }
+        ],
+        "model_message": "Please provide the approved plan for the migration to the new playlist membership table.",
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 280,
+              "completion_tokens": 12,
+              "total_tokens": 292
+            },
+            "milliseconds": 1003
+          },
+          {
+            "usage": {
+              "prompt_tokens": 305,
+              "completion_tokens": 26,
+              "total_tokens": 331
+            },
+            "milliseconds": 2155
+          }
+        ],
+        "matched": false,
+        "mcp_calls": 0,
+        "wrong_calls": 1,
+        "wrong_call_indices": [
+          1
+        ],
+        "recovered_after_error": false,
+        "clarified_before_tool_attempt": false,
+        "tokens": {
+          "prompt_tokens": 585,
+          "completion_tokens": 38,
+          "total_tokens": 623
+        }
+      },
+      "separate": {
+        "calls": 1,
+        "verdict": "incomplete",
+        "tool_issue_codes": [],
+        "agent_response": "Incomplete. No tool returned a verdict after 1 call.",
+        "milliseconds": 2813,
+        "trace": [
+          {
+            "name": "validate_request",
+            "arguments": "{}",
+            "mcp_arguments": null,
+            "result": {
+              "error": "No approved plan is attached to this request."
+            }
+          }
+        ],
+        "model_message": "Please provide the approved plan for the migration to the new playlist membership table.",
+        "model_turns": [
+          {
+            "usage": {
+              "prompt_tokens": 354,
+              "completion_tokens": 9,
+              "total_tokens": 363
+            },
+            "milliseconds": 897
+          },
+          {
+            "usage": {
+              "prompt_tokens": 375,
+              "completion_tokens": 23,
+              "total_tokens": 398
+            },
+            "milliseconds": 1916
+          }
+        ],
+        "matched": false,
+        "mcp_calls": 0,
+        "wrong_calls": 1,
+        "wrong_call_indices": [
+          1
+        ],
+        "recovered_after_error": false,
+        "clarified_before_tool_attempt": false,
+        "tokens": {
+          "prompt_tokens": 729,
+          "completion_tokens": 32,
+          "total_tokens": 761
+        }
+      }
+    }
+  ]
+}

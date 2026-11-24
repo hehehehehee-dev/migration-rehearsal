@@ -1,11 +1,18 @@
-  i    Local codegen on Custom endpoint — qwen2.5-coder-1.5b (generate), qwen2.5-coder-1.5b (triage)
+Synapse CLI 0.1.9, Local Custom mode
+
+Plain-language request
+Build one release-review tool named rehearse_database_migration. After checking approval for the typed plan, use a disposable snapshot and record its original state before attempting the change. Check the result and give the reviewer the final evidence report. Use the common workflow for both price and playlist changes, including the shared verifier. Pass the full return value of each existing phase to the next and let the phases carry any errors through to the report. Keep the implementation straight-line. Its input is plan, with the existing MigrationPlan type from mcp_plan. Include valid Python imports for the input type and the selected functions.
+
+CLI transcript
+  i    Local codegen on Custom endpoint — qwen2.5-coder-7b (generate), qwen2.5-coder-7b (triage)
 
   Build MCP Server (v2)
   ────────────────────────
 
   i    Mode  local — custom flow
   [working]  Scanning codebase  0s
-  ✓  Extracted 0 endpoint(s) and 13 function(s)  0s
+  ✓  Extracted 0 endpoint(s) and 24 function(s)  0s
+  ✓   Session  sess_e5d9af9f_mwuaaymk_f41092
   i    Language  python
 
   Generating
@@ -14,9 +21,9 @@
   [working]  Composing MCP tool  0s
   Generating MCP server…
 
-  ✦  Pro Tip: The best tools do one thing well. If a function does two things, consider splitting it.
+  ✦  Pro Tip: Async functions handle I/O concurrently. Use them for network calls, database queries, and file operations.
 
-  ✓  Generation complete  15s
+  ✓  Generation complete  20s
 
   ✓  MCP Server Ready
   custom-mode tool
@@ -24,6 +31,7 @@
   Tool        rehearse_database_migration
   Language    python
   Output      rehearse_database_migration_server.py
+  Session     sess_e5d9af9f_mwuaaymk_f41092
 
   Add to your MCP client:
 
@@ -32,7 +40,7 @@
         "rehearse-database-migration": {
           "command": "python",
           "args": [
-            ".tooling/codegen/rehearse_database_migration_server.py"
+            "E:\\Hackathon\\Migration-Rehearsal\\.tooling\\codegen-natural\\natural-qwen7-r3\\rehearse_database_migration_server.py"
           ]
         }
       }
@@ -42,3 +50,16 @@
   →  python rehearse_database_migration_server.py
 
   ✦  Ready. Point your client at the config above.
+
+Artifact verification
+rehearse_database_migration_server.py
+Raw artifact SHA-256 b81c32825845ba946128ed7695599ce4ec759ca21949e39c38bc7828cbf680f2
+Runnable server SHA-256 d11d6312887391369506fab1b134c3f1966e3a23e6c356f736d32d2ab2a37b13
+Phase calls validate_approved_plan -> create_test_snapshot -> capture_baseline -> execute_migration -> verify_postconditions -> build_evidence_report
+The raw CLI artifact is synapse-generated-server.py.txt. The checked-in server removes stray qualified names from the imports block, adds the missing MigrationPlan import, and clarifies the tool description. The function body matches the raw CLI artifact and model tool plan.
+
+Verification on the runnable server
+Synapse MCP: 35/35, including 20/20 holdout cases.
+Separate MCP tools: 35/35, including 20/20 holdout cases.
+The fixture was byte-for-byte unchanged.
+Live Qwen2.5-Coder-1.5B: 6/6 expected verdicts on each MCP surface; 1 vs 7 calls per case.

@@ -1,8 +1,8 @@
 # Migration Rehearsal
 
-**SQLite committed the migration. All 3,503 converted prices were wrong.**
+**A database migration can succeed and still change the wrong data.**
 
-Migration Rehearsal runs a candidate on a disposable copy of Chinook and checks the result against a pinned contract. One Synapse Custom MCP call can catch silent price corruption or playlist tracks reassigned to the wrong lists, even when SQLite commits and the foreign key checks pass.
+Migration Rehearsal tries the change on a disposable copy and shows what went wrong. It caught **3,503 wrong prices** in one run and **50 tracks sent to the wrong playlists** in another. SQLite accepted both changes. [Try it yourself](#try-it-locally)
 
 Built for **Vibe-a-thon Track 2** · Python · SQLite · Synapse Custom
 
@@ -98,9 +98,31 @@ The first two checks use the local engine. The third uses MCP and needs the depe
 
 ## Live agent comparison
 
-The same local **Qwen2.5-Coder-1.5B** model received the same approved candidates and instructions. One setup exposes the composed Synapse tool. The other exposes the same six Python phases as separate MCP tools. The agent sees the next-phase hint from each tool response while all six baseline tools remain available.
+One setup exposes the composed Synapse tool. The other exposes the same six Python phases separately. Both arms receive identical requests and instructions, see their normal tool descriptions, and let the model choose whether and which tool to call. The comparison removes explicit next-step hints from model-visible feedback. Both servers still enforce approval and the separate tools still reject out-of-order calls.
 
-The model selects which tool to call. The runner and workbench display the verdict and evidence from the final tool report. For example, the faulty plan shows **Blocked. Price cents mismatch (3,503).** The JSON trace retains the exact issue codes. A run without a final tool report appears as **Incomplete**.
+The [paired runner](compare_live.py) alternates which arm goes first. Each of six approved plans and two vague requests runs twice in a fresh MCP session per arm. The vague requests have no approved plan, so the host rejects tool attempts before MCP. A correct response asks specifically what information is missing. An approved-plan run succeeds only when its final tool report matches the expected evidence. The runner measures model tokens from the local adapter and elapsed time from the first model turn to the final outcome, including MCP work and excluding server startup.
+
+Wrong calls are requests the host or MCP rejected. A run recovers when it reaches the expected result after a rejected call. Valid `blocked`, `unclear`, and `unsupported` reports count as successful outcomes when expected. The paired cost comparison uses only approved-plan runs completed correctly by both arms.
+
+| Qwen2.5-Coder-7B, two runs per request | One Synapse tool | Six separate tools |
+| --- | ---: | ---: |
+| Correct reports on approved plans | **12/12** | **6/12** |
+| Wrong calls across all runs | 4 | 6 |
+| Runs that recovered after a rejection | 0/4 | 0/6 |
+| Specific questions on vague requests | 0/4 | 0/4 |
+| Token total across all runs | 6,432 | 27,728 |
+| MCP calls across the six pairs both completed | 6 | 36 |
+| Tokens across the same six pairs | **1,928** | **15,080** |
+| Median time on the same six pairs | **1.05 s** | **6.26 s** |
+
+The separate-tool agent repeated verification and stopped in the faulty-price case. In the two approved edge cases, it stopped after input validation without fetching a final report. For the vague requests, both arms tried to call a tool and then asked for an approved plan without asking which tracks or playlist memberships to change. The host rejected those attempts, so none reached MCP or ran SQL. [Full paired traces and measurements](live-comparison-results.json)
+
+The timings are from one local run on an RTX 5070 Laptop GPU. The two repetitions reverse the order of the arms at temperature zero. They show whether the result repeats in this setup.
+
+<details>
+<summary>Earlier guided run used in the current video</summary>
+
+This run used **Qwen2.5-Coder-1.5B** and explicitly named the next phase in the prompt. The workbench displays the verdict from the final tool report.
 
 | Candidate | Synapse Custom | Six separate tools | Trace |
 | --- | --- | --- | --- |
@@ -113,7 +135,7 @@ The model selects which tool to call. The runner and workbench display the verdi
 
 Both live setups reached the expected verdict on all six candidates. The separate-tool agent requested the report before verification once per case, then recovered. The scripted replay completes the same workflow in six calls when the tools run in order.
 
-The evidence covers two migration families on one public database and one local model. Its confirmation assumes a trusted local operator.
+</details>
 
 ## Connect another MCP client
 
@@ -160,31 +182,31 @@ For the playlist workflow, send a plan such as `{"plan":{"family":"playlist_memb
 
 ### Regenerate the MCP server
 
-Use Node.js 20+ and a running OpenAI-compatible endpoint:
+Use Node.js 20+ and a running OpenAI-compatible endpoint. The build script sends a plain-language request for a release-review tool. Synapse scans the project and selects the individual workflow functions.
 
 ```powershell
 npm install --prefix .tooling @2ndbrainlabs-ai/synapse-cli@0.1.9
-.\build_synapse.ps1 -Endpoint http://127.0.0.1:11455/v1 -Model your-model
+.\build_synapse.ps1 -Endpoint http://127.0.0.1:11455/v1 -Model your-model -RunName my-rebuild
 ```
 
-[Synapse Custom mode](https://github.com/2ndbrainlabs-ai/synapse-cli-ts#build-modes-auto-and-custom) emits the six-phase composition in `.tooling/codegen`. Compare that output with the checked-in server. The checked-in MCP boundary imports `MigrationPlan`, accepts `plan: MigrationPlan`, and passes `plan.canonical_json()` to the first phase. Preserve those lines when bringing in an updated composition. The [generation log](synapse-build.log) documents the build.
+[Synapse Custom mode](https://github.com/2ndbrainlabs-ai/synapse-cli-ts#build-modes-auto-and-custom) writes the server, request, and CLI log to `.tooling/codegen-natural/my-rebuild`. The [build log](synapse-build.log) records the exact request and the six functions Synapse chose from 24 scanned functions. Compare the [model tool plan](synapse-build-plan.json), [raw output](synapse-generated-server.py.txt), and [tested server](rehearse_database_migration_server.py). The tested server fixes the import block and clarifies the tool description. The generated function body is identical.
 
 ### Repeat the live comparison
 
-Use a compatible local inference endpoint or start the bundled adapter with your Qwen GGUF:
+Start the bundled adapter with your Qwen GGUF, or use a compatible endpoint that returns measured token usage.
 
 ```sh
 npm install --prefix .tooling node-llama-cpp@3.16.2
-node local_model.mjs path/to/model.gguf
+node local_model.mjs path/to/qwen2.5-coder-7b-instruct-q4_k_m.gguf
 ```
 
 In another terminal, run:
 
 ```sh
-python mcp_replay.py --server rehearse_database_migration_server.py --confirm --base-url http://127.0.0.1:11455/v1 --model qwen2.5-coder-1.5b --agent-case whole_dollars --integration-output my-live-trace.json
+python compare_live.py --confirm --base-url http://127.0.0.1:11455/v1 --model qwen2.5-coder-7b --output my-live-comparison.json
 ```
 
-The other live case IDs are `round_cents`, `missing_backfill_scope`, `currency_conversion`, `playlist_swapped`, and `playlist_preserved`. The trace retains the structured MCP arguments and full tool response alongside the report-based summary.
+The output includes each original request, the tool trace, any final model message, and per-turn token usage and timing.
 
 ### Capture the workbench and render a local replay
 

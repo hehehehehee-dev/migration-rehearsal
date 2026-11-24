@@ -1,5 +1,6 @@
 {
   "synapse_verified": true,
+  "server_sha256": "d11d6312887391369506fab1b134c3f1966e3a23e6c356f736d32d2ab2a37b13",
   "deterministic_comparison": {
     "composed_calls_per_case": 1,
     "separate_calls_per_case": 6,
@@ -16,7 +17,7 @@
         "price_cents_mismatch"
       ],
       "agent_response": "Blocked. Price cents mismatch (3,503).",
-      "milliseconds": 3867,
+      "milliseconds": 632,
       "trace": [
         {
           "name": "rehearse_database_migration",
@@ -95,7 +96,7 @@
         "price_cents_mismatch"
       ],
       "agent_response": "Blocked. Price cents mismatch (3,503).",
-      "milliseconds": 11588,
+      "milliseconds": 5718,
       "trace": [
         {
           "name": "validate_request",

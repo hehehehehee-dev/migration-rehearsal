@@ -33,7 +33,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 93.86
+      "milliseconds": 53.77
     },
     {
       "id": "arithmetic",
@@ -64,7 +64,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 90.42
+      "milliseconds": 48.36
     },
     {
       "id": "two_pass",
@@ -95,7 +95,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 91.84
+      "milliseconds": 48.03
     },
     {
       "id": "repaired_backfill",
@@ -126,7 +126,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 111.73
+      "milliseconds": 50.15
     },
     {
       "id": "whole_dollars",
@@ -190,7 +190,7 @@
           }
         }
       },
-      "milliseconds": 134.74
+      "milliseconds": 49.3
     },
     {
       "id": "no_schema_change",
@@ -226,7 +226,7 @@
           }
         }
       },
-      "milliseconds": 76.9
+      "milliseconds": 43.15
     },
     {
       "id": "partial_backfill",
@@ -290,7 +290,7 @@
           }
         }
       },
-      "milliseconds": 94.39
+      "milliseconds": 48.55
     },
     {
       "id": "missing_column",
@@ -323,7 +323,7 @@
           }
         }
       },
-      "milliseconds": 55.14
+      "milliseconds": 23.2
     },
     {
       "id": "touch_original",
@@ -368,7 +368,7 @@
           }
         }
       },
-      "milliseconds": 104.44
+      "milliseconds": 48.79
     },
     {
       "id": "leave_nulls",
@@ -432,7 +432,7 @@
           }
         }
       },
-      "milliseconds": 96.86
+      "milliseconds": 48.11
     },
     {
       "id": "broken_reference",
@@ -489,7 +489,7 @@
           }
         }
       },
-      "milliseconds": 103.53
+      "milliseconds": 48.51
     },
     {
       "id": "extra_contract_override",
@@ -518,7 +518,7 @@
           }
         }
       },
-      "milliseconds": 3.39
+      "milliseconds": 1.62
     },
     {
       "id": "parity_split",
@@ -549,7 +549,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 103.76
+      "milliseconds": 54.56
     },
     {
       "id": "idempotent_backfill",
@@ -580,7 +580,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 86.11
+      "milliseconds": 50.3
     },
     {
       "id": "repair_standard",
@@ -611,7 +611,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 91.52
+      "milliseconds": 55.85
     },
     {
       "id": "mixed_formulas",
@@ -642,7 +642,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 90.38
+      "milliseconds": 49.54
     },
     {
       "id": "rounded_dollars",
@@ -706,7 +706,7 @@
           }
         }
       },
-      "milliseconds": 86.72
+      "milliseconds": 49.46
     },
     {
       "id": "half_price",
@@ -770,7 +770,7 @@
           }
         }
       },
-      "milliseconds": 104.65
+      "milliseconds": 52.07
     },
     {
       "id": "late_null",
@@ -834,7 +834,7 @@
           }
         }
       },
-      "milliseconds": 274.41
+      "milliseconds": 49.33
     },
     {
       "id": "rewrite_invoice",
@@ -874,7 +874,7 @@
           }
         }
       },
-      "milliseconds": 267.99
+      "milliseconds": 52.57
     },
     {
       "id": "lose_playlists",
@@ -914,7 +914,7 @@
           }
         }
       },
-      "milliseconds": 285.39
+      "milliseconds": 70.93
     },
     {
       "id": "failed_after_update",
@@ -947,7 +947,7 @@
           }
         }
       },
-      "milliseconds": 254.08
+      "milliseconds": 26.7
     },
     {
       "id": "break_legacy_query",
@@ -993,7 +993,7 @@
           }
         }
       },
-      "milliseconds": 282.98
+      "milliseconds": 40.8
     },
     {
       "id": "missing_index",
@@ -1031,7 +1031,7 @@
           }
         }
       },
-      "milliseconds": 587.97
+      "milliseconds": 57.47
     },
     {
       "id": "currency_conversion",
@@ -1061,7 +1061,7 @@
           }
         }
       },
-      "milliseconds": 15.03
+      "milliseconds": 1.62
     },
     {
       "id": "missing_backfill_scope",
@@ -1091,7 +1091,7 @@
           }
         }
       },
-      "milliseconds": 12.58
+      "milliseconds": 1.71
     },
     {
       "id": "playlist_preserved",
@@ -1133,7 +1133,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 472.93
+      "milliseconds": 60.96
     },
     {
       "id": "playlist_swapped",
@@ -1275,7 +1275,7 @@
           }
         }
       },
-      "milliseconds": 136.11
+      "milliseconds": 68.4
     },
     {
       "id": "playlist_dropped_pair",
@@ -1334,7 +1334,7 @@
           }
         }
       },
-      "milliseconds": 126.56
+      "milliseconds": 58.98
     },
     {
       "id": "playlist_reverse_order",
@@ -1375,7 +1375,7 @@
         },
         "issues": {}
       },
-      "milliseconds": 168.96
+      "milliseconds": 75.59
     },
     {
       "id": "playlist_duplicate_pair",
@@ -1440,7 +1440,7 @@
           }
         }
       },
-      "milliseconds": 151.35
+      "milliseconds": 54.43
     },
     {
       "id": "playlist_orphan_track",
@@ -1528,7 +1528,7 @@
           }
         }
       },
-      "milliseconds": 180.31
+      "milliseconds": 71.82
     },
     {
       "id": "playlist_missing_unique",
@@ -1576,7 +1576,7 @@
           }
         }
       },
-      "milliseconds": 195.43
+      "milliseconds": 80.93
     },
     {
       "id": "playlist_mapping_unspecified",
@@ -1606,7 +1606,7 @@
           }
         }
       },
-      "milliseconds": 3.88
+      "milliseconds": 1.95
     },
     {
       "id": "playlist_unsupported_merge",
@@ -1636,9 +1636,10 @@
           }
         }
       },
-      "milliseconds": 4.94
+      "milliseconds": 1.55
     }
   ],
   "tool": "rehearse_database_migration",
+  "server_sha256": "d11d6312887391369506fab1b134c3f1966e3a23e6c356f736d32d2ab2a37b13",
   "synapse_verified": true
 }

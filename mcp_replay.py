@@ -1,6 +1,7 @@
 """Verify the two MCP surfaces and optionally compare the same local model."""
 import argparse
 from contextlib import contextmanager
+from hashlib import sha256
 import json
 import os
 from pathlib import Path
@@ -126,32 +127,45 @@ def agent_outcome(report, call_count):
             "agent_response": f"{verdict.capitalize()}. {evidence}."}
 
 
-def drive_agent(session, tools, plan, base_url, model):
+def drive_agent(session, tools, plan, base_url, model, *, request_text=None):
+    guided = request_text is None
     # The operator-approved candidate is pinned by the host on both sides.
     plan_tools = {t["name"]: t for t in tools if t["inputSchema"].get("required")}
     definitions = [{"type":"function", "function":{
         "name":t["name"], "description":t.get("description",""), "parameters":{"type":"object","properties":{},"additionalProperties":False}
     }} for t in tools]
-    messages = [
-        {"role":"system","content":"You are a database release reviewer. Use the supplied MCP tools to rehearse the attached candidate. Call the sole tool if there is one. If there are six, start with validate_request and follow each tool result's next field to the following phase. The host supplies the exact approved candidate. End when a tool returns a verdict."},
-        {"role":"user","content":f"Rehearse this attached candidate: {plan}"},
-    ]
+    if guided:
+        instruction = ("You are a database release reviewer. Use the supplied MCP tools to rehearse the attached candidate. "
+                       "Call the sole tool if there is one. If there are six, start with validate_request and follow each tool result's "
+                       "next field to the following phase. The host supplies the exact approved candidate. End when a tool returns a verdict.")
+        request_text = f"Rehearse this attached candidate: {plan}"
+    else:
+        instruction = ("You are a database release reviewer. If an approved plan is attached, choose a tool to start the rehearsal. "
+                       "The host supplies that exact plan; tool calls take no arguments from you. Keep using the tools after "
+                       "intermediate results or recoverable errors until there is a final report, even if the submitted plan is incomplete. "
+                       "If there is no approved plan and the request is underspecified, ask the reviewer a specific question before calling "
+                       "any tool. Do not assume missing details or claim a verdict without a tool report.")
+    messages = [{"role":"system","content":instruction}, {"role":"user","content":request_text}]
     started = time.perf_counter()
-    calls, report = [], None
+    calls, turns, report, final = [], [], None, None
     names = {t["name"] for t in tools}
     next_hint = next(iter(plan_tools), None)
     for _ in range(10):
         prompt = list(messages)
-        if next_hint:
+        if guided and next_hint:
             prompt.append({"role":"user","content":f"The tool protocol indicates the next phase is {next_hint}. Use that named tool now."})
         body = json.dumps({"model":model,"messages":prompt,"tools":definitions,
-                           "temperature":0,"max_tokens":180,"tool_choice":"required"}).encode()
+                           "temperature":0,"max_tokens":180,"tool_choice":"required" if guided else "auto"}).encode()
         request = urllib.request.Request(base_url.rstrip("/")+"/chat/completions",body,
                                          {"Content-Type":"application/json"})
+        model_started = time.perf_counter()
         with urllib.request.urlopen(request,timeout=75) as response:
-            msg = json.load(response)["choices"][0]["message"]
+            completion = json.load(response)
+        turns.append({"usage":completion.get("usage"), "milliseconds":round(1000*(time.perf_counter()-model_started))})
+        msg = completion["choices"][0]["message"]
         messages.append({k:v for k,v in msg.items() if k in {"role","content","tool_calls"}})
         if not msg.get("tool_calls"):
+            final = msg.get("content")
             break
         for call in msg["tool_calls"]:
             function = call["function"]
@@ -161,6 +175,8 @@ def drive_agent(session, tools, plan, base_url, model):
                 args = json.loads(function["arguments"])
                 if args != {}:
                     raise ValueError("These tools use the candidate attached by the operator.")
+                if plan is None:
+                    raise ValueError("No approved plan is attached to this request.")
                 if name in plan_tools:
                     args = plan_argument(plan_tools[name], plan)
                 if name in names:
@@ -176,15 +192,23 @@ def drive_agent(session, tools, plan, base_url, model):
             if "verdict" in result:
                 report = result
                 break
+            feedback = result
+            if not guided:
+                feedback = {key:value for key,value in result.items() if key != "next"}
+                if result.get("code") == "phase_out_of_order":
+                    feedback["error"] = "This phase cannot run at the current stage of the rehearsal."
             messages.append({"role":"tool","name":name,"tool_call_id":call["id"],
-                             "content":json.dumps(result)})
+                             "content":json.dumps(feedback)})
         if report is not None:
             break
     outcome = agent_outcome(report, len(calls))
     unit = "call" if len(calls) == 1 else "calls"
     print(f'Live agent ({len(calls)} {unit}). {outcome["agent_response"]}', flush=True)
-    return {"calls":len(calls), **outcome, "milliseconds":round(1000*(time.perf_counter()-started)),
-            "trace":calls}
+    record = {"calls":len(calls), **outcome, "milliseconds":round(1000*(time.perf_counter()-started)),
+              "trace":calls}
+    if not guided:
+        record.update(model_message=final, model_turns=turns)
+    return record
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
@@ -199,9 +223,11 @@ def main():
     p.add_argument("--integration-output", type=Path)
     p.add_argument("--model",default="qwen2.5-coder-7b")
     args=p.parse_args()
+    server = args.server.resolve()
+    server_sha256 = sha256(server.read_bytes()).hexdigest()
     selected=cases()
     plans=[canonical(c["plan"]) for c in selected]
-    with approved(plans), connect(args.server.resolve()) as (composed, tools):
+    with approved(plans), connect(server) as (composed, tools):
         if len(tools)!=1:
             raise RuntimeError(f"Expected one tool; received {len(tools)}")
         tool=tools[0]
@@ -210,10 +236,11 @@ def main():
 
         result = benchmark(selected,run)
         result["tool"] = tool["name"]
+        result["server_sha256"] = server_sha256
         verified = result["total"] == result["matched"] and result["source_unchanged"]
         result["synapse_verified"] = verified and not args.reference
         (ROOT/"mcp-benchmark-results.json").write_text(json.dumps(result,indent=2)+"\n")
-        meta = {"synapse_verified":result["synapse_verified"]}
+        meta = {"synapse_verified":result["synapse_verified"], "server_sha256":server_sha256}
         runtime = "Reference MCP" if args.reference else "Synapse MCP"
         print(f'{runtime}: {result["matched"]}/{result["total"]}',flush=True)
         hero=plans[[c["id"] for c in selected].index(args.agent_case)]

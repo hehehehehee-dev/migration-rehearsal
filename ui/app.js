@@ -379,7 +379,7 @@ async function initialize() {
     const paired = data.deterministic_comparison;
     if (live) {
       const traceBox = $('trace');
-      traceBox.append(make('p',live.model+' · live agent · '+live.composed.calls+' composed / '+live.separate.calls+' separate','trace-row'));
+      traceBox.append(make('p',live.model+' · guided replay · '+live.composed.calls+' composed / '+live.separate.calls+' separate','trace-row'));
       const journal = make('details',undefined,'raw');
       journal.append(make('summary','Inspect live tool trace'));
       for (const [label, record] of [['Composed tool',live.composed],['Separate tools',live.separate]]) {
@@ -400,6 +400,19 @@ async function initialize() {
     }
   } catch {
     $('benchmark-summary').textContent = 'Replay results unavailable';
+  }
+  try {
+    const {summary} = await get('/api/comparison');
+    if (summary) {
+      const {composed,separate} = summary;
+      const line = make('p',`Agent comparison without next-step hints · correct plan reports ${composed.matched_plan_runs}/${composed.plan_runs} vs ${separate.matched_plan_runs}/${separate.plan_runs} · `,'trace-row');
+      const link = make('a','View measured traces');
+      link.href = '/api/comparison';
+      line.append(link);
+      $('trace').prepend(line);
+    }
+  } catch (error) {
+    $('trace').prepend(make('p','Agent comparison unavailable.','trace-row'));
   }
 }
 choice.addEventListener('change',showSelection);

@@ -1,0 +1,21 @@
+{
+  "tool_name": "rehearse_database_migration",
+  "description": "Rehearse a database migration by creating a disposable snapshot, executing the migration, capturing the baseline, and verifying the postconditions.",
+  "param_names": [
+    "plan"
+  ],
+  "param_types": [
+    "MigrationPlan"
+  ],
+  "body_source": "context = validate_approved_plan(plan)\nif not context:\n    return context\n\nsnapshot = create_test_snapshot(context)\nif not snapshot:\n    return snapshot\n\nbaseline = capture_baseline(context)\nif not baseline:\n    return baseline\n\nexecute_migration(context)\nif not context:\n    return context\n\nverify_postconditions(context)\nif not context:\n    return context\n\nreport = build_evidence_report(context)\nreturn report",
+  "imports": [
+    "mcp_plan.validate_approved_plan",
+    "rehearsal.create_test_snapshot",
+    "rehearsal.capture_baseline",
+    "rehearsal.execute_migration",
+    "rehearsal.verify_postconditions",
+    "rehearsal.build_evidence_report"
+  ],
+  "env_vars": [],
+  "is_async": false
+}
